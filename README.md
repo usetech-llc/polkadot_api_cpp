@@ -1,5 +1,11 @@
 # Polkadot C++ API
 
+## Install Prerequisites
+
+```
+sudo apt-get -y install build-essential cmake
+```
+
 ## Installation
 
 This is work in progress, so installation is only possible from the source code.
@@ -16,5 +22,5 @@ make
 ### Run connect basic example
 
 ```
-bin/connect
+bin/polkaclient connect
 ```
