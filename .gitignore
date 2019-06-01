@@ -34,8 +34,10 @@
 # Build folder
 bin
 
-# cmake
+# Temporary test files
+Testing
 
+# cmake
 CMakeCache.txt
 CMakeFiles
 *.cmake

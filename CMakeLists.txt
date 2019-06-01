@@ -9,8 +9,8 @@ set(CMAKE_C_FLAGS "-ggdb")
 set(CMAKE_BUILD_TYPE Debug)
 
 # Setup source files directories
-file(GLOB_RECURSE examples ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE src ${PROJECT_SOURCE_DIR}/examples/*.cpp)
+file(GLOB_RECURSE examples ${PROJECT_SOURCE_DIR}/examples/*.cpp)
+file(GLOB_RECURSE src ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE srctest ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 # Setup output directories
@@ -25,7 +25,14 @@ add_library(polkacpp ${src})
 add_executable(polkaclient ${examples})
 target_link_libraries (polkaclient polkacpp)
 
-# Unit Testing
-add_executable(tests ${srctest})
-add_test(TEST01 bin/tests)
-set_tests_properties (TEST01 PROPERTIES PASS_REGULAR_EXPRESSION "success*")
+# Unit Testing - Build all files in test folder as a separate test
+file( GLOB TEST_SOURCES ${PROJECT_SOURCE_DIR}/test/*.cpp )
+foreach( testsourcefile ${TEST_SOURCES} )
+    string( REPLACE ".cpp" "" testfullpath ${testsourcefile} )
+    string( REPLACE  "${PROJECT_SOURCE_DIR}/test/" "" testname ${testfullpath} )
+
+    add_executable( ${testname} ${testsourcefile} )
+    target_link_libraries( ${testname} polkacpp )
+    add_test(${testname} "bin/${testname}")
+    set_tests_properties (${testname} PROPERTIES PASS_REGULAR_EXPRESSION "success*")
+endforeach( testsourcefile ${TEST_SOURCES} )
