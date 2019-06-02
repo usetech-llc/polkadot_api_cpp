@@ -2,10 +2,16 @@
 #include <string>
 #include <curl/curl.h>
 
+// Websockets
+#include <websocketpp/config/asio_client.hpp>
+#include <websocketpp/client.hpp>
+
+
+
+
+
 using namespace std;
 
-#include "types.h"
-#include "easywsclient.hpp"
 #include "constants.h"
 #include "wsclient.h"
 

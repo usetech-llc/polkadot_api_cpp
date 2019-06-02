@@ -2,6 +2,14 @@
 
 ## Install Prerequisites
 
+### websocketpp
+Checkout code from here: https://github.com/zaphoyd/websocketpp
+and copy websocketpp folder to /usr/include
+
+### Boost
+```
+sudo apt-get install libboost-all-dev
+```
 
 ### Build tools
 ```
