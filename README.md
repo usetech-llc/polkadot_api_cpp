@@ -1,4 +1,4 @@
-# Polkadot C++ API
+# Polkadot Substrate C++ API
 
 ## Install Prerequisites
 
@@ -58,11 +58,39 @@ make test
 ## How to Use
 
 ### Files to include
+```
+#include <polkadot/polkadot.h>
+```
 
 ### Library Initialization
+Parity node URL is the only required parameter, though URL must include port. Example:
+```
+string parity_node_url("wss://poc3-rpc.polkadot.io:443/");
+CWebSocketClient ws(parity_node_url);
+```
 
 ### Eastablishing and maintaining connection
+This call will establish connection and start message thread:
+```
+ws.connect();
+```
+
+The websocket subscriptions will provide data via the callback. In order to subscribe to an endpoint, call:
+```
+ws.subscribe(endpoint);
+```
+
+In order to stop subscription, call:
+```
+ws.unsubscribe(endpoint);
+```
+
+When connection is not needed anymore, call
+```
+ws.disconnect();
+```
 
 ### Reading data from polkadot node
+The data is returned as C structures. Documentation TBD.
 
 ### Sending extrincics
