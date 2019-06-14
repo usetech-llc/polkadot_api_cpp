@@ -1,0 +1,14 @@
+language: cpp
+
+compiler:
+  - gcc
+
+before_script:
+  # run cmake
+  - cmake .
+
+script:
+  # Build
+  - make
+  # The project uses ctest. Let's enable this later
+  #- make test
