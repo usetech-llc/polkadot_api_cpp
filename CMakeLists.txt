@@ -273,3 +273,30 @@ foreach( testsourcefile ${TEST_SOURCES} )
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
 
 endforeach( testsourcefile ${TEST_SOURCES} )
+
+
+###############################################################################
+# Linter
+
+# get all project files
+file( GLOB_RECURSE ALL_SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*)
+
+# exclude libs folder that contains 3rd party code
+
+set(PROJECT_TRDPARTY_DIR ${PROJECT_SOURCE_DIR}/src/libs)
+
+foreach (SOURCE_FILE ${ALL_SOURCE_FILES})
+    string(FIND ${SOURCE_FILE} ${PROJECT_TRDPARTY_DIR} PROJECT_TRDPARTY_DIR_FOUND)
+    if (NOT ${PROJECT_TRDPARTY_DIR_FOUND} EQUAL -1)
+        list(REMOVE_ITEM ALL_SOURCE_FILES ${SOURCE_FILE})
+    endif ()
+endforeach ()
+
+# Add clang-format target
+add_custom_target(
+        format
+        COMMAND /usr/bin/clang-format
+        -style=file
+        -i
+        ${ALL_SOURCE_FILES}
+)

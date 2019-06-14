@@ -1,0 +1,22 @@
+language: cpp
+
+compiler:
+  - gcc
+
+addons:
+  apt:
+    packages: libboost-all-dev
+
+install:
+  - git clone https://github.com/zaphoyd/websocketpp
+  - sudo mv websocketpp /usr/local/include/websocketpp
+
+before_script:
+  # run cmake
+  - cmake .
+
+script:
+  # Build
+  - make
+  # The project uses ctest. Let's enable this later
+  #- make test

@@ -9,5 +9,4 @@ public:
     int connect();
     bool isConnected();
     void disconnect();
-
 };
