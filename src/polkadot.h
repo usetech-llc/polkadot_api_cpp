@@ -15,5 +15,8 @@ using namespace std;
 #include "constants.h"
 #include "wsclient.h"
 
+#include "json11.hpp"
+using namespace json11;
+
 void PrintFromLib();
 int Foo(int bar);

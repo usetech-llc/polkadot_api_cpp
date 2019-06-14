@@ -23,10 +23,19 @@ using websocketpp::lib::bind;
 
 void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
     std::cout << msg->get_payload() << std::endl;
+
+    // DELETEME: Example how to deserialize payload
+    Json json;
+    string err;
+    json = Json::parse(msg->get_payload(), err);
+
+    cout << endl << "JSON RPC Version: " << json["jsonrpc"].string_value() << endl;
+    cout << "Request ID: " << json["id"].int_value() << endl;
+    cout << "Spec Name: " << json["result"]["specName"].string_value() << endl;
 }
 
 void on_open(client* c, websocketpp::connection_hdl hdl) {
-    std::string msg = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";;
+    std::string msg = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";
     c->send(hdl,msg,websocketpp::frame::opcode::text);
     c->get_alog().write(websocketpp::log::alevel::app, "Sent Message: "+msg);
 }
