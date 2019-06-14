@@ -8,7 +8,7 @@ addons:
     packages: libboost-all-dev
 
 install:
-  - git checkout https://github.com/zaphoyd/websocketpp
+  - git clone https://github.com/zaphoyd/websocketpp
   - sudo mv websocketpp /usr/local/include/websocketpp
 
 before_script:
