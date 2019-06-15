@@ -8,16 +8,18 @@ include(CTest)
 set(CMAKE_C_FLAGS "-ggdb")
 set(CMAKE_BUILD_TYPE Debug)
 
+
+
 #########################################################
 # WebSocket++ library
 
 ############ Paths
 
-set (WEBSOCKETPP_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-set (WEBSOCKETPP_INCLUDE ${WEBSOCKETPP_ROOT}/websocketpp)
 set (WEBSOCKETPP_BUILD_ROOT ${CMAKE_CURRENT_BINARY_DIR})
 set (WEBSOCKETPP_BIN ${WEBSOCKETPP_BUILD_ROOT}/bin)
 set (WEBSOCKETPP_LIB ${WEBSOCKETPP_BUILD_ROOT}/lib)
+
+set (WEBSOCKETPP_INCLUDE_DIR "/usr/local/include")
 
 ############
 
@@ -247,8 +249,8 @@ target_link_libraries (polkaclient ${Boost_LIBRARIES})
 target_link_libraries( polkaclient ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
+set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
 
 #####
 
@@ -271,6 +273,7 @@ foreach( testsourcefile ${TEST_SOURCES} )
     target_link_libraries( ${testname} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
+    set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
 
 endforeach( testsourcefile ${TEST_SOURCES} )
 
