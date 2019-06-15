@@ -5,7 +5,7 @@ message("Building project ${PROJECT_NAME}")
 include(CTest)
 
 # Set compiler flags
-set(CMAKE_C_FLAGS "-ggdb")
+set(CMAKE_C_FLAGS "-ggdb -pthread")
 set(CMAKE_BUILD_TYPE Debug)
 
 
@@ -273,7 +273,7 @@ foreach( testsourcefile ${TEST_SOURCES} )
     target_link_libraries( ${testname} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
-    set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
+    set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
 
 endforeach( testsourcefile ${TEST_SOURCES} )
 
