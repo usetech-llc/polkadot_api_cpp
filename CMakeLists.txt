@@ -1,12 +1,16 @@
 # General project setup
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.1)
 project (PolkadotCppAPI)
 message("Building project ${PROJECT_NAME}")
 include(CTest)
 
 # Set compiler flags
-set(CMAKE_C_FLAGS "-ggdb -pthread")
+set(CMAKE_C_FLAGS "-ggdb")
 set(CMAKE_BUILD_TYPE Debug)
+
+# Take care of libpthread
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
 
 
@@ -245,8 +249,9 @@ target_link_libraries (polkaclient polkacpp)
 
 ##### Link Boost and OpenSSL to example project
 
-target_link_libraries (polkaclient ${Boost_LIBRARIES})
-target_link_libraries( polkaclient ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries( polkaclient ${Boost_LIBRARIES} )
+target_link_libraries( polkaclient ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} )
+target_link_libraries( polkaclient Threads::Threads )
 
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
@@ -269,8 +274,9 @@ foreach( testsourcefile ${TEST_SOURCES} )
     set_tests_properties (${testname} PROPERTIES PASS_REGULAR_EXPRESSION "success*")
 
     # link Boost and OpenSSL to test executables
-    target_link_libraries( ${testname} ${Boost_LIBRARIES})
-    target_link_libraries( ${testname} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+    target_link_libraries( ${testname} ${Boost_LIBRARIES} )
+    target_link_libraries( ${testname} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} )
+    target_link_libraries( ${testname} Threads::Threads )
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
