@@ -9,7 +9,7 @@ addons:
 
 install:
   - git clone https://github.com/zaphoyd/websocketpp
-  - sudo mv websocketpp /usr/local/include/websocketpp
+  - sudo mv websocketpp/websocketpp /usr/local/include/websocketpp
 
 before_script:
   # run cmake
