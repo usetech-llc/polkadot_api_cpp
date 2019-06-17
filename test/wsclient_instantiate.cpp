@@ -1,16 +1,14 @@
 #include "../src/polkadot.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     try {
         // Default constructor
-        CWebSocketClient ws1();
-
-        // URL parameter in constructor
-        CWebSocketClient ws2(CConstants::parity_node_url);
+        CWebSocketClient *ws = CWebSocketClient::getInstance();
 
         // All tests ran ok
         cout << "success" << endl;
+
+        delete ws;
     } catch (...) {
         cout << "failed" << endl;
     }

@@ -1,34 +1,33 @@
 #include "polkadot.h"
 
-CWebSocketClient::CWebSocketClient(string nodeUrl) : _nodeUrl(nodeUrl) {}
+CWebSocketClient *CWebSocketClient::_instance = NULL;
 
-CWebSocketClient::CWebSocketClient() {}
+CWebSocketClient::CWebSocketClient() : _nodeUrl(CConstants::parity_node_url), _connected(false) {}
 
-typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
-typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
+CWebSocketClient::~CWebSocketClient() {
+    if (_connectedThread)
+        delete _connectedThread;
+}
+
+CWebSocketClient *CWebSocketClient::getInstance() {
+    if (!CWebSocketClient::_instance) {
+        CWebSocketClient::_instance = new CWebSocketClient();
+    }
+    return CWebSocketClient::_instance;
+}
 
 using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 
 void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
-    std::cout << msg->get_payload() << std::endl;
-
-    // DELETEME: Example how to deserialize payload
-    Json json;
-    string err;
-    json = Json::parse(msg->get_payload(), err);
-
-    cout << endl << "JSON RPC Version: " << json["jsonrpc"].string_value() << endl;
-    cout << "Request ID: " << json["id"].int_value() << endl;
-    cout << "Spec Name: " << json["result"]["specName"].string_value() << endl;
+    // Notify observers
+    for (auto o : CWebSocketClient::getInstance()->_observers) {
+        o->handleMessage(msg->get_payload());
+    }
 }
 
-void on_open(client *c, websocketpp::connection_hdl hdl) {
-    std::string msg = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";
-    c->send(hdl, msg, websocketpp::frame::opcode::text);
-    c->get_alog().write(websocketpp::log::alevel::app, "Sent Message: " + msg);
-}
+void on_open(client *c, websocketpp::connection_hdl hdl) { CWebSocketClient::getInstance()->_connected = true; }
 
 bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl::verify_context &ctx) { return true; }
 
@@ -50,34 +49,32 @@ context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl) {
     return ctx;
 }
 
-//{"jsonrpc":"2.0","method":"state_storage","params":{"result":{"block":"0x4a10c0e96359e56170dee4ab0163d254a0adbf92dcaae242d4cdb391a42fb4be","changes":[["0xcc956bdb7605e3547539f321ac2bc95c","0x080000000000000000010000000000"]]},"subscription":3227192}}
+void CWebSocketClient::runWsMessages() {
+    _c.run();
+    cout << "runWsMessages Thread exited" << endl;
+}
 
 int CWebSocketClient::connect() {
 
-    client c;
-
-    std::string hostname = "poc3-rpc.polkadot.io";
-    std::string port = "443";
-
-    std::string uri = "wss://" + hostname + ":" + port;
+    std::string uri = _nodeUrl;
 
     try {
         // Set logging to be pretty verbose (everything except message payloads)
-        c.set_access_channels(websocketpp::log::alevel::all);
-        c.clear_access_channels(websocketpp::log::alevel::frame_payload);
-        c.set_error_channels(websocketpp::log::elevel::all);
+        _c.set_access_channels(websocketpp::log::alevel::all);
+        _c.clear_access_channels(websocketpp::log::alevel::frame_payload);
+        _c.set_error_channels(websocketpp::log::elevel::all);
 
-        c.set_open_handler(bind(&on_open, &c, ::_1));
+        _c.set_open_handler(bind(&on_open, &_c, ::_1));
 
         // Initialize ASIO
-        c.init_asio();
+        _c.init_asio();
 
         // Register our message handler
-        c.set_message_handler(&on_message);
-        c.set_tls_init_handler(bind(&on_tls_init, hostname.c_str(), ::_1));
+        _c.set_message_handler(&on_message);
+        _c.set_tls_init_handler(bind(&on_tls_init, uri.c_str(), ::_1));
 
         websocketpp::lib::error_code ec;
-        client::connection_ptr con = c.get_connection(uri, ec);
+        _connection = _c.get_connection(uri, ec);
         if (ec) {
             std::cout << "could not create connection because: " << ec.message() << std::endl;
             return 0;
@@ -85,23 +82,33 @@ int CWebSocketClient::connect() {
 
         // Note that connect here only requests a connection. No network messages are
         // exchanged until the event loop starts running in the next line.
-        c.connect(con);
+        _c.connect(_connection);
 
-        c.get_alog().write(websocketpp::log::alevel::app, "Connecting to " + uri);
-
-        // websocketpp::lib::error_code wsec;
-        // std::string message = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";
-        // c.send(con, message, websocketpp::frame::opcode::text, wsec);
-
-        // c.poll(con, );
+        _c.get_alog().write(websocketpp::log::alevel::app, "Connecting to " + uri);
 
         // Start the ASIO io_service run loop
         // this will cause a single connection to be made to the server. c.run()
         // will exit when this connection is closed.
-        c.run();
+        _connectedThread = new thread(&CWebSocketClient::runWsMessages, this);
     } catch (websocketpp::exception const &e) {
         std::cout << e.what() << std::endl;
     }
 
     return 0;
 }
+
+bool CWebSocketClient::isConnected() { return _connected; }
+
+void CWebSocketClient::disconnect() {
+    _c.close(_connection, websocketpp::close::status::going_away, "");
+    _connectedThread->join();
+    _connected = false;
+}
+
+int CWebSocketClient::send(const string &msg) {
+    _c.send(_connection, msg, websocketpp::frame::opcode::text);
+    _c.get_alog().write(websocketpp::log::alevel::app, "Sent Message: " + msg);
+    return 0;
+}
+
+void CWebSocketClient::registerMessageObserver(IMessageObserver *handler) { _observers.push_back(handler); }
