@@ -19,4 +19,4 @@ script:
   # Build
   - make
   # The project uses ctest. Let's enable this later
-  #- make test
+  - make test
