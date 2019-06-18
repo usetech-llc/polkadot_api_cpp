@@ -9,11 +9,11 @@ CWebSocketClient::~CWebSocketClient() {
         delete _connectedThread;
 }
 
-CWebSocketClient *CWebSocketClient::getInstance() {
+IWebSocketClient *CWebSocketClient::getInstance() {
     if (!CWebSocketClient::_instance) {
         CWebSocketClient::_instance = new CWebSocketClient();
     }
-    return CWebSocketClient::_instance;
+    return (IWebSocketClient *)CWebSocketClient::_instance;
 }
 
 using websocketpp::lib::bind;
@@ -22,12 +22,16 @@ using websocketpp::lib::placeholders::_2;
 
 void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
     // Notify observers
-    for (auto o : CWebSocketClient::getInstance()->_observers) {
+    CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance();
+    for (auto o : inst->_observers) {
         o->handleMessage(msg->get_payload());
     }
 }
 
-void on_open(client *c, websocketpp::connection_hdl hdl) { CWebSocketClient::getInstance()->_connected = true; }
+void on_open(client *c, websocketpp::connection_hdl hdl) {
+    CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance();
+    inst->_connected = true;
+}
 
 bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl::verify_context &ctx) { return true; }
 

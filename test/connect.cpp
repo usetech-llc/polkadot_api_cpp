@@ -16,7 +16,7 @@ public:
 int main(int argc, char *argv[]) {
     TestMessageHandler tmh;
 
-    CWebSocketClient *ws = CWebSocketClient::getInstance();
+    IWebSocketClient *ws = CWebSocketClient::getInstance();
     ws->registerMessageObserver(&tmh);
     int err = ws->connect();
     usleep(2000000);
