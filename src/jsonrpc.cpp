@@ -100,7 +100,8 @@ int CJsonRpc::unsubscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) {
     for (auto it = _wsSubscribers.begin(); it != _wsSubscribers.end(); ++it)
         if (it->second == observer)
             subscriptionId = it->first;
-    _wsSubscribers.erase(subscriptionId);
+    if (subscriptionId)
+        _wsSubscribers.erase(subscriptionId);
 
     return 0;
 }
