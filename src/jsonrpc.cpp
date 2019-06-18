@@ -28,7 +28,10 @@ Json CJsonRpc::request(Json jsonMap) {
     _queryMtx.lock();
     condition_variable cv; // Condition variable used to notify about response
     mutex m;               // Mutex for condition varaiable
-    JsonRpcQuery query{.id = getNextId(), .cv = &cv, .m = &m};
+    JsonRpcQuery query;
+    query.id = getNextId();
+    query.cv = &cv;
+    query.m = &m;
     _queries[query.id] = query;
     _queryMtx.unlock();
 
