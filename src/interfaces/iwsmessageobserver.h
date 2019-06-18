@@ -1,4 +1,4 @@
-class IMessageObserver {
+class IWebSocketMessageObserver {
 public:
-    virtual void handleMessage(const string &payload) = 0;
+    virtual void handleWsMessage(const Json &message) = 0;
 };
