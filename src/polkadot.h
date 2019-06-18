@@ -14,8 +14,11 @@ using namespace std;
 #include "constants.h"
 #include "interfaces/iwsmessageobserver.h"
 #include "interfaces/iwsclient.h"
+#include "interfaces/ilogger.h"
 #include "wsclient.h"
+#include "loggerstub.h"
 
 #include "libs/json11/json11.hpp"
 using namespace json11;
+#include "jsonrpc.h"
 // clang-format on
