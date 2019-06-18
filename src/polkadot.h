@@ -12,7 +12,8 @@
 using namespace std;
 
 #include "constants.h"
-#include "wsmessageobserverIface.h"
+#include "interfaces/iwsmessageobserver.h"
+#include "interfaces/iwsclient.h"
 #include "wsclient.h"
 
 #include "libs/json11/json11.hpp"

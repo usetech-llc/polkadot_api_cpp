@@ -1,7 +1,7 @@
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 
-class CWebSocketClient {
+class CWebSocketClient : public IWebSocketClient {
 private:
     string _nodeUrl;
     static CWebSocketClient *_instance;
@@ -18,13 +18,13 @@ private:
     CWebSocketClient();
 
 public:
-    static CWebSocketClient *getInstance();
-    ~CWebSocketClient();
+    static IWebSocketClient *getInstance();
+    ~CWebSocketClient() override;
 
-    int connect();
-    bool isConnected();
-    void disconnect();
-    int send(const string &msg);
+    virtual int connect();
+    virtual bool isConnected();
+    virtual void disconnect();
+    virtual int send(const string &msg);
 
-    void registerMessageObserver(IMessageObserver *handler);
+    virtual void registerMessageObserver(IMessageObserver *handler);
 };
