@@ -15,8 +15,9 @@ public:
 
 int main(int argc, char *argv[]) {
     TestMessageHandler tmh;
+    LoggerStub log;
 
-    IWebSocketClient *ws = CWebSocketClient::getInstance();
+    IWebSocketClient *ws = CWebSocketClient::getInstance(&log);
     ws->registerMessageObserver(&tmh);
     int err = ws->connect();
     if ((err == 0) && (ws->isConnected())) {

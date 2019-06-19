@@ -34,10 +34,10 @@ private:
     int getNextId();
 
 public:
+    CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params);
     virtual ~CJsonRpc() override {}
     virtual int connect();
     virtual void disconnect();
-    CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params);
     virtual Json request(Json jsonMap);
     virtual void handleMessage(const string &payload);
     virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer);

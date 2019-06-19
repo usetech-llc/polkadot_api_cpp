@@ -4,6 +4,7 @@ typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> conte
 class CWebSocketClient : public IWebSocketClient {
 private:
     string _nodeUrl;
+    ILogger *_logger;
     static CWebSocketClient *_instance;
     vector<IMessageObserver *> _observers;
     thread *_connectedThread;
@@ -14,14 +15,15 @@ private:
     mutex _connectionMtx;             // Mutex for condition varaiable
     static chrono::seconds ConnectionTimeout;
 
+    friend context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
     friend void on_message(websocketpp::connection_hdl, client::message_ptr msg);
     friend void on_open(client *c, websocketpp::connection_hdl hdl);
     void runWsMessages();
 
-    CWebSocketClient();
+    CWebSocketClient(ILogger *logger);
 
 public:
-    static IWebSocketClient *getInstance();
+    static IWebSocketClient *getInstance(ILogger *logger);
     ~CWebSocketClient() override;
 
     virtual int connect();
