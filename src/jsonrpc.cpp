@@ -1,16 +1,12 @@
 #include "polkadot.h"
 
-CJsonRpc::CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params) {
-    this->jsonrpc = params.jsonrpc;
-    _wsc = wsc;
-    this->logger = logger;
-    this->lastId = 0;
-
+CJsonRpc::CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params)
+    : _jsonrpcVersion(params.jsonrpcVersion), _lastId(0), _logger(logger), _wsc(wsc) {
     // subscribe for responses
     _wsc->registerMessageObserver(this);
 }
 
-int CJsonRpc::getNextId() { return ++lastId; }
+int CJsonRpc::getNextId() { return ++_lastId; }
 
 int CJsonRpc::connect() {
     int err = _wsc->connect();
@@ -26,19 +22,19 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // Generate new request Id and place request in query map
     _queryMtx.lock();
-    condition_variable cv; // Condition variable used to notify about response
-    mutex m;               // Mutex for condition varaiable
+    condition_variable completionCV; // Condition variable used to notify about response
+    mutex completionMtx;             // Mutex for condition varaiable
     JsonRpcQuery query;
     query.id = getNextId();
-    query.cv = &cv;
-    query.m = &m;
+    query.completionCV = &completionCV;
+    query.completionMtx = &completionMtx;
     _queries[query.id] = query;
     _queryMtx.unlock();
 
     // build request
     Json request = Json::object{
         {"id", query.id},
-        {"jsonrpc", this->jsonrpc},
+        {"_jsonrpcVersion", _jsonrpcVersion},
         {"method", jsonMap["method"]},
         {"params", jsonMap["params"]},
     };
@@ -48,16 +44,16 @@ Json CJsonRpc::request(Json jsonMap) {
         _wsc->send(request.dump());
 
         string message = "Message " + std::to_string(query.id) + " was sent";
-        logger->info(message);
+        _logger->info(message);
     } else {
         string errstr("Not connected");
-        logger->error(errstr);
+        _logger->error(errstr);
         throw JsonRpcException(errstr);
     }
 
     // Block until a timeout happens or response is received
-    std::unique_lock<std::mutex> lk(*query.m);
-    query.cv->wait(lk);
+    std::unique_lock<std::mutex> lk(*query.completionMtx);
+    query.completionCV->wait(lk);
 
     // Move response object and return it
     Json result = move(_queries[query.id].json);
@@ -69,7 +65,7 @@ Json CJsonRpc::request(Json jsonMap) {
 void CJsonRpc::handleMessage(const string &payload) {
 
     string err;
-    logger->info("Message received: " + payload);
+    _logger->info("Message received: " + payload);
     Json json = Json::parse(payload, err);
 
     int requestId = json["id"].int_value();
@@ -78,7 +74,7 @@ void CJsonRpc::handleMessage(const string &payload) {
     if (_queries.count(requestId)) {
         // Response for requestId arrived. Set response and notify
         _queries[requestId].json = json["result"];
-        _queries[requestId].cv->notify_all();
+        _queries[requestId].completionCV->notify_all();
     }
     _queryMtx.unlock();
 }

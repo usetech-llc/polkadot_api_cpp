@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
 
     JsonRpcParams params;
-    params.jsonrpc = "2.0";
+    params.jsonrpcVersion = "2.0";
     LoggerStub log;
 
     Json query = Json::object{{"method", "chain_getRuntimeVersion"}, {"params", Json::array{}}};

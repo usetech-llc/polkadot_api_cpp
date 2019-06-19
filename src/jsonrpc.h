@@ -1,12 +1,12 @@
 struct JsonRpcParams {
-    string jsonrpc;
+    string jsonrpcVersion;
 };
 
 struct JsonRpcQuery {
     int id;
     Json json;
-    condition_variable *cv;
-    mutex *m;
+    condition_variable *completionCV;
+    mutex *completionMtx;
 };
 
 class JsonRpcException : public exception {
@@ -19,10 +19,10 @@ public:
 
 class CJsonRpc : public IMessageObserver, public IJsonRpc {
 private:
-    std::string jsonrpc;
+    std::string _jsonrpcVersion;
+    uint _lastId;
+    ILogger *_logger;
     IWebSocketClient *_wsc;
-    uint lastId;
-    ILogger *logger;
 
     // Map between request IDs and waiting requests
     map<int, JsonRpcQuery> _queries;
