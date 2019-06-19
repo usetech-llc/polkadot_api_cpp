@@ -1,6 +1,7 @@
 #include "polkadot.h"
 
 CWebSocketClient *CWebSocketClient::_instance = NULL;
+chrono::seconds CWebSocketClient::ConnectionTimeout(5); // 5 second connection timeout
 
 CWebSocketClient::CWebSocketClient() : _nodeUrl(CConstants::parity_node_url), _connected(false) {}
 
@@ -30,7 +31,7 @@ void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
 
 void on_open(client *c, websocketpp::connection_hdl hdl) {
     CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance();
-    inst->_connected = true;
+    inst->_connectionCV.notify_all();
 }
 
 bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl::verify_context &ctx) { return true; }
@@ -94,6 +95,12 @@ int CWebSocketClient::connect() {
         // this will cause a single connection to be made to the server. c.run()
         // will exit when this connection is closed.
         _connectedThread = new thread(&CWebSocketClient::runWsMessages, this);
+
+        // Wait for connection
+        std::unique_lock<std::mutex> connectionWaitLock(_connectionMtx);
+        _connectionCV.wait_for(connectionWaitLock, ConnectionTimeout);
+        _connected = true;
+
     } catch (websocketpp::exception const &e) {
         std::cout << e.what() << std::endl;
     }

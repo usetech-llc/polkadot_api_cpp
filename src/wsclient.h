@@ -10,6 +10,9 @@ private:
     client _c;
     client::connection_ptr _connection;
     bool _connected;
+    condition_variable _connectionCV; // Condition variable used to notify about connection
+    mutex _connectionMtx;             // Mutex for condition varaiable
+    static chrono::seconds ConnectionTimeout;
 
     friend void on_message(websocketpp::connection_hdl, client::message_ptr msg);
     friend void on_open(client *c, websocketpp::connection_hdl hdl);

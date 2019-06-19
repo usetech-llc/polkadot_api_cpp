@@ -9,7 +9,6 @@ int main(int argc, char *argv[]) {
     Json query = Json::object{{"method", "chain_getRuntimeVersion"}, {"params", Json::array{}}};
 
     CWebSocketClient::getInstance()->connect();
-    usleep(2000000);
     CJsonRpc jr(CWebSocketClient::getInstance(), &log, params);
     Json response = jr.request(query);
 

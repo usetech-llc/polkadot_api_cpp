@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
     IWebSocketClient *ws = CWebSocketClient::getInstance();
     ws->registerMessageObserver(&tmh);
     int err = ws->connect();
-    usleep(2000000);
     if ((err == 0) && (ws->isConnected())) {
         std::string msg = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";
         ws->send(msg);
