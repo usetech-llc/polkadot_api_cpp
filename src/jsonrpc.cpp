@@ -34,7 +34,7 @@ Json CJsonRpc::request(Json jsonMap) {
     // build request
     Json request = Json::object{
         {"id", query.id},
-        {"_jsonrpcVersion", _jsonrpcVersion},
+        {"jsonrpc", _jsonrpcVersion},
         {"method", jsonMap["method"]},
         {"params", jsonMap["params"]},
     };
@@ -52,8 +52,8 @@ Json CJsonRpc::request(Json jsonMap) {
     }
 
     // Block until a timeout happens or response is received
-    std::unique_lock<std::mutex> lk(*query.completionMtx);
-    query.completionCV->wait(lk);
+    std::unique_lock<std::mutex> responseWaitLock(*query.completionMtx);
+    query.completionCV->wait(responseWaitLock);
 
     // Move response object and return it
     Json result = move(_queries[query.id].json);
