@@ -14,6 +14,13 @@ using namespace json11;
 
 using namespace std;
 
+// Include structs
+#include "structs/responsebase.h"
+#include "structs/blockhash.h"
+#include "structs/runtimeversion.h"
+#include "structs/metadata.h"
+#include "structs/systeminfo.h"
+
 #include "constants.h"
 #include "errors.h"
 #include "interfaces/imessageobserver.h"
@@ -21,8 +28,10 @@ using namespace std;
 #include "interfaces/iwsclient.h"
 #include "interfaces/ijsonrpc.h"
 #include "interfaces/ilogger.h"
+#include "interfaces/iapplication.h"
 #include "wsclient.h"
 #include "loggerstub.h"
+#include "application.h"
 
 #include "jsonrpc.h"
 // clang-format on
