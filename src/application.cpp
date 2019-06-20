@@ -1,5 +1,12 @@
 #include "polkadot.h"
 
+// c++ 17 std::invoke implementation
+template<class PMF, class Pointer, class... Args>
+inline auto INVOKE(PMF pmf, Pointer&& ptr, Args&&... args) ->
+    decltype(((*std::forward<Pointer>(ptr).*pmf)(std::forward<Args>(args)...))) {
+        return ((*std::forward<Pointer>(ptr)).*pmf)(std::forward<Args>(args)...);
+    }
+
 CPolkaApi::CPolkaApi(){
 
     JsonRpcParams params;
@@ -20,6 +27,24 @@ int CPolkaApi::connect(){
 
 void CPolkaApi::disconnect(){
     _jsonRpc->disconnect();
+}
+
+/*
+    Wrapper for every a business object creation operation
+ */
+template <typename T, unique_ptr<T> (CPolkaApi::*F) (Json)>
+unique_ptr<T> CPolkaApi::deserialize(Json jsonObject){
+    
+    try{
+        // invoke pointer-to-member function
+        return INVOKE(F, this, jsonObject);
+    }
+    catch(std::exception &e){
+        string errstr("Cannot deserialize data ");
+        _logger->error(errstr + e.what());
+        throw ApplicationException(errstr + e.what());
+        return nullptr;
+    }
 }
 
 /*  Call 4 methods and put them together in a single object 
@@ -54,23 +79,48 @@ unique_ptr<SystemInfo> CPolkaApi::getSystemInfo(){
         };
     Json systemPropertiesJson = _jsonRpc->request(systemPropertiesQuery);
 
+    Json completeJson = Json::array{
+        systemNameJson,
+        systemChainJson,
+        systemVersionJson,
+        systemPropertiesJson
+    };
+
+    return move(deserialize<SystemInfo, &CPolkaApi::createSystemInfo>(completeJson));
+}
+
+unique_ptr<SystemInfo> CPolkaApi::createSystemInfo(Json jsonObject){
     unique_ptr<SystemInfo> si(new SystemInfo);
-
-    try{
-        strcpy(si->chainName, systemNameJson.string_value().c_str());
-        strcpy(si->chainId, systemChainJson.string_value().c_str());
-        strcpy(si->version, systemVersionJson.string_value().c_str());
-        si->tokenDecimals = systemPropertiesJson["tokenDecimals"].int_value();
-        strcpy(si->tokenSymbol, systemPropertiesJson["tokenSymbol"].string_value().c_str());
-    }
-    catch(std::exception &e){
-        string errstr("Cannot deserialize data ");
-        _logger->error(errstr + e.what());
-        throw ApplicationException(errstr + e.what());
-        return nullptr;
-    }
-
+    strcpy(si->chainName, jsonObject[0].string_value().c_str());
+    strcpy(si->chainId, jsonObject[1].string_value().c_str());
+    strcpy(si->version, jsonObject[2].string_value().c_str());
+    si->tokenDecimals = jsonObject[3]["tokenDecimals"].int_value();
+    strcpy(si->tokenSymbol, jsonObject[3]["tokenSymbol"].string_value().c_str());
     return si;
+}
+
+unique_ptr<BlockHash> CPolkaApi::createBlockHash(Json jsonObject){
+    unique_ptr<BlockHash> bh(new BlockHash);
+    strcpy(bh->hash, jsonObject.string_value().c_str());
+    return bh;
+}
+
+unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject){
+    unique_ptr<RuntimeVersion> rv(new RuntimeVersion);
+
+    strcpy(rv->specName, jsonObject["specName"].string_value().c_str());
+    strcpy(rv->implName, jsonObject["implName"].string_value().c_str());
+    rv->authoritingVersion = jsonObject["authoritingVersion"].int_value();
+    rv->specVersion = atoi(jsonObject["specVersion"].string_value().c_str());
+    rv->implVersion = atoi(jsonObject["implVersion"].string_value().c_str());
+
+    int i = 0;
+    for(Json item: jsonObject["apis"].array_items()){
+        strcpy(rv->api[i].num, item[0].string_value().c_str());
+        rv->api[i].id = item[1].int_value();
+        i++;
+    }
+    return rv;
 }
 
 unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> params){
@@ -81,23 +131,13 @@ unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> par
         };
 
     Json response = _jsonRpc->request(query);
-    unique_ptr<BlockHash> bh(new BlockHash);
 
-    try{
-        strcpy(bh->hash, response.string_value().c_str());
-    }
-    catch(std::exception &e){
-        string errstr("Cannot deserialize data ");
-        _logger->error(errstr + e.what());
-        throw ApplicationException(errstr + e.what());
-        return nullptr;
-    }
-
-    return bh;
+    return move(deserialize<BlockHash, &CPolkaApi::createBlockHash>(response));
 }
 
 unique_ptr<Metadata> CPolkaApi::getMetadata(unique_ptr<GetMetadataParams> params){
-
+    unique_ptr<Metadata> stub(new Metadata);
+    return move(stub);
 }
 
 unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params){
@@ -108,23 +148,6 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
         };
 
     Json response = _jsonRpc->request(query);
-    unique_ptr<RuntimeVersion> rv(new RuntimeVersion);
 
-    try{
-    strcpy(rv->specName, response["specName"].string_value().c_str());
-    strcpy(rv->implName, response["implName"].string_value().c_str());
-    rv->authoritingVersion = response["authoritingVersion"].int_value();
-    rv->specVersion = atoi(response["specVersion"].string_value().c_str());
-    rv->implVersion = atoi(response["implVersion"].string_value().c_str());
-    }
-    catch(std::exception &e){
-        int i = 0;
-        for(Json item: response["apis"].array_items()){
-            strcpy(rv->api[i].num, item[0].string_value().c_str());
-            rv->api[i].id = item[1].int_value();
-            i++;
-        }
-    }
-
-    return rv;
+    return move(deserialize<RuntimeVersion, &CPolkaApi::createRuntimeVersion>(response));
 }

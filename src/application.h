@@ -11,6 +11,12 @@ class CPolkaApi : public IApplication {
 private:
     ILogger *_logger;
     IJsonRpc *_jsonRpc;
+
+    unique_ptr<SystemInfo> createSystemInfo(Json jsonObject); 
+    unique_ptr<BlockHash> createBlockHash(Json jsonObject); 
+    unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject); 
+    template <typename T, unique_ptr<T> (CPolkaApi::*F) (Json)>
+    unique_ptr<T> deserialize(Json jsonObject);
     
 public:
     CPolkaApi();
