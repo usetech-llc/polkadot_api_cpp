@@ -1,9 +1,10 @@
 class LoggerStub : public ILogger // logger stub
 {
 private:
+    mutex _mtx;
     /* data */
 public:
-    void info(string message);
-    void error(string message);
-    void warning(string message);
+    virtual void info(string message);
+    virtual void error(string message);
+    virtual void warning(string message);
 };

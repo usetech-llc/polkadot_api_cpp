@@ -27,16 +27,15 @@ public:
      *
      * @param jsonMap JSON object with command parameters
      * @param observer The observer that will be notified of updates
-     * @return command execution result
+     * @return subscription ID
      */
     virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) = 0;
 
     /**
      *  Send a command to unsubscribe from websocket updates, e.g. state_unsubscribeStorage
      *
-     * @param jsonMap JSON object with command parameters
-     * @param observer The observer that was subscribed and will be unsubscribed
+     * @param subscriptionId Id of subscription to unsubscribe from
      * @return command execution result
      */
-    virtual int unsubscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) = 0;
+    virtual int unsubscribeWs(int subscriptionId) = 0;
 };

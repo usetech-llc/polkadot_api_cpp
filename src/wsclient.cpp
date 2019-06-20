@@ -4,12 +4,9 @@ CWebSocketClient *CWebSocketClient::_instance = nullptr;
 chrono::seconds CWebSocketClient::ConnectionTimeout(5); // 5 second connection timeout
 
 CWebSocketClient::CWebSocketClient(ILogger *logger)
-    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connected(false) {}
+    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _connected(false) {}
 
-CWebSocketClient::~CWebSocketClient() {
-    if (_connectedThread)
-        delete _connectedThread;
-}
+CWebSocketClient::~CWebSocketClient() { delete _connectedThread; }
 
 IWebSocketClient *CWebSocketClient::getInstance(ILogger *logger) {
     if (!CWebSocketClient::_instance) {
@@ -23,11 +20,14 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 
 void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
-    // Notify observers
-    CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance(nullptr);
-    inst->_logger->info(string("WS Received Message: ") + msg->get_payload());
-    for (auto o : inst->_observers) {
-        o->handleMessage(msg->get_payload());
+    if (msg->get_opcode() == websocketpp::frame::opcode::text) {
+        // Notify observers
+        CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance(nullptr);
+        string payload(msg->get_payload());
+        inst->_logger->info(string("WS Received Message: ") + payload);
+        for (auto o : inst->_observers) {
+            o->handleMessage(payload);
+        }
     }
 }
 
@@ -58,6 +58,7 @@ context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl) {
 }
 
 void CWebSocketClient::runWsMessages() {
+    // will exit when this connection is closed.
     _c.run();
     _logger->info("runWsMessages Thread exited");
 }
@@ -95,13 +96,13 @@ int CWebSocketClient::connect() {
 
         // Start the ASIO io_service run loop
         // this will cause a single connection to be made to the server. c.run()
-        // will exit when this connection is closed.
+        std::unique_lock<std::mutex> connectionWaitLock(_connectionMtx);
         _connectedThread = new thread(&CWebSocketClient::runWsMessages, this);
 
         // Wait for connection
-        std::unique_lock<std::mutex> connectionWaitLock(_connectionMtx);
         _connectionCV.wait_for(connectionWaitLock, ConnectionTimeout);
         _connected = true;
+        _logger->info("Connection established");
 
     } catch (websocketpp::exception const &e) {
         _logger->error(string("Could not create connection: ") + e.what());
