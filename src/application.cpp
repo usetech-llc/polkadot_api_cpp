@@ -21,7 +21,7 @@ CPolkaApi::~CPolkaApi() {
     delete _jsonRpc;
 }
 
-int CPolkaApi::connect() { _jsonRpc->connect(); }
+int CPolkaApi::connect() { return _jsonRpc->connect(); }
 
 void CPolkaApi::disconnect() { _jsonRpc->disconnect(); }
 
@@ -42,11 +42,11 @@ template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> CPolkaA
 }
 
 /*  Call 4 methods and put them together in a single object
-    *  system_chain
-    *  system_name
-    *  system_version
-    *  system_properties
-*/
+ *  system_chain
+ *  system_name
+ *  system_version
+ *  system_properties
+ */
 unique_ptr<SystemInfo> CPolkaApi::getSystemInfo() {
 
     Json systemNameQuery = Json::object{{"method", "system_name"}, {"params", Json::array{}}};
