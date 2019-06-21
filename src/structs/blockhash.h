@@ -9,6 +9,6 @@ struct BlockHash {
 /*
   params for chain_getBlockHash
 */
-struct GetBlockHashParams{
+struct GetBlockHashParams {
     int blockNumber;
 };

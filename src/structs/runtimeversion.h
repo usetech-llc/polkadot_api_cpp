@@ -20,6 +20,6 @@ struct RuntimeVersion {
   params for chain_getRuntimeVersion
 */
 
-struct GetRuntimeVersionParams{
+struct GetRuntimeVersionParams {
     char blockHash[MAX_NAME_SIZE];
 };

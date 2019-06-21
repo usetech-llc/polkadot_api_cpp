@@ -15,19 +15,19 @@ public:
     virtual void disconnect() = 0;
 
     /**
-     *  This method calls rpc bellow and puts it together: 
+     *  This method calls rpc bellow and puts it together:
      *  system_chain
      *  system_name
      *  system_version
      *  system_properties
-     * 
+     *
      * @return SystemInfo struct with result
      */
     virtual unique_ptr<SystemInfo> getSystemInfo() = 0;
 
     /**
      *  Retreives the block hash for specific block
-     * 
+     *
      *  @param struct with blockNumber block number
      *  @return BlockHash struct with result
      */
