@@ -13,7 +13,7 @@ struct EventArg {
 };
 
 struct OuterEvent {
-    char name[DEFAULT_SIZE] ;
+    char name[DEFAULT_SIZE];
     EventArg eventArg[DEFAULT_SIZE];
 };
 
@@ -63,6 +63,6 @@ struct Metadata {
   params for state_getMetadata
 */
 
-struct GetMetadataParams{
+struct GetMetadataParams {
     char blockHash[MAX_NAME_SIZE];
 };
