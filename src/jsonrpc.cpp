@@ -65,42 +65,58 @@ Json CJsonRpc::request(Json jsonMap) {
 void CJsonRpc::handleMessage(const string &payload) {
 
     string err;
-    _logger->info("Message received: " + payload);
+    _logger->info(string("Message received: ") + payload);
     Json json = Json::parse(payload, err);
 
-    int requestId = json["id"].int_value();
+    int requestId = 0;
+    int subscriptionId = 0;
+    if (!json["id"].is_null())
+        requestId = json["id"].int_value();
+    if (!json["params"].is_null())
+        subscriptionId = json["params"]["subscription"].int_value();
 
-    _queryMtx.lock();
-    if (_queries.count(requestId)) {
+    if (requestId && _queries.count(requestId)) {
         // Response for requestId arrived. Set response and notify
+        _queryMtx.lock();
         _queries[requestId].json = json["result"];
-        _queries[requestId].completionCV->notify_all();
+        condition_variable *completionCV = _queries[requestId].completionCV;
+        _queryMtx.unlock();
+        completionCV->notify_all();
+    } else if (subscriptionId) {
+        // Subscription response arrived.
+        _queryMtx.lock();
+        if (_wsSubscribers.count(subscriptionId))
+            _wsSubscribers[subscriptionId]->handleWsMessage(json["params"]["result"]);
+        _queryMtx.unlock();
+    } else {
+        _logger->error("Unknown type of response: " + payload);
     }
-    _queryMtx.unlock();
 }
 
 int CJsonRpc::subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) {
     // Send normal request
     auto response = request(jsonMap);
-
     // Get response for this request and extract subscription ID
-    int subscriptionId = response["result"].int_value();
+    int subscriptionId = response.int_value();
     _wsSubscribers[subscriptionId] = observer;
+    _logger->info(string("Subscribed with subscription ID: ") + to_string(subscriptionId));
 
-    return 0;
+    return subscriptionId;
 }
 
-int CJsonRpc::unsubscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) {
-    // Send normal request
-    request(jsonMap);
+int CJsonRpc::unsubscribeWs(int subscriptionId) {
+    // Send unsubscribe request
+    if (subscriptionId) {
+        Json unsubscribeQuery =
+            Json::object{{"method", "state_unsubscribeStorage"}, {"params", Json::array{subscriptionId}}};
 
-    // Find observer in the oberver map and remove
-    int subscriptionId = 0;
-    for (auto it = _wsSubscribers.begin(); it != _wsSubscribers.end(); ++it)
-        if (it->second == observer)
-            subscriptionId = it->first;
-    if (subscriptionId)
+        request(unsubscribeQuery);
+        _logger->info(string("Unsubscribed from subscription ID: ") + to_string(subscriptionId));
+
+        // remove observer from the oberver map
+        _queryMtx.lock();
         _wsSubscribers.erase(subscriptionId);
-
+        _queryMtx.unlock();
+    }
     return 0;
 }

@@ -41,5 +41,5 @@ public:
     virtual Json request(Json jsonMap);
     virtual void handleMessage(const string &payload);
     virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer);
-    virtual int unsubscribeWs(Json jsonMap, IWebSocketMessageObserver *observer);
+    virtual int unsubscribeWs(int subscriptionId);
 };
