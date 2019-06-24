@@ -9,7 +9,7 @@ struct ApiItem {
 
 struct RuntimeVersion {
     ApiItem api[DEFAULT_SIZE];
-    unsigned int authoritingVersion;
+    unsigned int authoringVersion;
     char implName[MAX_NAME_SIZE];
     int implVersion;
     char specName[MAX_NAME_SIZE];

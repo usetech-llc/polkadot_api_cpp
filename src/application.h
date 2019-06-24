@@ -17,8 +17,9 @@ private:
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
 
 public:
-    CPolkaApi();
-    virtual ~CPolkaApi() override;
+    CPolkaApi() = delete;
+    CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc);
+    virtual ~CPolkaApi() override {}
     virtual int connect();
     virtual void disconnect();
     virtual unique_ptr<SystemInfo> getSystemInfo();

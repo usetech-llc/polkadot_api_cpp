@@ -2,7 +2,13 @@
 
 int main(int argc, char *argv[]) {
 
-    CPolkaApi app;
+    JsonRpcParams params;
+    params.jsonrpcVersion = "2.0";
+
+    LoggerStub logger;
+    CJsonRpc jsonRpc(CWebSocketClient::getInstance(&logger), &logger, params);
+
+    CPolkaApi app(&logger, &jsonRpc);
 
     // string blockHash = "0xb72a241d0a3a38268671caa3bc4ad7e88015cff341a1da0f1982227c5a52a3e3";
     // GetRuntimeVersionParams par;

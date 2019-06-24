@@ -7,18 +7,9 @@ inline auto INVOKE(PMF pmf, Pointer &&ptr, Args &&... args)
     return ((*std::forward<Pointer>(ptr)).*pmf)(std::forward<Args>(args)...);
 }
 
-CPolkaApi::CPolkaApi() {
-
-    JsonRpcParams params;
-    params.jsonrpcVersion = "2.0";
-
-    _logger = new LoggerStub();
-    _jsonRpc = new CJsonRpc(CWebSocketClient::getInstance(_logger), _logger, params);
-}
-
-CPolkaApi::~CPolkaApi() {
-    delete _logger;
-    delete _jsonRpc;
+CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc) {
+    _logger = logger;
+    _jsonRpc = jsonRpc;
 }
 
 int CPolkaApi::connect() { return _jsonRpc->connect(); }
@@ -87,9 +78,9 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
 
     strcpy(rv->specName, jsonObject["specName"].string_value().c_str());
     strcpy(rv->implName, jsonObject["implName"].string_value().c_str());
-    rv->authoritingVersion = jsonObject["authoritingVersion"].int_value();
-    rv->specVersion = atoi(jsonObject["specVersion"].string_value().c_str());
-    rv->implVersion = atoi(jsonObject["implVersion"].string_value().c_str());
+    rv->authoringVersion = jsonObject["authoringVersion"].int_value();
+    rv->specVersion = jsonObject["specVersion"].int_value();
+    rv->implVersion = jsonObject["implVersion"].int_value();
 
     int i = 0;
     for (Json item : jsonObject["apis"].array_items()) {
