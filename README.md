@@ -21,6 +21,11 @@ sudo apt-get -y install build-essential cmake
 sudo apt-get install libcurl4-openssl-dev
 ```
 
+### doxygen
+```
+sudo apt-get install doxygen python-pydot python-pydot-ng graphviz
+```
+
 ## Installation
 
 This is work in progress, so installation is only possible from the source code.
