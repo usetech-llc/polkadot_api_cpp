@@ -315,6 +315,6 @@ add_custom_target(
 
 add_custom_target(
         doc
-        COMMAND doxygen
+        COMMAND rm -rf doc/html && doxygen
         .doxygen.conf
 )
