@@ -7,7 +7,8 @@ inline auto INVOKE(PMF pmf, Pointer &&ptr, Args &&... args)
     return ((*std::forward<Pointer>(ptr)).*pmf)(std::forward<Args>(args)...);
 }
 
-CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc) {
+CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc)
+    : _blockNumberSubscriber(nullptr), _blockNumberSubscriptionId(0) {
     _logger = logger;
     _jsonRpc = jsonRpc;
 }
@@ -112,4 +113,51 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
     Json response = _jsonRpc->request(query);
 
     return move(deserialize<RuntimeVersion, &CPolkaApi::createRuntimeVersion>(response));
+}
+
+long long CPolkaApi::fromHex(string hexStr) {
+    int offset = 0;
+    if ((hexStr[0] == '0') && (hexStr[1] == 'x')) {
+        offset = 2;
+    }
+    long long result = 0;
+    while (offset < (int)hexStr.length()) {
+        unsigned char digit = hexStr[offset];
+        if ((digit >= 'a') && (digit <= 'f'))
+            digit = digit - 'a' + 10;
+        else if ((digit >= 'A') && (digit <= 'F'))
+            digit = digit - 'A' + 10;
+        else if ((digit >= '0') && (digit <= '9'))
+            digit = digit - '0';
+        result = (result << 4) | digit;
+        offset++;
+    }
+    return result;
+}
+
+void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
+
+    if (_blockNumberSubscriptionId == subscriptionId) {
+        _blockNumberSubscriber(fromHex(message["number"].string_value()));
+    }
+}
+
+int CPolkaApi::subscribeBlockNumber(std::function<void(long long)> callback) {
+    _blockNumberSubscriber = callback;
+
+    // Subscribe to websocket
+    if (!_blockNumberSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "chain_subscribeNewHead"}, {"params", Json::array{}}};
+        _blockNumberSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+int CPolkaApi::unsubscribeBlockNumber() {
+    if (_blockNumberSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId);
+        _blockNumberSubscriber = nullptr;
+        _blockNumberSubscriptionId = 0;
+    }
+    return PAPI_OK;
 }

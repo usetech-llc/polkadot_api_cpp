@@ -36,7 +36,7 @@ public:
         subscriptionId = jr->subscribeWs(subscribeQuery, this);
     }
 
-    virtual void handleWsMessage(const Json &message) {
+    virtual void handleWsMessage(const int subscriptionId, const Json &message) {
         cout << "WS Update Message Received (console app): " << message.dump() << endl;
         if (!disconnectThread)
             disconnectThread = new thread(&TestSubscriptionListener::close, this);

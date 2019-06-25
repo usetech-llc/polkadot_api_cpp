@@ -60,4 +60,22 @@ public:
      * @return RuntimeVersion struct with result
      */
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params) = 0;
+
+    /**
+     *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already
+     * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeBlockNumber method is
+     * called, the API will be receiving updates and forwarding them to subscribed object/function. Only
+     * unsubscribeBlockNumber will physically unsubscribe from WebSocket endpoint updates.
+     *
+     * @param callback - functor or lambda expression that will receive updates
+     * @return operation result
+     */
+    virtual int subscribeBlockNumber(std::function<void(long long)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates with most recent block number.
+     *
+     * @return operation result
+     */
+    virtual int unsubscribeBlockNumber() = 0;
 };

@@ -1,5 +1,6 @@
 // clang-format off
 #include <curl/curl.h>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <thread>

@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -83,7 +86,7 @@ void CJsonRpc::handleMessage(const string &payload) {
         // Subscription response arrived.
         _queryMtx.lock();
         if (_wsSubscribers.count(subscriptionId))
-            _wsSubscribers[subscriptionId]->handleWsMessage(json["params"]["result"]);
+            _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, json["params"]["result"]);
         _queryMtx.unlock();
     } else {
         _logger->error("Unknown type of response: " + payload);
