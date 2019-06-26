@@ -91,6 +91,20 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
     return rv;
 }
 
+unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject){
+
+    unique_ptr<Metadata> md(new Metadata);
+    MetadataFactory mdf(_logger);
+
+    // cut off "0x" 
+    mdf.setInputData(jsonObject.string_value().substr(2));
+
+    md->metadataV0 = mdf.getMetadataV0();
+    md->metadataV5 = mdf.getMetadataV5();
+
+    return md;
+}
+
 unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> params) {
 
     Json query = Json::object{{"method", "chain_getBlockHash"}, {"params", Json::array{params->blockNumber}}};
@@ -101,8 +115,13 @@ unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> par
 }
 
 unique_ptr<Metadata> CPolkaApi::getMetadata(unique_ptr<GetMetadataParams> params) {
-    unique_ptr<Metadata> stub(new Metadata);
-    return move(stub);
+    
+    Json query = Json::object{{"method", "state_getMetadata"}, {"params", Json::array{params->blockHash}}};
+
+    Json response = _jsonRpc->request(query);
+    cout << response.dump();
+
+    return move(deserialize<Metadata, &CPolkaApi::createMetadata>(response));
 }
 
 unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params) {

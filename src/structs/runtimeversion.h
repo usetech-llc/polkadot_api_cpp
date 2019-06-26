@@ -3,16 +3,16 @@
 */
 
 struct ApiItem {
-    char num[DEFAULT_SIZE];
+    char num[STRING_SIZE];
     int id;
 };
 
 struct RuntimeVersion {
-    ApiItem api[DEFAULT_SIZE];
+    ApiItem api[COLLECTION_SIZE];
     unsigned int authoringVersion;
-    char implName[MAX_NAME_SIZE];
+    char implName[STRING_SIZE];
     int implVersion;
-    char specName[MAX_NAME_SIZE];
+    char specName[STRING_SIZE];
     int specVersion;
 };
 
@@ -21,5 +21,5 @@ struct RuntimeVersion {
 */
 
 struct GetRuntimeVersionParams {
-    char blockHash[MAX_NAME_SIZE];
+    char blockHash[STRING_SIZE];
 };

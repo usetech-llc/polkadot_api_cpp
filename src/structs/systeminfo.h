@@ -1,8 +1,8 @@
 
 struct SystemInfo {
-    char chainId[DEFAULT_SIZE];
-    char chainName[DEFAULT_SIZE];
-    char version[DEFAULT_SIZE];
+    char chainId[STRING_SIZE];
+    char chainName[STRING_SIZE];
+    char version[STRING_SIZE];
     int tokenDecimals;
-    char tokenSymbol[MAX_NAME_SIZE];
+    char tokenSymbol[STRING_SIZE];
 };

@@ -3,7 +3,7 @@
 */
 
 struct BlockHash {
-    char hash[MAX_NAME_SIZE];
+    char hash[STRING_SIZE];
 };
 
 /*
