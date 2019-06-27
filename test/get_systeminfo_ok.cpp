@@ -13,13 +13,13 @@ int main(int argc, char *argv[]) {
     auto resp3 = app.getSystemInfo();
 
     // Check chainId
-    assert(strcmp(resp3->chainId, "Alexander") == 0);
+    assert(strlen(resp3->chainId) > 0);
 
     // Check chainName
     assert(strcmp(resp3->chainName, "parity-polkadot") == 0);
 
     // Check version
-    assert(strcmp(resp3->version, "0.4.4") == 0);
+    assert(strlen(resp3->version) > 0);
 
     // Check tokenSymbol
     assert(strcmp(resp3->tokenSymbol, "DOT") == 0);
