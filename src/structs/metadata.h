@@ -8,6 +8,6 @@ struct Metadata {
 /*
   params for state_getMetadata
 */
-struct GetMetadataParams{
+struct GetMetadataParams {
     char blockHash[STRING_SIZE];
 };

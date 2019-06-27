@@ -4,9 +4,8 @@ private:
     int _version;
     ILogger *_logger;
 
-
 public:
-    MetadataFactory(ILogger* logger);
+    MetadataFactory(ILogger *logger);
     void setInputData(string hexString);
     int getVersion();
     unique_ptr<MDV0> getMetadataV0();
