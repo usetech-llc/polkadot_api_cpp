@@ -233,7 +233,6 @@ export (PACKAGE websocketpp)
 # Setup source files directories
 file(GLOB_RECURSE examples ${PROJECT_SOURCE_DIR}/examples/*.cpp)
 file(GLOB_RECURSE src ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE cli ${PROJECT_SOURCE_DIR}/cli/*.cpp)
 file(GLOB_RECURSE srctest ${PROJECT_SOURCE_DIR}/test/*.cpp)
 
 # Setup output directories
@@ -247,20 +246,6 @@ add_library(polkacpp ${src})
 # Build example sources as executables
 add_executable(polkaclient ${examples})
 target_link_libraries (polkaclient polkacpp)
-
-# Build cli sources as executables
-add_executable(cli ${cli})
-target_link_libraries (cli polkacpp)
-
-##### Link Boost and OpenSSL to cli project
-
-target_link_libraries( cli ${Boost_LIBRARIES} )
-target_link_libraries( cli ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} )
-target_link_libraries( cli Threads::Threads )
-
-set_property(TARGET cli APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-set_property(TARGET cli APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
-set_property(TARGET cli APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
 
 ##### Link Boost and OpenSSL to example project
 
