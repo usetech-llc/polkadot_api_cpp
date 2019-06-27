@@ -315,12 +315,12 @@ EventArgV5 getEventV5(std::string &str) {
 }
 
 unique_ptr<MDV5> fillV5Metadata(std::string str) {
-    // magic bytes
-    auto magic1 = nextByte(str);
-    auto magic2 = nextByte(str);
-    auto magic3 = nextByte(str);
-    auto magic4 = nextByte(str);
-    auto magic5 = nextByte(str);
+    // skip 5 magic bytes
+    nextByte(str);
+    nextByte(str);
+    nextByte(str);
+    nextByte(str);
+    nextByte(str);
 
     unique_ptr<MDV5> md(new MDV5);
     int mLen = decodeCompactInteger(str);
