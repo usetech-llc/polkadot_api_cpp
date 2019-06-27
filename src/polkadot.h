@@ -10,7 +10,7 @@
 #include <websocketpp/config/asio_client.hpp>
 
 #include "libs/json11/json11.hpp"
-#include "libs/scale/scale.h"
+#include "scale.h"
 using namespace json11;
 
 using namespace std;
