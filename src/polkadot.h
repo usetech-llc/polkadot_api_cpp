@@ -11,6 +11,7 @@
 #include <websocketpp/config/asio_client.hpp>
 
 #include "libs/json11/json11.hpp"
+#include "scale.h"
 using namespace json11;
 
 using namespace std;
@@ -19,6 +20,8 @@ using namespace std;
 #include "structs/responsebase.h"
 #include "structs/blockhash.h"
 #include "structs/runtimeversion.h"
+#include "structs/metadataV0.h"
+#include "structs/metadataV5.h"
 #include "structs/metadata.h"
 #include "structs/systeminfo.h"
 
@@ -30,6 +33,7 @@ using namespace std;
 #include "interfaces/ijsonrpc.h"
 #include "interfaces/ilogger.h"
 #include "interfaces/iapplication.h"
+#include "metadatafactory.h"
 #include "wsclient.h"
 #include "loggerstub.h"
 #include "application.h"
