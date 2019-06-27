@@ -18,7 +18,7 @@ public:
 
 int main(int argc, char *argv[]) {
     TestMessageHandler tmh;
-    LoggerStub log;
+    EasyLogger log;
 
     IWebSocketClient *ws = CWebSocketClient::getInstance(&log);
     ws->registerMessageObserver(&tmh);

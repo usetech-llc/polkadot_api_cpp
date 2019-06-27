@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
     JsonRpcParams params;
     params.jsonrpcVersion = "2.0";
 
-    LoggerStub logger;
+    EasyLogger logger;
     CJsonRpc jsonRpc(CWebSocketClient::getInstance(&logger), &logger, params);
 
     CPolkaApi app(&logger, &jsonRpc);

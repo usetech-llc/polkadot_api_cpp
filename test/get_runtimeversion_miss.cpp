@@ -17,7 +17,7 @@ private:
 };
 
 int main(int argc, char *argv[]) {
-    LoggerStub log;
+    EasyLogger log;
     CMockJsonRpcMissingField mockRpc;
 
     CPolkaApi app(&log, &mockRpc);

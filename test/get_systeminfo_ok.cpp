@@ -4,7 +4,7 @@
 #include <cassert>
 
 int main(int argc, char *argv[]) {
-    LoggerStub log;
+    EasyLogger log;
     CMockJsonRpcSystemInfo mockRpc;
 
     CPolkaApi app(&log, &mockRpc);

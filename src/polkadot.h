@@ -10,6 +10,7 @@
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
 
+#include "libs/easyloggingpp/easylogging++.h"
 #include "libs/json11/json11.hpp"
 #include "scale.h"
 using namespace json11;
@@ -35,7 +36,7 @@ using namespace std;
 #include "interfaces/iapplication.h"
 #include "metadatafactory.h"
 #include "wsclient.h"
-#include "loggerstub.h"
+#include "elog.h"
 #include "application.h"
 
 #include "jsonrpc.h"

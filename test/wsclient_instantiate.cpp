@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]) {
     try {
         // Default constructor
-        LoggerStub log;
+        EasyLogger log;
         IWebSocketClient *ws = CWebSocketClient::getInstance(&log);
 
         // All tests ran ok

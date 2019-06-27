@@ -3,7 +3,7 @@
 class TestSubscriptionListener : public IWebSocketMessageObserver {
 public:
     volatile bool done;
-    LoggerStub log;
+    EasyLogger log;
     IWebSocketClient *client;
     CJsonRpc *jr;
     int subscriptionId;

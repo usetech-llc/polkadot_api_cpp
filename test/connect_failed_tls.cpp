@@ -1,7 +1,7 @@
 #include "../src/polkadot.h"
 
 int main(int argc, char *argv[]) {
-    LoggerStub log;
+    EasyLogger log;
 
     // Setup: remove certificate file
     rename(CConstants::certificate_file.c_str(), (CConstants::certificate_file + ".tmp").c_str());
