@@ -3,7 +3,8 @@
 int main(int argc, char *argv[]) {
     try {
         // Default constructor
-        CWebSocketClient *ws = CWebSocketClient::getInstance();
+        LoggerStub log;
+        IWebSocketClient *ws = CWebSocketClient::getInstance(&log);
 
         // All tests ran ok
         cout << "success" << endl;

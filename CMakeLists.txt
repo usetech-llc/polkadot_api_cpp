@@ -309,3 +309,12 @@ add_custom_target(
         -i
         ${ALL_SOURCE_FILES}
 )
+
+###############################################################################
+# Doxygen
+
+add_custom_target(
+        doc
+        COMMAND rm -rf doc/html && doxygen
+        .doxygen.conf
+)

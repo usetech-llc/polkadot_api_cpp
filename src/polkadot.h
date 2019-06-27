@@ -1,5 +1,6 @@
 // clang-format off
 #include <curl/curl.h>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -9,12 +10,33 @@
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
 
+#include "libs/json11/json11.hpp"
+#include "scale.h"
+using namespace json11;
+
 using namespace std;
 
-#include "constants.h"
-#include "wsmessageobserverIface.h"
-#include "wsclient.h"
+// Include structs
+#include "structs/responsebase.h"
+#include "structs/blockhash.h"
+#include "structs/runtimeversion.h"
+#include "structs/metadataV0.h"
+#include "structs/metadataV5.h"
+#include "structs/metadata.h"
+#include "structs/systeminfo.h"
 
-#include "libs/json11/json11.hpp"
-using namespace json11;
+#include "constants.h"
+#include "errors.h"
+#include "interfaces/imessageobserver.h"
+#include "interfaces/iwsmessageobserver.h"
+#include "interfaces/iwsclient.h"
+#include "interfaces/ijsonrpc.h"
+#include "interfaces/ilogger.h"
+#include "interfaces/iapplication.h"
+#include "metadatafactory.h"
+#include "wsclient.h"
+#include "loggerstub.h"
+#include "application.h"
+
+#include "jsonrpc.h"
 // clang-format on

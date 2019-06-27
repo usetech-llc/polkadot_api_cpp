@@ -1,0 +1,5 @@
+#define PAPI_OK 0
+
+#define PAPI_NO_CONNECTION 1
+#define PAPI_CANT_CONNECT 2
+#define PAPI_NOT_CONNECTED 3

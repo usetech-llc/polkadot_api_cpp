@@ -1,30 +1,35 @@
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 
-class CWebSocketClient {
+class CWebSocketClient : public IWebSocketClient {
 private:
     string _nodeUrl;
+    ILogger *_logger;
     static CWebSocketClient *_instance;
     vector<IMessageObserver *> _observers;
     thread *_connectedThread;
     client _c;
     client::connection_ptr _connection;
     bool _connected;
+    condition_variable _connectionCV; // Condition variable used to notify about connection
+    mutex _connectionMtx;             // Mutex for condition varaiable
+    static chrono::seconds ConnectionTimeout;
 
+    friend context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
     friend void on_message(websocketpp::connection_hdl, client::message_ptr msg);
     friend void on_open(client *c, websocketpp::connection_hdl hdl);
     void runWsMessages();
 
-    CWebSocketClient();
+    CWebSocketClient(ILogger *logger);
 
 public:
-    static CWebSocketClient *getInstance();
-    ~CWebSocketClient();
+    static IWebSocketClient *getInstance(ILogger *logger);
+    ~CWebSocketClient() override;
 
-    int connect();
-    bool isConnected();
-    void disconnect();
-    int send(const string &msg);
+    virtual int connect();
+    virtual bool isConnected();
+    virtual void disconnect();
+    virtual int send(const string &msg);
 
-    void registerMessageObserver(IMessageObserver *handler);
+    virtual void registerMessageObserver(IMessageObserver *handler);
 };
