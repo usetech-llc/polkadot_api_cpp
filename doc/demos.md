@@ -54,3 +54,11 @@ Currently unit tests, see above
 
 - Building: See [root level README.md](https://github.com/usetech-llc/polkadot_api_cpp/blob/master/README.md)
 - Lib usage: See doc/html folder
+
+
+## Deliverable 2 - WebSocket Subscriptions
+
+### API can be subscribed and unsibscribed
+```
+bin/wssubscribeApp
+```

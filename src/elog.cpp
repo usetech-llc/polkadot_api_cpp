@@ -2,6 +2,18 @@
 
 INITIALIZE_EASYLOGGINGPP
 
-void EasyLogger::info(string message) { LOG(INFO) << message; }
-void EasyLogger::error(string message) { LOG(ERROR) << message; }
-void EasyLogger::warning(string message) { LOG(WARNING) << message; }
+void EasyLogger::info(string message) {
+    _mtx.lock();
+    LOG(INFO) << message;
+    _mtx.unlock();
+}
+void EasyLogger::error(string message) {
+    _mtx.lock();
+    LOG(ERROR) << message;
+    _mtx.unlock();
+}
+void EasyLogger::warning(string message) {
+    _mtx.lock();
+    LOG(WARNING) << message;
+    _mtx.unlock();
+}

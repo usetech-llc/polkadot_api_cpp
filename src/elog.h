@@ -1,4 +1,7 @@
 class EasyLogger : public ILogger {
+private:
+    mutex _mtx;
+
 public:
     virtual ~EasyLogger() {}
     virtual void info(string message);
