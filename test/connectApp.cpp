@@ -34,7 +34,8 @@ int main(int argc, char *argv[]) {
 
     cout << resp3->specName << endl;
     for (auto item : resp3->api) {
-        cout << "num:      " << item.num << "id:      " << item.id << endl;
+        if (item.id)
+            cout << "num:      " << item.num << "id:      " << item.id << endl;
     }
 
     app.disconnect();

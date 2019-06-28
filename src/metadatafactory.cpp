@@ -386,6 +386,7 @@ unique_ptr<MDV0> MetadataFactory::getMetadataV0() {
 
         if (result != nullptr) {
             _version = 0;
+            _logger->info("V0 metadata decoded successfully");
         }
     } catch (...) {
         _logger->warning("V0 metadata decode has failed");
@@ -402,6 +403,7 @@ unique_ptr<MDV5> MetadataFactory::getMetadataV5() {
 
         if (result != nullptr) {
             _version = 5;
+            _logger->info("V5 metadata decoded successfully");
         }
     } catch (...) {
         _logger->warning("V5 metadata decode has failed");

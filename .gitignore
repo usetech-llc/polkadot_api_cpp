@@ -43,3 +43,6 @@ CMakeFiles
 *.cmake
 Makefile
 *.tcl
+
+# logs
+*.log
