@@ -52,5 +52,5 @@ Currently unit tests, see above
 
 ### Building instructions, initialization, and library usage documented
 
-Building: See [root level README.md](https://github.com/usetech-llc/polkadot_api_cpp/blob/master/README.md)
-Lib usage: See doc/html folder.
+- Building: See [root level README.md](https://github.com/usetech-llc/polkadot_api_cpp/blob/master/README.md)
+- Lib usage: See doc/html folder
