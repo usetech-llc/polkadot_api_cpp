@@ -25,6 +25,7 @@ using namespace std;
 #include "structs/metadataV5.h"
 #include "structs/metadata.h"
 #include "structs/systeminfo.h"
+#include "structs/publickey.h"
 
 #include "constants.h"
 #include "errors.h"
@@ -34,6 +35,7 @@ using namespace std;
 #include "interfaces/ijsonrpc.h"
 #include "interfaces/ilogger.h"
 #include "interfaces/iapplication.h"
+#include "utils/address.h"
 #include "metadatafactory.h"
 #include "wsclient.h"
 #include "elog.h"
