@@ -17,15 +17,19 @@ private:
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
     long long fromHex(string hexStr);
+    string reverseBytes(string str);
+    long long _bestBlockNum;
 
     // Implements IWebSocketMessageObserver
     void handleWsMessage(const int subscriptionId, const Json &message);
 
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
+    std::function<void(Era, Session)> _eraAndSessionSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
+    int _eraAndSessionSubscriptionId;
 
 public:
     CPolkaApi() = delete;
@@ -40,4 +44,7 @@ public:
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
+
+    virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
+    virtual int unsubscribeEraAndSession();
 };

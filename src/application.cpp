@@ -8,7 +8,8 @@ inline auto INVOKE(PMF pmf, Pointer &&ptr, Args &&... args)
 }
 
 CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc)
-    : _blockNumberSubscriber(nullptr), _blockNumberSubscriptionId(0) {
+    : _blockNumberSubscriber(nullptr), _eraAndSessionSubscriber(nullptr), _blockNumberSubscriptionId(0),
+      _eraAndSessionSubscriptionId(0), _bestBlockNum(-1) {
     _logger = logger;
     _jsonRpc = jsonRpc;
 }
@@ -134,6 +135,19 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
     return move(deserialize<RuntimeVersion, &CPolkaApi::createRuntimeVersion>(response));
 }
 
+string CPolkaApi::reverseBytes(string str) {
+    if (strcmp(str.substr(0, 2).c_str(), "0x") == 0)
+        str = str.substr(2);
+
+    string result;
+    for (unsigned int i = 0; i < str.length(); i += 2) {
+
+        auto bt = str.substr(i, 2);
+        result.insert(0, bt);
+    }
+    return result;
+}
+
 long long CPolkaApi::fromHex(string hexStr) {
     int offset = 0;
     if ((hexStr[0] == '0') && (hexStr[1] == 'x')) {
@@ -159,6 +173,31 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
     if (_blockNumberSubscriptionId == subscriptionId) {
         _blockNumberSubscriber(fromHex(message["number"].string_value()));
     }
+
+    if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
+
+        cout << endl << endl << endl << endl << endl << "value: " << (message.dump());
+
+        auto lastLengthChange = fromHex(reverseBytes(message["changes"][0][1].string_value()));
+        auto sessionLength = fromHex(reverseBytes(message["changes"][1][1].string_value()));
+        auto currentEra = fromHex(reverseBytes(message["changes"][2][1].string_value()));
+        auto sessionsPerEra = fromHex(reverseBytes(message["changes"][3][1].string_value()));
+        auto currentIndexSubcription = fromHex(reverseBytes(message["changes"][4][1].string_value()));
+
+        auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
+        auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
+
+        Era era;
+        era.currentEra = currentEra;
+        era.eraProgress = eraProgress;
+        Session session;
+        session.sessionIndex = currentIndexSubcription;
+        session.lastLengthChange = lastLengthChange;
+        session.sessionLength = sessionLength;
+        session.sessionProgress = sessionProgress;
+
+        _eraAndSessionSubscriber(era, session);
+    }
 }
 
 int CPolkaApi::subscribeBlockNumber(std::function<void(long long)> callback) {
@@ -172,6 +211,36 @@ int CPolkaApi::subscribeBlockNumber(std::function<void(long long)> callback) {
 
     return PAPI_OK;
 }
+
+int CPolkaApi::subscribeEraAndSession(std::function<void(Era, Session)> callback) {
+    _eraAndSessionSubscriber = callback;
+
+    subscribeBlockNumber([&](long long blockNum) { _bestBlockNum = blockNum; });
+
+    // era and session subscription
+    auto params = Json::array{Json::array{CConstants::lastLengthChangeSubcription, CConstants::sessionLengthSubcription,
+                                          CConstants::currentEraSubcription, CConstants::sessionsPerEraSubcription,
+                                          CConstants::currentIndexSubcription}};
+
+    // Subscribe to websocket
+    if (!_eraAndSessionSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "state_subscribeStorage"}, {"params", params}};
+        _eraAndSessionSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeEraAndSession() {
+    if (_eraAndSessionSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_eraAndSessionSubscriptionId);
+        _eraAndSessionSubscriber = nullptr;
+        _eraAndSessionSubscriptionId = 0;
+    }
+    unsubscribeBlockNumber();
+    return PAPI_OK;
+}
+
 int CPolkaApi::unsubscribeBlockNumber() {
     if (_blockNumberSubscriptionId) {
         _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId);

@@ -78,4 +78,22 @@ public:
      * @return operation result
      */
     virtual int unsubscribeBlockNumber() = 0;
+
+    /**
+     *  Subscribe to era and session. Only one subscription at a time is allowed. If a subscription already
+     * exists, old subscription will be discarded and replaced with the new one. Until subscribeEraAndSession method is
+     * called, the API will be receiving updates and forwarding them to subscribed object/function. Only
+     * unsubscribeBlockNumber will physically unsubscribe from WebSocket endpoint updates.
+     *
+     * @param callback - functor or lambda expression that will receive updates
+     * @return operation result
+     */
+    virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates with era and session.
+     *
+     * @return operation result
+     */
+    virtual int unsubscribeEraAndSession() = 0;
 };

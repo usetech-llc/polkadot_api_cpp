@@ -25,6 +25,7 @@ using namespace std;
 #include "structs/metadataV5.h"
 #include "structs/metadata.h"
 #include "structs/systeminfo.h"
+#include "structs/common.h"
 
 #include "constants.h"
 #include "errors.h"
