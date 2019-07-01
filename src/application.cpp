@@ -8,8 +8,8 @@ inline auto INVOKE(PMF pmf, Pointer &&ptr, Args &&... args)
 }
 
 CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc)
-    : _blockNumberSubscriber(nullptr), _eraAndSessionSubscriber(nullptr), _blockNumberSubscriptionId(0),
-      _eraAndSessionSubscriptionId(0), _bestBlockNum(-1) {
+    : _bestBlockNum(-1), _blockNumberSubscriber(nullptr), _eraAndSessionSubscriber(nullptr),
+      _blockNumberSubscriptionId(0), _eraAndSessionSubscriptionId(0) {
     _logger = logger;
     _jsonRpc = jsonRpc;
 }
