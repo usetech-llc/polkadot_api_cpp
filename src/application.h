@@ -1,3 +1,8 @@
+typedef struct ProtocolParameters {
+    Hasher FreeBalanceHasher;
+    string FreeBalancePrefix;
+} ProtocolParameters;
+
 class ApplicationException : public exception {
     string _msg;
 
@@ -16,16 +21,21 @@ private:
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
-    long long fromHex(string hexStr);
+    template <typename T> T fromHex(string hexStr, bool bigEndian = true);
+    Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
+
+    ProtocolParameters _protocolPrm;
 
     // Implements IWebSocketMessageObserver
     void handleWsMessage(const int subscriptionId, const Json &message);
 
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
+    map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
+    map<string, int> _balanceSubscriptionIds;
 
 public:
     CPolkaApi() = delete;
@@ -40,4 +50,6 @@ public:
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
+    virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback);
+    virtual int unsubscribeBalance(string address);
 };

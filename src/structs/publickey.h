@@ -1,4 +1,4 @@
-#define PUBLIC_KEY_LENGTH 16
+#define PUBLIC_KEY_LENGTH 32
 #define ADDRESS_LENGTH 48
 
 typedef struct PublicKey {

@@ -1,16 +1,15 @@
 #include "../../src/polkadot.h"
-#include "../libs/blake/blake2.h"
 
-const char *const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-const char ALPHABET_MAP[128] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                                -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-                                -1, -1, -1, -1, -1, 0,  1,  2,  3,  4,  5,  6,  7,  8,  -1, -1, -1, -1, -1, -1, -1, 9,
-                                10, 11, 12, 13, 14, 15, 16, -1, 17, 18, 19, 20, 21, -1, 22, 23, 24, 25, 26, 27, 28, 29,
-                                30, 31, 32, -1, -1, -1, -1, -1, -1, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, -1, 44,
-                                45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, -1, -1, -1, -1, -1};
+const char *const AddressUtils::ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+const char AddressUtils::ALPHABET_MAP[128] = {
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0,  1,  2,
+    3,  4,  5,  6,  7,  8,  -1, -1, -1, -1, -1, -1, -1, 9,  10, 11, 12, 13, 14, 15, 16, -1, 17, 18, 19, 20,
+    21, -1, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, -1, -1, -1, -1, -1, -1, 33, 34, 35, 36, 37, 38, 39,
+    40, 41, 42, 43, -1, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, -1, -1, -1, -1, -1};
 
 // result must be declared: char result[len * 137 / 100];
-int EncodeBase58(const unsigned char *bytes, int len, unsigned char result[]) {
+int AddressUtils::EncodeBase58(const unsigned char *bytes, int len, unsigned char result[]) {
     unsigned char digits[len * 137 / 100];
     int digitslen = 1;
     for (int i = 0; i < len; i++) {
@@ -37,7 +36,7 @@ int EncodeBase58(const unsigned char *bytes, int len, unsigned char result[]) {
 }
 
 // result must be declared (for the worst case): char result[len * 2];
-int DecodeBase58(const unsigned char *str, int len, unsigned char *result) {
+int AddressUtils::DecodeBase58(const unsigned char *str, int len, unsigned char *result) {
     result[0] = 0;
     int resultlen = 1;
     for (int i = 0; i < len; i++) {
@@ -65,22 +64,23 @@ int DecodeBase58(const unsigned char *str, int len, unsigned char *result) {
     return resultlen;
 }
 
-PublicKey decodePublicKeyFromAddr(const Address &addr) {
+PublicKey AddressUtils::getPublicKeyFromAddr(const Address &addr) {
     PublicKey pubk{0};
 
     unsigned char bs58decoded[ADDRESS_LENGTH];
     int len = DecodeBase58(addr.symbols, ADDRESS_LENGTH, bs58decoded);
-    cout << len << endl;
-    printf("%02X%02X%02X%02X\n", bs58decoded[0], bs58decoded[1], bs58decoded[2], bs58decoded[3]);
-
-    // Add SS58RPE prefix, remove checksum (2 bytes)
-    unsigned char SS58RPE[] = {0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45};
-    unsigned char ssPrefixed[ADDRESS_LENGTH + 7];
-    memcpy(ssPrefixed, SS58RPE, 7);
-    memcpy(ssPrefixed + 7, bs58decoded, len - 2);
-    len += 5;
+    if (len == 35) {
+        memcpy(pubk.bytes, bs58decoded + 1, PUBLIC_KEY_LENGTH);
+    }
 
     // TODO: Check the address checksum
+    // Add SS58RPE prefix, remove checksum (2 bytes)
+    // unsigned char SS58RPE[] = {0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45};
+    // unsigned char ssPrefixed[100];
+    // memcpy(ssPrefixed, SS58RPE, 7);
+    //// memcpy(ssPrefixed + 7, pubk.bytes, PUBLIC_KEY_LENGTH);
+    // memcpy(ssPrefixed + 7, bs58decoded + 1, 34);
+
     // unsigned char blake2bHashed[ADDRESS_LENGTH];
     // blake2b(blake2bHashed, 16, ssPrefixed, 512 / 8, NULL, 0);
     //// blake2b(blake2bHashed, 64, (const void *)"abc", 3, NULL, 0);

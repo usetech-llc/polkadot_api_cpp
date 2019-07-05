@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -60,7 +63,6 @@ Json CJsonRpc::request(Json jsonMap) {
 }
 
 void CJsonRpc::handleMessage(const string &payload) {
-
     string err;
     _logger->info(string("Message received: ") + payload);
     Json json = Json::parse(payload, err);
