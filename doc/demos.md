@@ -70,5 +70,5 @@ TBD
 
 ### Current era and session subscription
 ```
-TBD
+bin/wssubscribeAppEraNSession
 ```

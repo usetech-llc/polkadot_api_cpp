@@ -30,6 +30,8 @@ private:
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
 
     ProtocolParameters _protocolPrm;
+    string reverseBytes(string str);
+    long long _bestBlockNum;
 
     // Implements IWebSocketMessageObserver
     void handleWsMessage(const int subscriptionId, const Json &message);
@@ -37,10 +39,12 @@ private:
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
     map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
+    std::function<void(Era, Session)> _eraAndSessionSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
     map<string, int> _balanceSubscriptionIds;
+    int _eraAndSessionSubscriptionId;
 
 public:
     CPolkaApi() = delete;
@@ -57,4 +61,6 @@ public:
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback);
     virtual int unsubscribeBalance(string address);
+    virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
+    virtual int unsubscribeEraAndSession();
 };

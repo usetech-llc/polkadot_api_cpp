@@ -27,6 +27,7 @@ using namespace std;
 #include "structs/systeminfo.h"
 #include "structs/publickey.h"
 #include "structs/hasher.h"
+#include "structs/common.h"
 
 #include "constants.h"
 #include "errors.h"
