@@ -24,8 +24,8 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
 class CMockJsonRpcMD0 : public IJsonRpc {
@@ -34,17 +34,15 @@ private:
         string testValue;
         string line;
         ifstream myfile("test/metadata/exampleMetadataV0.txt");
-        if (myfile.is_open())
-        {
-            while (getline(myfile, line))
-            {
+        if (myfile.is_open()) {
+            while (getline(myfile, line)) {
                 testValue += line;
             }
             myfile.close();
         }
 
-            string err;
-            return Json("0x" + testValue);
+        string err;
+        return Json("0x" + testValue);
     }
 
 public:
@@ -61,10 +59,9 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
-
 
 class CMockJsonRpcMD5 : public IJsonRpc {
 private:
@@ -72,17 +69,15 @@ private:
         string testValue;
         string line;
         ifstream myfile("test/metadata/exampleMetadataV5.txt");
-        if (myfile.is_open())
-        {
-            while (getline(myfile, line))
-            {
+        if (myfile.is_open()) {
+            while (getline(myfile, line)) {
                 testValue += line;
             }
             myfile.close();
         }
 
-            string err;
-            return Json("0x" + testValue);
+        string err;
+        return Json("0x" + testValue);
     }
 
 public:
@@ -99,16 +94,16 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
 class CMockJsonRpcStateGetHashBlock : public IJsonRpc {
 private:
     virtual Json getBlockHash() {
-      
-            string err;
-            return Json("0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
+
+        string err;
+        return Json("0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
     }
 
 public:
@@ -125,34 +120,23 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
-
-
 
 class CMockJsonRpcSystemInfo : public IJsonRpc {
 private:
     virtual Json getSystemProps() {
-      
-            string err;
-            return Json::parse("\{\"tokenDecimals\":15,\"tokenSymbol\":\"DOT\"}",err);
+
+        string err;
+        return Json::parse("\{\"tokenDecimals\":15,\"tokenSymbol\":\"DOT\"}", err);
     }
 
-    virtual Json getSystemChain() {
-      
-            return Json("Alexander");
-    }
+    virtual Json getSystemChain() { return Json("Alexander"); }
 
-    virtual Json getSystemName() {
-      
-            return Json("parity-polkadot");
-    }
+    virtual Json getSystemName() { return Json("parity-polkadot"); }
 
-    virtual Json getSystemVersion() {
-      
-            return Json("0.4.4");
-    } 
+    virtual Json getSystemVersion() { return Json("0.4.4"); }
 
 public:
     CMockJsonRpcSystemInfo() {}
@@ -180,6 +164,6 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
