@@ -30,7 +30,6 @@ private:
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
 
     ProtocolParameters _protocolPrm;
-    string reverseBytes(string str);
     long long _bestBlockNum;
 
     // Implements IWebSocketMessageObserver
