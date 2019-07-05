@@ -3,6 +3,11 @@ typedef struct ProtocolParameters {
     string FreeBalancePrefix;
 } ProtocolParameters;
 
+typedef struct SubscriptionUpdate {
+    int subscriptionId;
+    Json message;
+} SubscriptionUpdate;
+
 class ApplicationException : public exception {
     string _msg;
 
@@ -21,7 +26,7 @@ private:
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
-    template <typename T> T fromHex(string hexStr, bool bigEndian = true);
+    template <typename T> T fromHex(string hexStr, bool bigEndianBytes = true);
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
 
     ProtocolParameters _protocolPrm;

@@ -248,18 +248,26 @@ template <typename T> T CPolkaApi::fromHex(string hexStr, bool bigEndianBytes) {
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
-    // Handle Block subscriptions
-    if (_blockNumberSubscriptionId == subscriptionId) {
-        _blockNumberSubscriber(fromHex<long long>(message["number"].string_value()));
-        return;
-    }
-
-    // Handle Balance subscriptions
-    for (auto const &sid : _balanceSubscriptionIds) {
-        if (sid.second == subscriptionId) {
-            _balanceSubscribers[sid.first](fromHex<unsigned __int128>(message["changes"][0][1].string_value(), false));
+    // TODO: DOT-55, fix with proper producer-consumer
+    int count = 0;
+    while (count < 10) {
+        // Handle Block subscriptions
+        if (_blockNumberSubscriptionId == subscriptionId) {
+            _blockNumberSubscriber(fromHex<long long>(message["number"].string_value()));
             return;
         }
+
+        // Handle Balance subscriptions
+        for (auto const &sid : _balanceSubscriptionIds) {
+            if (sid.second == subscriptionId) {
+                _balanceSubscribers[sid.first](
+                    fromHex<unsigned __int128>(message["changes"][0][1].string_value(), false));
+                return;
+            }
+        }
+
+        usleep(100000);
+        count++;
     }
 }
 
@@ -290,12 +298,13 @@ int CPolkaApi::subscribeBalance(string address, std::function<void(unsigned __in
     // Subscribe to websocket
     if (_balanceSubscriptionIds.count(address) == 0) {
         Address addrStruct;
-        memcpy(addrStruct.symbols, "5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht", ADDRESS_LENGTH);
+        memcpy(addrStruct.symbols, address.c_str(), ADDRESS_LENGTH);
         string storageKey =
             StorageUtils::getAddressStorageKey(_protocolPrm.FreeBalanceHasher, addrStruct, "Balances FreeBalance");
         Json subscribeQuery =
             Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{storageKey}}}};
         _balanceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
+        cout << "======== Subscriber registered " << endl;
     }
 
     return PAPI_OK;

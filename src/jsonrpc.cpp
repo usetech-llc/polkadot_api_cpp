@@ -83,6 +83,15 @@ void CJsonRpc::handleMessage(const string &payload) {
         completionCV->notify_all();
     } else if (subscriptionId) {
         // Subscription response arrived.
+        // Delay it if there are pending subscriptions to prevent update arriving before subscriber is listening
+        // TODO: DOT-55, fix with proper producer-consumer
+        _queryMtx.lock();
+        bool observerFound = (_wsSubscribers.count(subscriptionId) != 0);
+        _queryMtx.unlock();
+        if (!observerFound) {
+            usleep(500000);
+        }
+
         _queryMtx.lock();
         if (_wsSubscribers.count(subscriptionId))
             _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, json["params"]["result"]);
