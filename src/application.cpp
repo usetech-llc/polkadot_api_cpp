@@ -31,17 +31,35 @@ int CPolkaApi::connect() {
     return result;
 }
 
+char easytolower(char in) {
+    if (in <= 'Z' && in >= 'A')
+        return in - ('Z' - 'z');
+    return in;
+}
+
 Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName) {
     Hasher hasher = XXHASH;
+
+    // Convert all names to lowercase
+    string moduleNameLower = moduleName;
+    std::transform(moduleNameLower.begin(), moduleNameLower.end(), moduleNameLower.begin(), easytolower);
+    string funcNameLower = funcName;
+    std::transform(funcNameLower.begin(), funcNameLower.end(), funcNameLower.begin(), easytolower);
+
     if (meta->metadataV0) {
         hasher = XXHASH;
     } else if (meta->metadataV5) {
         // Find the module index in metadata
         int moduleIndex = -1;
         for (int i = 0; i < COLLECTION_SIZE; ++i) {
-            if (moduleName == meta->metadataV5->module[i]->name) {
-                moduleIndex = i;
-                break;
+            if (meta->metadataV5->module[i]) {
+                string name = meta->metadataV5->module[i]->name;
+                std::transform(name.begin(), name.end(), name.begin(), easytolower);
+
+                if (moduleNameLower == name) {
+                    moduleIndex = i;
+                    break;
+                }
             }
         }
 
@@ -49,7 +67,10 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
         string hasherStr = "";
         if (moduleIndex >= 0) {
             for (int i = 0; i < COLLECTION_SIZE; ++i) {
-                if (funcName == meta->metadataV5->module[moduleIndex]->storage[i].name) {
+                string name = meta->metadataV5->module[moduleIndex]->storage[i].name;
+                std::transform(name.begin(), name.end(), name.begin(), easytolower);
+
+                if (funcNameLower == name) {
                     hasherStr = meta->metadataV5->module[moduleIndex]->storage[i].type.hasher;
                     break;
                 }
@@ -66,8 +87,8 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
 
 void CPolkaApi::disconnect() { _jsonRpc->disconnect(); }
 
-/*
-    Wrapper for every a business object creation operation
+/**
+ *    Wrapper for every business object creation operation
  */
 template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> CPolkaApi::deserialize(Json jsonObject) {
 
@@ -82,7 +103,7 @@ template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> CPolkaA
     }
 }
 
-/*  Call 4 methods and put them together in a single object
+/**  Call 4 methods and put them together in a single object
  *  system_chain
  *  system_name
  *  system_version
@@ -108,7 +129,9 @@ unique_ptr<SystemInfo> CPolkaApi::getSystemInfo() {
 }
 
 unique_ptr<SystemInfo> CPolkaApi::createSystemInfo(Json jsonObject) {
-    unique_ptr<SystemInfo> si(new SystemInfo);
+    SystemInfo *result = new SystemInfo();
+    memset(result, 0, sizeof(SystemInfo));
+    unique_ptr<SystemInfo> si(result);
     strcpy(si->chainName, jsonObject[0].string_value().c_str());
     strcpy(si->chainId, jsonObject[1].string_value().c_str());
     strcpy(si->version, jsonObject[2].string_value().c_str());
@@ -118,14 +141,17 @@ unique_ptr<SystemInfo> CPolkaApi::createSystemInfo(Json jsonObject) {
 }
 
 unique_ptr<BlockHash> CPolkaApi::createBlockHash(Json jsonObject) {
-    unique_ptr<BlockHash> bh(new BlockHash);
+    BlockHash *result = new BlockHash();
+    memset(result, 0, sizeof(BlockHash));
+    unique_ptr<BlockHash> bh(result);
     strcpy(bh->hash, jsonObject.string_value().c_str());
     return bh;
 }
 
 unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
-    unique_ptr<RuntimeVersion> rv(new RuntimeVersion);
-
+    RuntimeVersion *result = new RuntimeVersion();
+    memset(result, 0, sizeof(RuntimeVersion));
+    unique_ptr<RuntimeVersion> rv(result);
     strcpy(rv->specName, jsonObject["specName"].string_value().c_str());
     strcpy(rv->implName, jsonObject["implName"].string_value().c_str());
     rv->authoringVersion = jsonObject["authoringVersion"].int_value();
@@ -142,7 +168,6 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
 }
 
 unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
-
     unique_ptr<Metadata> md(new Metadata);
     MetadataFactory mdf(_logger);
 

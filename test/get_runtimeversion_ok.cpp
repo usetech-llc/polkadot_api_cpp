@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
     EasyLogger log;
-    CMockJsonRpc mockRpc;
+    CMockJsonRpcMD0 mockRpc;
 
     CPolkaApi app(&log, &mockRpc);
     app.connect();

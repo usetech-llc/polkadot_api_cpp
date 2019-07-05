@@ -77,9 +77,6 @@ int main(int argc, char *argv[]) {
     while (!done)
         usleep(10000);
 
-    // Uncomment if you want to watch for more updates
-    // usleep(30000000);
-
     // Unsubscribe and close connection
     app.unsubscribeBalance(addr);
     app.disconnect();
