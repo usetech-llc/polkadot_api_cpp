@@ -165,7 +165,9 @@ DispachCallV0 getOuterDispachV0(std::string &str) {
 }
 
 unique_ptr<MDV0> fillV0Metadata(string str) {
-    unique_ptr<MDV0> md(new MDV0);
+    MDV0 *result = new MDV0();
+    memset((void *)result, 0, sizeof(MDV0));
+    unique_ptr<MDV0> md(result);
 
     md->oew = unique_ptr<OuterEventWrapperV0>(new OuterEventWrapperV0);
     md->dispach = unique_ptr<OuterDispachV0>(new OuterDispachV0);
@@ -322,7 +324,9 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
     nextByte(str);
     nextByte(str);
 
-    unique_ptr<MDV5> md(new MDV5);
+    MDV5 *result = new MDV5();
+    memset((void *)result, 0, sizeof(MDV5));
+    unique_ptr<MDV5> md(result);
     int mLen = decodeCompactInteger(str);
     for (auto moduleIndex = 0; moduleIndex < mLen; moduleIndex++) {
         // create module instance

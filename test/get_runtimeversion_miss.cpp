@@ -3,8 +3,8 @@
 #undef NDEBUG
 #include <cassert>
 
-class CMockJsonRpcMissingField : public CMockJsonRpc {
-private:
+class CMockJsonRpcMissingField : public CMockJsonRpcMD0 {
+protected:
     virtual Json getRuntimeVersion() {
         string err;
         return Json::parse("{\"apis\": [[\"0xdf6acb689907609b\", 2], [\"0x37e397fc7c91f5e4\", 1], "
@@ -29,8 +29,9 @@ int main(int argc, char *argv[]) {
     // Ensure all items are present in api
     int apiItemCount = 0;
     for (auto item : resp3->api) {
-        if (item.id && strlen(item.num))
+        if (item.id && strlen(item.num)) {
             apiItemCount++;
+        }
     }
     assert(apiItemCount == 9);
 

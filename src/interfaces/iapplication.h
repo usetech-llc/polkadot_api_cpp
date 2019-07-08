@@ -80,6 +80,27 @@ public:
     virtual int unsubscribeBlockNumber() = 0;
 
     /**
+     *  Subscribe to most recent balance for a given address. Only one subscription at a time per address is allowed. If
+     * a subscription already exists for the same address, old subscription will be discarded and replaced with the new
+     * one. Until unsubscribeBalance method is called with the same address, the API will be receiving updates and
+     * forwarding them to subscribed object/function. Only unsubscribeBalance will physically unsubscribe from WebSocket
+     * endpoint updates.
+     *
+     * @param address - address to receive balance updates for
+     * @param callback - functor or lambda expression that will receive balance updates
+     * @return operation result
+     */
+    virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.
+     *
+     * @param address - address to stop receiving balance updates for
+     * @return operation result
+     */
+    virtual int unsubscribeBalance(string address) = 0;
+
+    /**
      *  Subscribe to era and session. Only one subscription at a time is allowed. If a subscription already
      * exists, old subscription will be discarded and replaced with the new one. Until subscribeEraAndSession method is
      * called, the API will be receiving updates and forwarding them to subscribed object/function. Only

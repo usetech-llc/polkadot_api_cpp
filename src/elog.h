@@ -1,3 +1,5 @@
+#define MAX_LOG_MSG_LENGTH 500
+
 class EasyLogger : public ILogger {
 private:
     mutex _mtx;

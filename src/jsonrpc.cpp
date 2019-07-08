@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -60,7 +63,6 @@ Json CJsonRpc::request(Json jsonMap) {
 }
 
 void CJsonRpc::handleMessage(const string &payload) {
-
     string err;
     _logger->info(string("Message received: ") + payload);
     Json json = Json::parse(payload, err);
@@ -85,6 +87,15 @@ void CJsonRpc::handleMessage(const string &payload) {
         completionCV->notify_all();
     } else if (subscriptionId) {
         // Subscription response arrived.
+        // Delay it if there are pending subscriptions to prevent update arriving before subscriber is listening
+        // TODO: DOT-55, fix with proper producer-consumer
+        _queryMtx.lock();
+        bool observerFound = (_wsSubscribers.count(subscriptionId) != 0);
+        _queryMtx.unlock();
+        if (!observerFound) {
+            usleep(500000);
+        }
+
         _queryMtx.lock();
         if (_wsSubscribers.count(subscriptionId))
             _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, json["params"]["result"]);

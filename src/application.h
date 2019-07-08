@@ -1,3 +1,13 @@
+typedef struct ProtocolParameters {
+    Hasher FreeBalanceHasher;
+    string FreeBalancePrefix;
+} ProtocolParameters;
+
+typedef struct SubscriptionUpdate {
+    int subscriptionId;
+    Json message;
+} SubscriptionUpdate;
+
 class ApplicationException : public exception {
     string _msg;
 
@@ -16,8 +26,10 @@ private:
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
-    long long fromHex(string hexStr);
-    string reverseBytes(string str);
+    template <typename T> T fromHex(string hexStr, bool bigEndianBytes = true);
+    Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
+
+    ProtocolParameters _protocolPrm;
     long long _bestBlockNum;
 
     // Implements IWebSocketMessageObserver
@@ -25,10 +37,12 @@ private:
 
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
+    map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
+    map<string, int> _balanceSubscriptionIds;
     int _eraAndSessionSubscriptionId;
 
 public:
@@ -44,7 +58,8 @@ public:
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
-
+    virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback);
+    virtual int unsubscribeBalance(string address);
     virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
     virtual int unsubscribeEraAndSession();
 };

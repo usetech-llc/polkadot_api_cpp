@@ -1,5 +1,5 @@
 class CMockJsonRpc : public IJsonRpc {
-private:
+protected:
     virtual Json getRuntimeVersion() {
         string err;
         return Json::parse("{\"apis\": [[\"0xdf6acb689907609b\", 2], [\"0x37e397fc7c91f5e4\", 1], "
@@ -24,141 +24,106 @@ public:
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
-class CMockJsonRpcMD0 : public IJsonRpc {
-private:
+class CMockJsonRpcMD0 : public CMockJsonRpc {
+protected:
     virtual Json getMetadata() {
         string testValue;
         string line;
         ifstream myfile("test/metadata/exampleMetadataV0.txt");
-        if (myfile.is_open())
-        {
-            while (getline(myfile, line))
-            {
+        if (myfile.is_open()) {
+            while (getline(myfile, line)) {
                 testValue += line;
             }
             myfile.close();
         }
 
-            string err;
-            return Json("0x" + testValue);
+        string err;
+        return Json("0x" + testValue);
     }
 
 public:
     CMockJsonRpcMD0() {}
     virtual ~CMockJsonRpcMD0() override {}
-    virtual int connect() { return 0; }
-    virtual void disconnect() {}
     virtual Json request(Json jsonMap) {
         Json ret;
 
+        if (jsonMap["method"] == "chain_getRuntimeVersion") {
+            ret = getRuntimeVersion();
+        }
         if (jsonMap["method"] == "state_getMetadata") {
             ret = getMetadata();
         }
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
-
-class CMockJsonRpcMD5 : public IJsonRpc {
-private:
+class CMockJsonRpcMD5 : public CMockJsonRpc {
+protected:
     virtual Json getMetadata() {
         string testValue;
         string line;
         ifstream myfile("test/metadata/exampleMetadataV5.txt");
-        if (myfile.is_open())
-        {
-            while (getline(myfile, line))
-            {
+        if (myfile.is_open()) {
+            while (getline(myfile, line)) {
                 testValue += line;
             }
             myfile.close();
         }
 
-            string err;
-            return Json("0x" + testValue);
+        string err;
+        return Json("0x" + testValue);
     }
 
 public:
     CMockJsonRpcMD5() {}
     virtual ~CMockJsonRpcMD5() override {}
-    virtual int connect() { return 0; }
-    virtual void disconnect() {}
-    virtual Json request(Json jsonMap) {
-        Json ret;
-
-        if (jsonMap["method"] == "state_getMetadata") {
-            ret = getMetadata();
-        }
-
-        return move(ret);
-    }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
-class CMockJsonRpcStateGetHashBlock : public IJsonRpc {
-private:
+class CMockJsonRpcStateGetHashBlock : public CMockJsonRpcMD0 {
+protected:
     virtual Json getBlockHash() {
-      
-            string err;
-            return Json("0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
+
+        string err;
+        return Json("0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
     }
 
 public:
     CMockJsonRpcStateGetHashBlock() {}
     virtual ~CMockJsonRpcStateGetHashBlock() override {}
-    virtual int connect() { return 0; }
-    virtual void disconnect() {}
     virtual Json request(Json jsonMap) {
         Json ret;
 
         if (jsonMap["method"] == "chain_getBlockHash") {
             ret = getBlockHash();
+            return move(ret);
+        } else {
+            return CMockJsonRpcMD0::request(jsonMap);
         }
-
-        return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
 };
 
-
-
-class CMockJsonRpcSystemInfo : public IJsonRpc {
-private:
+class CMockJsonRpcSystemInfo : public CMockJsonRpcMD0 {
+protected:
     virtual Json getSystemProps() {
-      
-            string err;
-            return Json::parse("\{\"tokenDecimals\":15,\"tokenSymbol\":\"DOT\"}",err);
+
+        string err;
+        return Json::parse("\{\"tokenDecimals\":15,\"tokenSymbol\":\"DOT\"}", err);
     }
 
-    virtual Json getSystemChain() {
-      
-            return Json("Alexander");
-    }
+    virtual Json getSystemChain() { return Json("Alexander"); }
 
-    virtual Json getSystemName() {
-      
-            return Json("parity-polkadot");
-    }
+    virtual Json getSystemName() { return Json("parity-polkadot"); }
 
-    virtual Json getSystemVersion() {
-      
-            return Json("0.4.4");
-    } 
+    virtual Json getSystemVersion() { return Json("0.4.4"); }
 
 public:
     CMockJsonRpcSystemInfo() {}
     virtual ~CMockJsonRpcSystemInfo() override {}
-    virtual int connect() { return 0; }
-    virtual void disconnect() {}
     virtual Json request(Json jsonMap) {
         Json ret;
 
@@ -166,20 +131,22 @@ public:
             ret = getSystemProps();
         }
 
-        if (jsonMap["method"] == "system_chain") {
+        else if (jsonMap["method"] == "system_chain") {
             ret = getSystemChain();
         }
 
-        if (jsonMap["method"] == "system_name") {
+        else if (jsonMap["method"] == "system_name") {
             ret = getSystemName();
         }
 
-        if (jsonMap["method"] == "system_version") {
+        else if (jsonMap["method"] == "system_version") {
             ret = getSystemVersion();
+        }
+
+        else {
+            return CMockJsonRpcMD0::request(jsonMap);
         }
 
         return move(ret);
     }
-    int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    int unsubscribeWs(int subscriptionId) { return 0; }
 };
