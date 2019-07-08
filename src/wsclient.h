@@ -8,6 +8,7 @@ private:
     static CWebSocketClient *_instance;
     vector<IMessageObserver *> _observers;
     thread *_connectedThread;
+    thread *_healthThread;
     client _c;
     client::connection_ptr _connection;
     bool _connected;
@@ -18,6 +19,7 @@ private:
     friend context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
     friend void on_message(websocketpp::connection_hdl, client::message_ptr msg);
     friend void on_open(client *c, websocketpp::connection_hdl hdl);
+    void health();
     void runWsMessages();
 
     CWebSocketClient(ILogger *logger);

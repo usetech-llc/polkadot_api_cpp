@@ -9,4 +9,5 @@ public:
     static const string currentEraSubcription;
     static const string sessionsPerEraSubcription;
     static const string currentIndexSubcription;
+    static const long delayTime;
 };

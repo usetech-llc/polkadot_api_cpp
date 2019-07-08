@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         usleep(10000);
 
     // Uncomment if you want to watch for more blocks
-    // usleep(30000000);
+    //usleep(300000000);
 
     // Unsubscribe and close connection
     app.unsubscribeBlockNumber();

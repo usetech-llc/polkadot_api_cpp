@@ -72,6 +72,10 @@ void CJsonRpc::handleMessage(const string &payload) {
     if (!json["params"].is_null())
         subscriptionId = json["params"]["subscription"].int_value();
 
+    // no react with health response
+    if (requestId == INT_MAX)
+        return;
+
     if (requestId && _queries.count(requestId)) {
         // Response for requestId arrived. Set response and notify
         _queryMtx.lock();

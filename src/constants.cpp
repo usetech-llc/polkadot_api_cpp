@@ -13,3 +13,5 @@ const string CConstants::currentEraSubcription("0x579ab55d37b1220812be3c3df29d48
 const string CConstants::sessionsPerEraSubcription("0xb7b6ec0f25eb1ed8b91d05f697d7a874");
 // currentIndex storage subscription hash
 const string CConstants::currentIndexSubcription("0xb8f48a8c01f629d6dc877f64892bed49");
+// delay for system_health call (mircoseconds)
+const long CConstants::delayTime = 300000000;
