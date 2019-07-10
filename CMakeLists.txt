@@ -325,8 +325,8 @@ add_custom_target(
 add_custom_target(
         deps
         COMMAND cd .. &&
-                #rm -rf wpp &&
-                git clone https://github.com/zaphoyd/websocketpp wpp || true &&
+                rm -rf wpp &&
+                git clone https://github.com/zaphoyd/websocketpp wpp &&
                 sudo rm -rf /usr/local/include/websocketpp &&
                 sudo mv wpp/websocketpp /usr/local/include/websocketpp
 
@@ -338,7 +338,8 @@ add_custom_target(
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
                 rustup install nightly &&
                 rustup default nightly &&
-                mkdir build && cd build &&
+                mkdir build || true && 
+                cd build &&
                 cmake .. -DCMAKE_BUILD_TYPE=Release &&
                 sudo -E env "PATH=/usr/bin:$ENV{HOME}/.cargo/bin:$ENV{PATH}" make install
 )
