@@ -318,3 +318,12 @@ add_custom_target(
         COMMAND rm -rf doc/html && doxygen
         .doxygen.conf
 )
+
+###############################################################################
+# Install dependencies
+
+add_custom_target(
+        deps
+        COMMAND git clone https://github.com/zaphoyd/websocketpp
+        COMMAND sudo mv websocketpp/websocketpp /usr/local/include/websocketpp
+)
