@@ -9,8 +9,8 @@ addons:
 
 cache:
   directories:
-    - ${TRAVIS_BUILD_DIR}/wpp
-    - ${TRAVIS_BUILD_DIR}/sr25519
+    - /usr/local/include/include/sr25519
+    - /usr/local/lib
 
 install:
   # this install step will take care of deploying a newer cmake version
