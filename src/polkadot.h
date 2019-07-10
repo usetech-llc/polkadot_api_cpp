@@ -39,6 +39,9 @@ using namespace std;
 #include "interfaces/iapplication.h"
 #include "utils/address.h"
 #include "utils/storage.h"
+extern "C" {
+    #include "utils/sr25519.h"
+}
 #include "metadatafactory.h"
 #include "wsclient.h"
 #include "elog.h"

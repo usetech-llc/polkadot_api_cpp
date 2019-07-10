@@ -5,7 +5,7 @@ message("Building project ${PROJECT_NAME}")
 include(CTest)
 
 # Set compiler flags
-set(CMAKE_C_FLAGS "-ggdb")
+set(CMAKE_C_FLAGS "-ggdb -ldl")
 set(CMAKE_BUILD_TYPE Debug)
 
 # Take care of libpthread
@@ -252,6 +252,8 @@ target_link_libraries (polkaclient polkacpp)
 target_link_libraries( polkaclient ${Boost_LIBRARIES} )
 target_link_libraries( polkaclient ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} )
 target_link_libraries( polkaclient Threads::Threads )
+target_link_libraries( polkaclient sr25519crust )
+target_link_libraries( polkaclient dl )
 
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
 set_property(TARGET polkaclient APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
@@ -277,6 +279,8 @@ foreach( testsourcefile ${TEST_SOURCES} )
     target_link_libraries( ${testname} ${Boost_LIBRARIES} )
     target_link_libraries( ${testname} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} )
     target_link_libraries( ${testname} Threads::Threads )
+    target_link_libraries( ${testname} sr25519crust )
+    target_link_libraries( ${testname} dl )
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
     set_property(TARGET ${testname} APPEND PROPERTY INCLUDE_DIRECTORIES ${WEBSOCKETPP_INCLUDE_DIR})
@@ -338,7 +342,7 @@ add_custom_target(
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
                 rustup install nightly &&
                 rustup default nightly &&
-                mkdir build || true && 
+                mkdir build || true &&
                 cd build &&
                 cmake .. -DCMAKE_BUILD_TYPE=Release &&
                 sudo -E env "PATH=/usr/bin:$ENV{HOME}/.cargo/bin:$ENV{PATH}" make install
