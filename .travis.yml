@@ -9,7 +9,6 @@ addons:
 
 cache:
   directories:
-    - ${HOME}/.cargo
     - ${TRAVIS_BUILD_DIR}/wpp
     - ${TRAVIS_BUILD_DIR}/sr25519
 
