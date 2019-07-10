@@ -324,17 +324,21 @@ add_custom_target(
 
 add_custom_target(
         deps
-        COMMAND git clone https://github.com/zaphoyd/websocketpp
-        COMMAND sudo mv websocketpp/websocketpp /usr/local/include/websocketpp
+        COMMAND cd .. &&
+                rm -rf wpp &&
+                git clone https://github.com/zaphoyd/websocketpp wpp &&
+                sudo rm -rf /usr/local/include/websocketpp &&
+                sudo mv wpp/websocketpp /usr/local/include/websocketpp
 
         # sr25519-crust
-        COMMAND mkdir sr25519 && cd sr25519
-        COMMAND curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-        COMMAND rustup install nightly
-        COMMAND rustup default nightly
-        COMMAND mkdir build && cd build
-        COMMAND cmake .. -DCMAKE_BUILD_TYPE=Release
-        COMMAND sudo make install
-        COMMAND cd ../..
-        COMMAND ls -la
+        COMMAND cd .. &&
+                rm -rf sr25519 &&
+                git clone https://github.com/Warchant/sr25519-crust.git sr25519 &&
+                cd sr25519 &&
+                curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
+                rustup install nightly &&
+                rustup default nightly &&
+                mkdir build && cd build &&
+                cmake .. -DCMAKE_BUILD_TYPE=Release &&
+                sudo make install
 )
