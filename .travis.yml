@@ -8,11 +8,11 @@ addons:
     packages: libboost-all-dev
 
 install:
+  - cmake .
   - make deps
 
 before_script:
-  # run cmake
-  - cmake .
+  # cmake was already run
 
 script:
   # Build
