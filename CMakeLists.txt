@@ -332,7 +332,7 @@ add_custom_target(
 
         # sr25519-crust
         COMMAND cd .. &&
-                rm -rf sr25519 &&
+                sudo rm -rf sr25519 &&
                 git clone https://github.com/Warchant/sr25519-crust.git sr25519 &&
                 cd sr25519 &&
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
@@ -340,5 +340,5 @@ add_custom_target(
                 rustup default nightly &&
                 mkdir build && cd build &&
                 cmake .. -DCMAKE_BUILD_TYPE=Release &&
-                sudo make install
+                sudo -E env "PATH=/usr/bin:$ENV{HOME}/.cargo/bin:$ENV{PATH}" make install
 )
