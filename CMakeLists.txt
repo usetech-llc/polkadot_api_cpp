@@ -320,7 +320,7 @@ add_custom_target(
 )
 
 ###############################################################################
-# Install dependencies.
+# Install dependencies
 
 add_custom_target(
         deps
