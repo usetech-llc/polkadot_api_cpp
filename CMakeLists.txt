@@ -335,4 +335,5 @@ add_custom_target(
         COMMAND mkdir build && cd build
         COMMAND cmake .. -DCMAKE_BUILD_TYPE=Release
         COMMAND sudo make install
+        COMMAND cd ../..
 )
