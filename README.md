@@ -2,10 +2,6 @@
 
 ## Install Prerequisites
 
-### websocketpp
-Checkout code from here: https://github.com/zaphoyd/websocketpp
-and copy websocketpp folder to /usr/include
-
 ### Boost
 ```
 sudo apt-get install libboost-all-dev
@@ -24,6 +20,11 @@ sudo apt-get install libcurl4-openssl-dev
 ### doxygen
 ```
 sudo apt-get install doxygen python-pydot python-pydot-ng graphviz
+```
+
+### Other dependencies: websocketpp, sr25519-crust...
+```
+make deps
 ```
 
 ## Installation
