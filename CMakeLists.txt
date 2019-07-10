@@ -325,15 +325,15 @@ add_custom_target(
 add_custom_target(
         deps
         COMMAND cd .. &&
-                rm -rf wpp &&
-                git clone https://github.com/zaphoyd/websocketpp wpp &&
+                #rm -rf wpp &&
+                git clone https://github.com/zaphoyd/websocketpp wpp || true &&
                 sudo rm -rf /usr/local/include/websocketpp &&
                 sudo mv wpp/websocketpp /usr/local/include/websocketpp
 
         # sr25519-crust
         COMMAND cd .. &&
-                sudo rm -rf sr25519 &&
-                git clone https://github.com/Warchant/sr25519-crust.git sr25519 &&
+                #sudo rm -rf sr25519 &&
+                git clone https://github.com/Warchant/sr25519-crust.git sr25519 || true &&
                 cd sr25519 &&
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
                 rustup install nightly &&
