@@ -8,6 +8,7 @@ addons:
     packages: libboost-all-dev
 
 install:
+  - export PATH="$HOME/.cargo/bin:$PATH"
   - cmake .
   - make deps
 
