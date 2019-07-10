@@ -7,6 +7,10 @@ addons:
   apt:
     packages: libboost-all-dev
 
+before_cache:
+  - sudo chown -R travis:travis /usr/local/include/include
+  - sudo chown -R travis:travis /usr/local/lib
+
 cache:
   directories:
     - /usr/local/include/include/sr25519
