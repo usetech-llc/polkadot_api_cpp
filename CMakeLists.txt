@@ -330,7 +330,7 @@ add_custom_target(
         # sr25519-crust
         COMMAND mkdir sr25519 && cd sr25519
         COMMAND curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
-        COMMAND source $HOME/.cargo/env
+        COMMAND . $HOME/.cargo/env
         COMMAND rustup install nightly
         COMMAND rustup default nightly
         COMMAND mkdir build && cd build
