@@ -250,10 +250,10 @@ bool CWebSocketClient::isConnected() { return _connected; }
 
 void CWebSocketClient::disconnect() {
     _c.close(_connection, websocketpp::close::status::going_away, "");
+    _connected = false;
     _connectedThread->join();
     _connectedThread = nullptr;
     _healthThread->join();
-    _connected = false;
 }
 
 int CWebSocketClient::send(const string &msg) {
@@ -275,7 +275,7 @@ void CWebSocketClient::health() {
     while (1) {
         usleep(CConstants::delayTime);
         if (!isConnected())
-            continue;
+            break;
         if (_connectedThread == nullptr)
             break;
 
