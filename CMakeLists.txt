@@ -336,4 +336,5 @@ add_custom_target(
         COMMAND cmake .. -DCMAKE_BUILD_TYPE=Release
         COMMAND sudo make install
         COMMAND cd ../..
+        COMMAND ls -la
 )
