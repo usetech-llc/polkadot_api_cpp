@@ -7,6 +7,12 @@ addons:
   apt:
     packages: libboost-all-dev
 
+ cache:
+    directories:
+     - ${HOMR}/.cargo
+     - ${TRAVIS_BUILD_DIR}/wpp
+     - ${TRAVIS_BUILD_DIR}/sr25519
+
 install:
   # this install step will take care of deploying a newer cmake version
   # first we create a directory for the CMake binaries
