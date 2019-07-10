@@ -38,11 +38,13 @@ private:
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
     map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
+    map<string, std::function<void(unsigned __int128)>> _nonceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
     map<string, int> _balanceSubscriptionIds;
+    map<string, int> _nonceSubscriptionIds;
     int _eraAndSessionSubscriptionId;
 
 public:
@@ -62,4 +64,6 @@ public:
     virtual int unsubscribeBalance(string address);
     virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
     virtual int unsubscribeEraAndSession();
+    virtual int subscribeAccountNonce(string address, std::function<void(unsigned long)> callback);
+    virtual int unsubscribeAccountNonce(string address);
 };
