@@ -4,9 +4,13 @@ CWebSocketClient *CWebSocketClient::_instance = nullptr;
 chrono::seconds CWebSocketClient::ConnectionTimeout(5); // 5 second connection timeout
 
 CWebSocketClient::CWebSocketClient(ILogger *logger)
-    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _connected(false) {}
+    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _healthThread(nullptr),
+      _connected(false) {}
 
-CWebSocketClient::~CWebSocketClient() { delete _connectedThread; }
+CWebSocketClient::~CWebSocketClient() {
+    delete _connectedThread;
+    delete _healthThread;
+}
 
 IWebSocketClient *CWebSocketClient::getInstance(ILogger *logger) {
     if (!CWebSocketClient::_instance) {
@@ -246,8 +250,9 @@ bool CWebSocketClient::isConnected() { return _connected; }
 
 void CWebSocketClient::disconnect() {
     _c.close(_connection, websocketpp::close::status::going_away, "");
-    _healthThread->join();
     _connectedThread->join();
+    _connectedThread = nullptr;
+    _healthThread->join();
     _connected = false;
 }
 
@@ -268,10 +273,11 @@ void CWebSocketClient::health() {
     };
 
     while (1) {
-
         usleep(CConstants::delayTime);
         if (!isConnected())
             continue;
+        if (_connectedThread == nullptr)
+            break;
 
         send(request.dump());
     }
