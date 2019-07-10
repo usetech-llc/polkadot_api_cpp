@@ -8,8 +8,7 @@ addons:
     packages: libboost-all-dev
 
 before_cache:
-  - sudo chown -R travis:travis /usr/local/include/include
-  - sudo chown -R travis:travis /usr/local/lib
+  - sudo chown -R travis:travis /usr/local
 
 cache:
   directories:
