@@ -70,6 +70,19 @@ public:
     virtual unsigned long getAccountNonce(string address) = 0;
 
     /**
+     *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once completed, the
+     * callback will be called with completion result.
+     *
+     * @param sender - address of sender (who signs the transaction)
+     * @param privateKey - 64 byte private key of signer in hex, 2 symbols per byte (e.g. "0102ABCD...")
+     * @param recipient - address that will receive the transfer
+     * @param amount - amount (in femto DOTs) to transfer
+     * @param callback - functor or lambda expression that will receive operation result
+     */
+    virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
+                                     std::function<void(int)> callback) = 0;
+
+    /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already
      * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeBlockNumber method is
      * called, the API will be receiving updates and forwarding them to subscribed object/function. Only

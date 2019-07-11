@@ -17,6 +17,10 @@ using namespace json11;
 
 using namespace std;
 
+extern "C" {
+    #include "utils/sr25519.h"
+}
+
 // Include structs
 #include "structs/responsebase.h"
 #include "structs/blockhash.h"
@@ -28,6 +32,8 @@ using namespace std;
 #include "structs/publickey.h"
 #include "structs/hasher.h"
 #include "structs/common.h"
+#include "structs/signaturepayload.h"
+#include "structs/extrinsic.h"
 #include "structs/transfer.h"
 
 #include "constants.h"
@@ -40,9 +46,6 @@ using namespace std;
 #include "interfaces/iapplication.h"
 #include "utils/address.h"
 #include "utils/storage.h"
-extern "C" {
-    #include "utils/sr25519.h"
-}
 #include "metadatafactory.h"
 #include "wsclient.h"
 #include "elog.h"

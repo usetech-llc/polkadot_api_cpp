@@ -1,10 +1,11 @@
 
+#include "scale.h"
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 using namespace std;
-#define CompactInteger long
 
 namespace scale {
 class CompactIntegerException : public exception {
@@ -94,4 +95,45 @@ CompactInteger decodeCompactInteger(string &stream) {
 
     return CompactInteger{(long)number};
 };
+
+CompactIntegerLEBytes encodeCompactInteger(unsigned __int128 n) {
+
+    CompactIntegerLEBytes b;
+    memset(&b, 0, sizeof(b));
+
+    if (n <= 63) {
+        b.length = 1;
+        b.bytes[0] = n << 2;
+    } else if (n <= 0x3FFF) {
+        b.length = 2;
+        b.bytes[0] = ((n & 0x3F) << 2) | 0x01;
+        b.bytes[1] = ((n & 0xFC0) >> 6);
+    } else if (n <= 0x3FFFFFFF) {
+        b.length = 4;
+        b.bytes[0] = ((n & 0x3F) << 2) | 0x02;
+        n >>= 6;
+        for (int i = 1; i < 4; ++i) {
+            b.bytes[i] = (n & 0xFF);
+            n >>= 8;
+        }
+    } else { // Big integer mode
+        b.length = 1;
+        int byteNum = 1;
+        while (n) {
+            b.bytes[byteNum++] = (n & 0xFF);
+            n >>= 8;
+        }
+        b.length = byteNum;
+        b.bytes[0] = ((byteNum - 5) << 2) | 0x03;
+    }
+
+    return move(b);
+}
+
+long writeCompactToBuf(CompactIntegerLEBytes ci, uint8_t *buf) {
+    for (int i = 0; i < ci.length; ++i)
+        buf[i] = ci.bytes[i];
+    return ci.length;
+}
+
 } // namespace scale

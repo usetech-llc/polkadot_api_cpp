@@ -209,10 +209,21 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
 }
 
 unsigned long CPolkaApi::getAccountNonce(string address) {
-
+    // Subscribe to account nonce updates and immediately unsubscribe after response is received
+    // This pattern is borrowed from POC-3 UI
+    bool done = false;
     unsigned long result = 0;
-    Json query = Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{storageKey}}}};
-    _nonceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
+    subscribeAccountNonce(address, [&](unsigned long nonce) {
+        result = nonce;
+        done = true;
+    });
+
+    while (!done)
+        usleep(10000);
+
+    unsubscribeAccountNonce(address);
+
+    return result;
 }
 
 template <typename T> T CPolkaApi::fromHex(string hexStr, bool bigEndianBytes) {
@@ -414,10 +425,7 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     return PAPI_OK;
 }
 
-unique_ptr<Transfer> CPolkaApi::transfer(string address, long double amount) {
-    unique_ptr<Transfer> transfer(new Transfer);
-
-    return transfer;
+void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
+                                    std::function<void(int)> callback) {
+    int i = 0;
 }
-
-void CPolkaApi::signAndSend(string recipient, unique_ptr<Transfer> transfer) {}
