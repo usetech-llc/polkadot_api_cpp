@@ -58,6 +58,9 @@ public:
     virtual unique_ptr<Metadata> getMetadata(unique_ptr<GetMetadataParams> params);
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params);
 
+    virtual unique_ptr<Transfer> transfer(string address, long double amount);
+    virtual void signAndSend(string recipient, unique_ptr<Transfer> transfer); // need to add callback function
+
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback);

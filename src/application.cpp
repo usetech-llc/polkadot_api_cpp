@@ -412,3 +412,11 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     }
     return PAPI_OK;
 }
+
+unique_ptr<Transfer> CPolkaApi::transfer(string address, long double amount) {
+    unique_ptr<Transfer> transfer(new Transfer);
+
+    return transfer;
+}
+
+void CPolkaApi::signAndSend(string recipient, unique_ptr<Transfer> transfer) {}
