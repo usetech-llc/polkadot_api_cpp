@@ -253,12 +253,16 @@ void CWebSocketClient::disconnect() {
     _connected = false;
     _connectedThread->join();
     _connectedThread = nullptr;
+    _sendMtx.lock();
+    _sendMtx.unlock();
     _healthThread->join();
 }
 
 int CWebSocketClient::send(const string &msg) {
     if (_connected) {
+        _sendMtx.lock();
         _c.send(_connection, msg, websocketpp::frame::opcode::text);
+        _sendMtx.unlock();
         return PAPI_OK;
     }
 
@@ -269,17 +273,25 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+        {"id", INT_MAX},
+        {"jsonrpc", "2.0"},
+        {"method", "system_health"},
+        {"params", Json::array()},
     };
 
+    long period_counter = 0;
     while (1) {
-        usleep(CConstants::delayTime);
+        usleep(HEALTH_WAKEUP_MKS);
+        period_counter += HEALTH_WAKEUP_MKS;
         if (!isConnected())
             break;
         if (_connectedThread == nullptr)
             break;
 
-        send(request.dump());
+        if (period_counter >= CConstants::health_check_delay_time) {
+            send(request.dump());
+            period_counter = 0;
+        }
     }
 }
 

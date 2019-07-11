@@ -323,9 +323,9 @@ int CPolkaApi::subscribeEraAndSession(std::function<void(Era, Session)> callback
     subscribeBlockNumber([&](long long blockNum) { _bestBlockNum = blockNum; });
 
     // era and session subscription
-    auto params = Json::array{Json::array{CConstants::lastLengthChangeSubcription, CConstants::sessionLengthSubcription,
-                                          CConstants::currentEraSubcription, CConstants::sessionsPerEraSubcription,
-                                          CConstants::currentIndexSubcription}};
+    auto params =
+        Json::array{Json::array{LAST_LENGTH_CHANGE_SUBSCRIPTION, SESSION_LENGTH_SUBSCRIPTION, CURRENT_ERA_SUBSCRIPTION,
+                                SESSIONS_PER_ERA_SUBSCRIPTION, CURRENT_INDEX_SUBSCRIPTION}};
 
     // Subscribe to websocket
     if (!_eraAndSessionSubscriptionId) {
@@ -367,7 +367,6 @@ int CPolkaApi::subscribeBalance(string address, std::function<void(unsigned __in
         Json subscribeQuery =
             Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{storageKey}}}};
         _balanceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
-        cout << "======== Subscriber registered " << endl;
     }
 
     return PAPI_OK;
@@ -398,7 +397,6 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
             Json::object{{"method", "state_subscribeStorage"},
                          {"params", Json::array{Json::array{storageKey}}}}; //"0xf6e55a1128686306458c4f7159dc61e4"
         _nonceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
-        cout << "======== Subscriber registered " << endl;
     }
 
     return PAPI_OK;

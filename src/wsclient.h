@@ -1,6 +1,8 @@
 typedef websocketpp::client<websocketpp::config::asio_tls_client> client;
 typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> context_ptr;
 
+#define HEALTH_WAKEUP_MKS 100000
+
 class CWebSocketClient : public IWebSocketClient {
 private:
     string _nodeUrl;
@@ -15,6 +17,7 @@ private:
     condition_variable _connectionCV; // Condition variable used to notify about connection
     mutex _connectionMtx;             // Mutex for condition varaiable
     static chrono::seconds ConnectionTimeout;
+    mutex _sendMtx; // Mutex for sending data to be block send method
 
     friend context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
     friend void on_message(websocketpp::connection_hdl, client::message_ptr msg);
