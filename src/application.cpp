@@ -281,7 +281,7 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
     if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
 
-        cout << endl << endl << endl << endl << endl << "value: " << (message.dump());
+        //_logger->info(string("eraAndSessionSubscription subscription data: ") + message.dump());
 
         auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
         auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
@@ -385,13 +385,13 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
     _nonceSubscribers[address] = callback;
 
     // Subscribe to websocket
-    if (_balanceSubscriptionIds.count(address) == 0) {
+    if (_nonceSubscriptionIds.count(address) == 0) {
         Address accountAddr;
         memcpy(accountAddr.symbols, address.c_str(), ADDRESS_LENGTH);
 
         auto storageKey = StorageUtils::getAddressStorageKey(_protocolPrm.FreeBalanceHasher, accountAddr,
                                                              string("System AccountNonce"));
-        cout << endl << endl << endl << storageKey << endl << endl << endl;
+        _logger->info(string("Nonce subscription storageKey: ") + storageKey);
 
         Json subscribeQuery =
             Json::object{{"method", "state_subscribeStorage"},
