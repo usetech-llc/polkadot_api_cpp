@@ -2,13 +2,13 @@
 
 int main(int argc, char *argv[]) {
 
-    if (argc < 2){
+    if (argc < 2) {
 
         cout << "success" << endl;
         return 0;
     }
 
-  JsonRpcParams params;
+    JsonRpcParams params;
     params.jsonrpcVersion = "2.0";
 
     EasyLogger logger;

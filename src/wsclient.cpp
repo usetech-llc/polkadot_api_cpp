@@ -273,10 +273,7 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX},
-        {"jsonrpc", "2.0"},
-        {"method", "system_health"},
-        {"params", Json::array()},
+        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
     };
 
     long period_counter = 0;

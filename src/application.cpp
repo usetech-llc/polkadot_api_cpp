@@ -389,8 +389,8 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
         Address accountAddr;
         memcpy(accountAddr.symbols, address.c_str(), ADDRESS_LENGTH);
 
-        auto storageKey =
-            StorageUtils::getAddressStorageKey(Hasher::BLAKE2, accountAddr, string("System AccountNonce"));
+        auto storageKey = StorageUtils::getAddressStorageKey(_protocolPrm.FreeBalanceHasher, accountAddr,
+                                                             string("System AccountNonce"));
         cout << endl << endl << endl << storageKey << endl << endl << endl;
 
         Json subscribeQuery =
