@@ -2,7 +2,12 @@
 
 int main(int argc, char *argv[]) {
 
-    // Create and connect app layer
+    if (argc < 2) {
+
+        cout << "success" << endl;
+        return 0;
+    }
+
     JsonRpcParams params;
     params.jsonrpcVersion = "2.0";
 
@@ -12,10 +17,11 @@ int main(int argc, char *argv[]) {
     CPolkaApi app(&logger, &jsonRpc);
     app.connect();
 
-    // Subscribe to block number updates
+    // Subscribe to account nonce updates
+    string addr(argv[1]);
     bool done = false;
-    app.subscribeBlockNumber([&](long long blockNum) {
-        cout << endl << "Most recent block: " << blockNum << endl << endl;
+    app.subscribeAccountNonce(addr, [&](unsigned long nonce) {
+        cout << endl << " Account Nonce: " << nonce << endl << endl;
         done = true;
     });
 
@@ -23,11 +29,11 @@ int main(int argc, char *argv[]) {
     while (!done)
         usleep(10000);
 
-    // Uncomment if you want to watch for more blocks
-    //usleep(300000000);
+    // Uncomment if you want to watch for more updates
+    // usleep(30000000);
 
     // Unsubscribe and close connection
-    app.unsubscribeBlockNumber();
+    app.unsubscribeAccountNonce(addr);
     app.disconnect();
 
     cout << "success" << endl;

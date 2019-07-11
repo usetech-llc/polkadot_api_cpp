@@ -33,10 +33,7 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id},
-        {"jsonrpc", _jsonrpcVersion},
-        {"method", jsonMap["method"]},
-        {"params", jsonMap["params"]},
+        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -73,6 +70,10 @@ void CJsonRpc::handleMessage(const string &payload) {
         requestId = json["id"].int_value();
     if (!json["params"].is_null())
         subscriptionId = json["params"]["subscription"].int_value();
+
+    // no react with health response
+    if (requestId == INT_MAX)
+        return;
 
     if (requestId && _queries.count(requestId)) {
         // Response for requestId arrived. Set response and notify

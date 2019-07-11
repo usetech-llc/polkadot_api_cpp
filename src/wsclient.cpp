@@ -4,9 +4,13 @@ CWebSocketClient *CWebSocketClient::_instance = nullptr;
 chrono::seconds CWebSocketClient::ConnectionTimeout(5); // 5 second connection timeout
 
 CWebSocketClient::CWebSocketClient(ILogger *logger)
-    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _connected(false) {}
+    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _healthThread(nullptr),
+      _connected(false) {}
 
-CWebSocketClient::~CWebSocketClient() { delete _connectedThread; }
+CWebSocketClient::~CWebSocketClient() {
+    delete _connectedThread;
+    delete _healthThread;
+}
 
 IWebSocketClient *CWebSocketClient::getInstance(ILogger *logger) {
     if (!CWebSocketClient::_instance) {
@@ -217,6 +221,7 @@ int CWebSocketClient::connect() {
         // this will cause a single connection to be made to the server. c.run()
         std::unique_lock<std::mutex> connectionWaitLock(_connectionMtx);
         _connectedThread = new thread(&CWebSocketClient::runWsMessages, this);
+        _healthThread = new thread(&CWebSocketClient::health, this);
 
         // Wait for connection
         _connectionCV.wait_for(connectionWaitLock, ConnectionTimeout);
@@ -224,8 +229,11 @@ int CWebSocketClient::connect() {
             _logger->info("Connection established");
         } else {
             _connectedThread->join();
+            _healthThread->join();
             delete _connectedThread;
+            delete _healthThread;
             _connectedThread = nullptr;
+            _healthThread = nullptr;
             _logger->error("Connection failed");
             return PAPI_CANT_CONNECT;
         }
@@ -242,18 +250,46 @@ bool CWebSocketClient::isConnected() { return _connected; }
 
 void CWebSocketClient::disconnect() {
     _c.close(_connection, websocketpp::close::status::going_away, "");
-    _connectedThread->join();
     _connected = false;
+    _connectedThread->join();
+    _connectedThread = nullptr;
+    _sendMtx.lock();
+    _sendMtx.unlock();
+    _healthThread->join();
 }
 
 int CWebSocketClient::send(const string &msg) {
     if (_connected) {
+        _sendMtx.lock();
         _c.send(_connection, msg, websocketpp::frame::opcode::text);
-        _logger->info(string("WS Sent Message: ") + msg);
+        _sendMtx.unlock();
         return PAPI_OK;
     }
 
     return PAPI_NOT_CONNECTED;
+}
+
+void CWebSocketClient::health() {
+
+    // hardcoded health message
+    Json request = Json::object{
+        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+    };
+
+    long period_counter = 0;
+    while (1) {
+        usleep(HEALTH_WAKEUP_MKS);
+        period_counter += HEALTH_WAKEUP_MKS;
+        if (!isConnected())
+            break;
+        if (_connectedThread == nullptr)
+            break;
+
+        if (period_counter >= CConstants::health_check_delay_time) {
+            send(request.dump());
+            period_counter = 0;
+        }
+    }
 }
 
 void CWebSocketClient::registerMessageObserver(IMessageObserver *handler) { _observers.push_back(handler); }
