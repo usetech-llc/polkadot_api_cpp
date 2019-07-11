@@ -68,6 +68,7 @@ public:
     virtual unique_ptr<BlockHash> getBlockHash(unique_ptr<GetBlockHashParams> params);
     virtual unique_ptr<Metadata> getMetadata(unique_ptr<GetMetadataParams> params);
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params);
+    virtual unsigned long getAccountNonce(string address);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

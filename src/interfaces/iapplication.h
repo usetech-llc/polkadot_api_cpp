@@ -62,6 +62,14 @@ public:
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params) = 0;
 
     /**
+     *  Retreives the current nonce for specific address
+     *
+     *  @param address - the address to get nonce for
+     *  @return address nonce
+     */
+    virtual unsigned long getAccountNonce(string address) = 0;
+
+    /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already
      * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeBlockNumber method is
      * called, the API will be receiving updates and forwarding them to subscribed object/function. Only
@@ -117,4 +125,25 @@ public:
      * @return operation result
      */
     virtual int unsubscribeEraAndSession() = 0;
+
+    /**
+     *  Subscribe to nonce updates for a given address. Only one subscription at a time per address is allowed. If
+     * a subscription already exists for the same address, old subscription will be discarded and replaced with the new
+     * one. Until unsubscribeNonce method is called with the same address, the API will be receiving updates and
+     * forwarding them to subscribed object/function. Only unsubscribeNonce will physically unsubscribe from WebSocket
+     * endpoint updates.
+     *
+     * @param address - address to receive nonce updates for
+     * @param callback - functor or lambda expression that will receive nonce updates
+     * @return operation result
+     */
+    virtual int subscribeAccountNonce(string address, std::function<void(unsigned long)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates for address nonce.
+     *
+     * @param address - address to stop receiving nonce updates for
+     * @return operation result
+     */
+    virtual int unsubscribeAccountNonce(string address) = 0;
 };

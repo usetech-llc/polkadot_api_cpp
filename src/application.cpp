@@ -208,6 +208,13 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
     return move(deserialize<RuntimeVersion, &CPolkaApi::createRuntimeVersion>(response));
 }
 
+unsigned long CPolkaApi::getAccountNonce(string address) {
+
+    unsigned long result = 0;
+    Json query = Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{storageKey}}}};
+    _nonceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
+}
+
 template <typename T> T CPolkaApi::fromHex(string hexStr, bool bigEndianBytes) {
     int offset = 0;
     int byteOffset = 0;
@@ -280,9 +287,6 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
     }
 
     if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
-
-        //_logger->info(string("eraAndSessionSubscription subscription data: ") + message.dump());
-
         auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
         auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
         auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
@@ -394,8 +398,7 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
         _logger->info(string("Nonce subscription storageKey: ") + storageKey);
 
         Json subscribeQuery =
-            Json::object{{"method", "state_subscribeStorage"},
-                         {"params", Json::array{Json::array{storageKey}}}}; //"0xf6e55a1128686306458c4f7159dc61e4"
+            Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{storageKey}}}};
         _nonceSubscriptionIds[address] = _jsonRpc->subscribeWs(subscribeQuery, this);
     }
 
