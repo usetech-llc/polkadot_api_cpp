@@ -28,6 +28,7 @@ using namespace std;
 #include "structs/publickey.h"
 #include "structs/hasher.h"
 #include "structs/common.h"
+#include "structs/transfer.h"
 
 #include "constants.h"
 #include "errors.h"
