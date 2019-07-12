@@ -1,8 +1,12 @@
 # Manual Demos
 
+Milestone 1 deliverables are located in branch [release/milestone1](https://github.com/usetech-llc/polkadot_api_cpp/tree/release/milestone1)
+
 ## Deliverable 1
 
 ### The project can be built with provided instructions on bare installation of Ubuntu Linux 16.04.
+
+First, please install prerequisites as described in [main README.md](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone1/README.md) file
 
 ```
 cmake .
