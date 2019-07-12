@@ -7,6 +7,29 @@ struct TransferMethod : public Method {
 struct TransferExtrinsic : public Extrinsic {
     TransferMethod method;
 
+    long serializeMethodBinary(uint8_t *buf) {
+        // Compact-encode amount
+        auto compactAmount = scale::encodeCompactInteger(method.amount);
+
+        int writtenLength = 0;
+
+        // Module + Method
+        buf[writtenLength++] = method.moduleIndex;
+        buf[writtenLength++] = method.methodIndex;
+
+        // Address separator
+        buf[writtenLength++] = ADDRESS_SEPARATOR;
+
+        // Receiving address public key
+        memcpy(buf + writtenLength, method.receiverPublicKey, SR25519_PUBLIC_SIZE);
+        writtenLength += SR25519_PUBLIC_SIZE;
+
+        // Amount
+        writtenLength += scale::writeCompactToBuf(compactAmount, buf + writtenLength);
+
+        return writtenLength;
+    }
+
     long serializeBinary(uint8_t *buf) {
         // Compact-encode amount
         auto compactAmount = scale::encodeCompactInteger(method.amount);
@@ -44,21 +67,10 @@ struct TransferExtrinsic : public Extrinsic {
         writtenLength += scale::writeCompactToBuf(compactNonce, buf + writtenLength);
 
         // Extrinsic Era
-        buf[writtenLength++] = IMMORTAL_ERA;
+        buf[writtenLength++] = signature.era;
 
-        // Module + Method
-        buf[writtenLength++] = method.moduleIndex;
-        buf[writtenLength++] = method.methodIndex;
-
-        // Address separator
-        buf[writtenLength++] = ADDRESS_SEPARATOR;
-
-        // Receiving address public key
-        memcpy(buf + writtenLength, method.receiverPublicKey, SR25519_PUBLIC_SIZE);
-        writtenLength += SR25519_PUBLIC_SIZE;
-
-        // Amount
-        writtenLength += scale::writeCompactToBuf(compactAmount, buf + writtenLength);
+        // Method
+        writtenLength += serializeMethodBinary(buf + writtenLength);
 
         return writtenLength;
     }

@@ -90,3 +90,11 @@ PublicKey AddressUtils::getPublicKeyFromAddr(const Address &addr) {
 
     return move(pubk);
 }
+
+PublicKey AddressUtils::getPublicKeyFromAddr(const char *addrStr) {
+    Address addr;
+    memcpy(addr.symbols, addrStr, ADDRESS_LENGTH);
+    return getPublicKeyFromAddr(addr);
+}
+
+PublicKey AddressUtils::getPublicKeyFromAddr(const string &addrStr) { return getPublicKeyFromAddr(addrStr.c_str()); }

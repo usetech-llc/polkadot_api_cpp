@@ -9,9 +9,14 @@
 // currentIndex storage subscription hash
 #define CURRENT_INDEX_SUBSCRIPTION "0xb8f48a8c01f629d6dc877f64892bed49"
 
+#define MAX_METHOD_BYTES_SZ 2048
+
 typedef struct ProtocolParameters {
     Hasher FreeBalanceHasher;
     string FreeBalancePrefix;
+    int BalanceModuleIndex;
+    int TransferMethodIndex;
+    uint8_t GenesisBlockHash[BLOCK_HASH_SIZE];
 } ProtocolParameters;
 
 typedef struct SubscriptionUpdate {
@@ -37,8 +42,10 @@ private:
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
-    template <typename T> T fromHex(string hexStr, bool bigEndianBytes = true);
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
+    int getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName);
+    int getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
+    int getStorageMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
 
     ProtocolParameters _protocolPrm;
     long long _bestBlockNum;
@@ -51,12 +58,14 @@ private:
     map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
     map<string, std::function<void(unsigned __int128)>> _nonceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
+    std::function<void(string)> _transactionCompletionSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
     map<string, int> _balanceSubscriptionIds;
     map<string, int> _nonceSubscriptionIds;
     int _eraAndSessionSubscriptionId;
+    int _transactionCompletionSubscriptionId;
 
 public:
     CPolkaApi() = delete;
@@ -71,7 +80,7 @@ public:
     virtual unsigned long getAccountNonce(string address);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
-                                     std::function<void(int)> callback);
+                                     std::function<void(string)> callback);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

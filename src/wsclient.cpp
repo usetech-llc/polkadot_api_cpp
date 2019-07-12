@@ -253,8 +253,6 @@ void CWebSocketClient::disconnect() {
     _connected = false;
     _connectedThread->join();
     _connectedThread = nullptr;
-    _sendMtx.lock();
-    _sendMtx.unlock();
     _healthThread->join();
 }
 
@@ -263,6 +261,7 @@ int CWebSocketClient::send(const string &msg) {
         _sendMtx.lock();
         _c.send(_connection, msg, websocketpp::frame::opcode::text);
         _sendMtx.unlock();
+        _logger->info(string("WS sent message: ") + msg);
         return PAPI_OK;
     }
 
@@ -273,7 +272,10 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+        {"id", INT_MAX},
+        {"jsonrpc", "2.0"},
+        {"method", "system_health"},
+        {"params", Json::array()},
     };
 
     long period_counter = 0;

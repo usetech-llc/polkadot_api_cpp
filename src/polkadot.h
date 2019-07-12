@@ -38,6 +38,7 @@ extern "C" {
 
 #include "constants.h"
 #include "errors.h"
+#include "utils/converters.h"
 #include "interfaces/imessageobserver.h"
 #include "interfaces/iwsmessageobserver.h"
 #include "interfaces/iwsclient.h"

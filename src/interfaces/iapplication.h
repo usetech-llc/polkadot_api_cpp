@@ -77,10 +77,10 @@ public:
      * @param privateKey - 64 byte private key of signer in hex, 2 symbols per byte (e.g. "0102ABCD...")
      * @param recipient - address that will receive the transfer
      * @param amount - amount (in femto DOTs) to transfer
-     * @param callback - functor or lambda expression that will receive operation result
+     * @param callback - functor or lambda expression that will receive operation updates
      */
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
-                                     std::function<void(int)> callback) = 0;
+                                     std::function<void(string)> callback) = 0;
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already

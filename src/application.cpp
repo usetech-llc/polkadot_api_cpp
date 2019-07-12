@@ -20,14 +20,23 @@ int CPolkaApi::connect() {
     // 1. Connect to WS
     result = _jsonRpc->connect();
 
-    // 2. Read metadata for some block and initialize protocol parameters
-    string blockHash = "0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa";
+    // 2. Read genesis block hash
+    unique_ptr<GetBlockHashParams> par(new GetBlockHashParams);
+    par->blockNumber = 0;
+    auto genesisHashStr = getBlockHash(move(par));
+    for (int i = 0; i < BLOCK_HASH_SIZE; ++i) {
+        _protocolPrm.GenesisBlockHash[i] = fromHexByte(genesisHashStr->hash + 2 + i * 2);
+    }
+
+    // 3. Read metadata for some block and initialize protocol parameters
     unique_ptr<GetMetadataParams> prm(new GetMetadataParams);
-    strcpy(prm->blockHash, blockHash.c_str());
+    strcpy(prm->blockHash, genesisHashStr->hash);
 
     auto mdresp = getMetadata(move(prm));
     _protocolPrm.FreeBalanceHasher = getFuncHasher(mdresp, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
+    _protocolPrm.BalanceModuleIndex = getModuleIndex(mdresp, string("Balances"));
+    _protocolPrm.TransferMethodIndex = getCallMethodIndex(mdresp, _protocolPrm.BalanceModuleIndex, string("transfer"));
 
     return result;
 }
@@ -41,40 +50,18 @@ char easytolower(char in) {
 Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName) {
     Hasher hasher = XXHASH;
 
-    // Convert all names to lowercase
-    string moduleNameLower = moduleName;
-    std::transform(moduleNameLower.begin(), moduleNameLower.end(), moduleNameLower.begin(), easytolower);
-    string funcNameLower = funcName;
-    std::transform(funcNameLower.begin(), funcNameLower.end(), funcNameLower.begin(), easytolower);
-
     if (meta->metadataV0) {
         hasher = XXHASH;
     } else if (meta->metadataV5) {
         // Find the module index in metadata
-        int moduleIndex = -1;
-        for (int i = 0; i < COLLECTION_SIZE; ++i) {
-            if (meta->metadataV5->module[i]) {
-                string name = meta->metadataV5->module[i]->name;
-                std::transform(name.begin(), name.end(), name.begin(), easytolower);
-
-                if (moduleNameLower == name) {
-                    moduleIndex = i;
-                    break;
-                }
-            }
-        }
+        int moduleIndex = getModuleIndex(meta, moduleName);
 
         // Find function by name in module and get its hasher
         string hasherStr = "";
         if (moduleIndex >= 0) {
-            for (int i = 0; i < COLLECTION_SIZE; ++i) {
-                string name = meta->metadataV5->module[moduleIndex]->storage[i].name;
-                std::transform(name.begin(), name.end(), name.begin(), easytolower);
-
-                if (funcNameLower == name) {
-                    hasherStr = meta->metadataV5->module[moduleIndex]->storage[i].type.hasher;
-                    break;
-                }
+            int methodIndex = getStorageMethodIndex(meta, moduleIndex, funcName);
+            if (methodIndex > 0) {
+                hasherStr = meta->metadataV5->module[moduleIndex]->storage[methodIndex].type.hasher;
             }
         }
 
@@ -84,6 +71,84 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
         }
     }
     return hasher;
+}
+
+int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName) {
+
+    // Find the module index in metadata
+    int moduleIndex = -1;
+    string moduleNameLower = moduleName;
+    std::transform(moduleNameLower.begin(), moduleNameLower.end(), moduleNameLower.begin(), easytolower);
+
+    for (int i = 0; i < COLLECTION_SIZE; ++i) {
+        string name("");
+        if (meta->metadataV0 && meta->metadataV0->module[i]) {
+            name = meta->metadataV0->module[i]->prefix;
+        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+            name = meta->metadataV5->module[i]->name;
+        }
+
+        if (name.length()) {
+            std::transform(name.begin(), name.end(), name.begin(), easytolower);
+
+            if (moduleNameLower == name) {
+                moduleIndex = i;
+                break;
+            }
+        }
+    }
+
+    return moduleIndex;
+}
+
+int CPolkaApi::getStorageMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName) {
+    int methodIndex = -1;
+    string funcNameLower = funcName;
+    std::transform(funcNameLower.begin(), funcNameLower.end(), funcNameLower.begin(), easytolower);
+
+    for (int i = 0; i < COLLECTION_SIZE; ++i) {
+
+        string name("");
+        if (meta->metadataV0 && meta->metadataV0->module[i]) {
+            name = meta->metadataV0->module[moduleIndex]->storage.function[i].name;
+        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+            name = meta->metadataV5->module[moduleIndex]->storage[i].name;
+        }
+
+        std::transform(name.begin(), name.end(), name.begin(), easytolower);
+
+        if (funcNameLower == name) {
+            methodIndex = i;
+            break;
+        }
+    }
+
+    return methodIndex;
+}
+
+int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName) {
+    int methodIndex = -1;
+    string funcNameLower = funcName;
+    std::transform(funcNameLower.begin(), funcNameLower.end(), funcNameLower.begin(), easytolower);
+
+    for (int i = 0; i < COLLECTION_SIZE; ++i) {
+
+        string name("");
+        if (meta->metadataV0 && meta->metadataV0->module[i]) {
+            name = meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name;
+        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+            name = meta->metadataV5->module[moduleIndex]->call[i].name;
+        }
+
+        std::transform(name.begin(), name.end(), name.begin(), easytolower);
+
+        if (funcNameLower == name) {
+            methodIndex = i;
+            break;
+        }
+    }
+
+    return methodIndex;
 }
 
 void CPolkaApi::disconnect() { _jsonRpc->disconnect(); }
@@ -226,45 +291,6 @@ unsigned long CPolkaApi::getAccountNonce(string address) {
     return result;
 }
 
-template <typename T> T CPolkaApi::fromHex(string hexStr, bool bigEndianBytes) {
-    int offset = 0;
-    int byteOffset = 0;
-    if ((hexStr[0] == '0') && (hexStr[1] == 'x')) {
-        offset = 2;
-    }
-    T result = 0;
-    while (offset < (int)hexStr.length()) {
-        unsigned char digit1 = hexStr[offset];
-        unsigned char digit2 = hexStr[offset + 1];
-        unsigned char byte = 0;
-        if ((digit1 >= 'a') && (digit1 <= 'f'))
-            digit1 = digit1 - 'a' + 10;
-        else if ((digit1 >= 'A') && (digit1 <= 'F'))
-            digit1 = digit1 - 'A' + 10;
-        else if ((digit1 >= '0') && (digit1 <= '9'))
-            digit1 = digit1 - '0';
-        if ((digit2 >= 'a') && (digit2 <= 'f'))
-            digit2 = digit2 - 'a' + 10;
-        else if ((digit2 >= 'A') && (digit2 <= 'F'))
-            digit2 = digit2 - 'A' + 10;
-        else if ((digit2 >= '0') && (digit2 <= '9'))
-            digit2 = digit2 - '0';
-
-        byte = (digit1 << 4) | digit2;
-
-        if (bigEndianBytes) {
-            result = (result << 8) | byte;
-        } else {
-            T wbyte = byte;
-            result = (wbyte << byteOffset) | result;
-            byteOffset += 8;
-        }
-
-        offset += 2;
-    }
-    return result;
-}
-
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
     // TODO: DOT-55, fix with proper producer-consumer
@@ -291,6 +317,20 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
                     fromHex<unsigned __int128>(message["changes"][0][1].string_value(), false));
                 return;
             }
+        }
+
+        // Handle transaction completion subscriptions
+        if (_transactionCompletionSubscriptionId == subscriptionId) {
+            if (message.dump().find("ready") != std::string::npos)
+                _transactionCompletionSubscriber(string("ready"));
+            else if (message.dump().find("finalized") != std::string::npos) {
+                _transactionCompletionSubscriber(string("finalized"));
+
+                // There is no need to unsubscribe, just reset variabled
+                _transactionCompletionSubscriber = nullptr;
+                _transactionCompletionSubscriptionId = 0;
+            }
+            return;
         }
 
         usleep(100000);
@@ -426,6 +466,62 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
-                                    std::function<void(int)> callback) {
-    int i = 0;
+                                    std::function<void(string)> callback) {
+
+    _logger->info("=== Starting a Transfer Extrinsic ===");
+
+    // Get account Nonce
+    unsigned long nonce = getAccountNonce(sender);
+    _logger->info(string("sender nonce: ") + to_string(nonce));
+
+    // Format transaction
+    TransferExtrinsic te;
+    memset(&te, 0, sizeof(te));
+    te.method.moduleIndex =
+        _protocolPrm.BalanceModuleIndex - 1; // Not sure why index should be 3, asked in Tech channel
+    te.method.methodIndex = _protocolPrm.TransferMethodIndex;
+    auto recipientPK = AddressUtils::getPublicKeyFromAddr(recipient);
+    memcpy(te.method.receiverPublicKey, recipientPK.bytes, PUBLIC_KEY_LENGTH);
+    te.method.amount = amount;
+    te.signature.version = SIGNATURE_VERSION;
+    auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
+    memcpy(te.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
+    te.signature.nonce = nonce;
+    te.signature.era = IMMORTAL_ERA;
+
+    // Format signature payload
+    SignaturePayload sp;
+    sp.nonce = nonce;
+    uint8_t methodBytes[MAX_METHOD_BYTES_SZ];
+    sp.methodBytesLength = te.serializeMethodBinary(methodBytes);
+    sp.methodBytes = methodBytes;
+    sp.era = IMMORTAL_ERA;
+    memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
+
+    // Serialize and Sign payload
+    uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
+    long payloadLength = sp.serializeBinary(signaturePayloadBytes);
+
+    vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
+    uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
+    sr25519_sign(sig, te.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Copy signature bytes to transaction
+    memcpy(te.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
+
+    // Serialize and send transaction
+    uint8_t teBytes[MAX_METHOD_BYTES_SZ];
+    long teByteLength = te.serializeBinary(teBytes);
+    string teStr("0x");
+    for (int i = 0; i < teByteLength; ++i) {
+        char b[3] = {0};
+        sprintf(b, "%02X", teBytes[i]);
+        teStr += b;
+    }
+
+    Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
+
+    // Send == Subscribe callback to completion
+    _transactionCompletionSubscriber = callback;
+    _transactionCompletionSubscriptionId = _jsonRpc->subscribeWs(query, this);
 }
