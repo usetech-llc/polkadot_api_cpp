@@ -111,6 +111,26 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0c578b10204f79d0da8cb6479cf0af45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf60c651290fb77835f90ec826e2257"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#abdf60c651290fb77835f90ec826e2257">getRuntimeVersion</a> (unique_ptr&lt; <a class="el" href="structGetRuntimeVersionParams.html">GetRuntimeVersionParams</a> &gt; params)=0</td></tr>
 <tr class="separator:abdf60c651290fb77835f90ec826e2257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7dbe556c940f7040eba40beba1b22ae"><td class="memItemLeft" align="right" valign="top">virtual unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ae7dbe556c940f7040eba40beba1b22ae">getAccountNonce</a> (string address)=0</td></tr>
+<tr class="separator:ae7dbe556c940f7040eba40beba1b22ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa56d2498932ac9c31f5f2a92a8ac6f77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#aa56d2498932ac9c31f5f2a92a8ac6f77">signAndSendTransfer</a> (string sender, string privateKey, string recipient, unsigned __int128 amount, std::function&lt; void(string)&gt; callback)=0</td></tr>
+<tr class="separator:aa56d2498932ac9c31f5f2a92a8ac6f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0a04117025fa7294e540159a102177"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">subscribeBlockNumber</a> (std::function&lt; void(long long)&gt; callback)=0</td></tr>
+<tr class="separator:a1a0a04117025fa7294e540159a102177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad743ca6e723a8e98fc6a6fced686341d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">unsubscribeBlockNumber</a> ()=0</td></tr>
+<tr class="separator:ad743ca6e723a8e98fc6a6fced686341d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d22f7dda3d53e6f9877a609e3679cdc"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6d22f7dda3d53e6f9877a609e3679cdc">subscribeBalance</a> (string address, std::function&lt; void(unsigned __int128)&gt; callback)=0</td></tr>
+<tr class="separator:a6d22f7dda3d53e6f9877a609e3679cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6422c696fa18a0896456bb8a2b5eae7c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6422c696fa18a0896456bb8a2b5eae7c">unsubscribeBalance</a> (string address)=0</td></tr>
+<tr class="separator:a6422c696fa18a0896456bb8a2b5eae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af73bb90d3220bcedf18a288fd00654bc"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#af73bb90d3220bcedf18a288fd00654bc">subscribeEraAndSession</a> (std::function&lt; void(<a class="el" href="structEra.html">Era</a>, <a class="el" href="structSession.html">Session</a>)&gt; callback)=0</td></tr>
+<tr class="separator:af73bb90d3220bcedf18a288fd00654bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada6a4f45cecca200c40a3045514cea22"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ada6a4f45cecca200c40a3045514cea22">unsubscribeEraAndSession</a> ()=0</td></tr>
+<tr class="separator:ada6a4f45cecca200c40a3045514cea22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad005e633533abd96b0b829c8c6abe16f"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad005e633533abd96b0b829c8c6abe16f">subscribeAccountNonce</a> (string address, std::function&lt; void(unsigned long)&gt; callback)=0</td></tr>
+<tr class="separator:ad005e633533abd96b0b829c8c6abe16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d19365711fdd418038e8463f6a1701"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#af0d19365711fdd418038e8463f6a1701">unsubscribeAccountNonce</a> (string address)=0</td></tr>
+<tr class="separator:af0d19365711fdd418038e8463f6a1701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -173,6 +193,40 @@ Public Member Functions</h2></td></tr>
 <p>Disconnects from WebSocket </p>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#ae50b729de4c0676f4f55f2752002e991">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7dbe556c940f7040eba40beba1b22ae"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unsigned long IApplication::getAccountNonce </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Retreives the current nonce for specific address</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>- the address to get nonce for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>address nonce </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ae1faea32c853279c15cb723723dc9c3b">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -302,6 +356,351 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSystemInfo.html">SystemInfo</a> struct with result </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#ad6a8bb4fb16abb2d9737cb58eda0991d">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa56d2498932ac9c31f5f2a92a8ac6f77"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void IApplication::signAndSendTransfer </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>privateKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>recipient</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned __int128&#160;</td>
+          <td class="paramname"><em>amount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(string)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once completed, the callback will be called with completion result.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sender</td><td>- address of sender (who signs the transaction) </td></tr>
+    <tr><td class="paramname">privateKey</td><td>- 64 byte private key of signer in hex, 2 symbols per byte (e.g. "0102ABCD...") </td></tr>
+    <tr><td class="paramname">recipient</td><td>- address that will receive the transfer </td></tr>
+    <tr><td class="paramname">amount</td><td>- amount (in femto DOTs) to transfer </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive operation updates </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ae45eba6a20e32034f436e26ed5b0b9bd">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad005e633533abd96b0b829c8c6abe16f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeAccountNonce </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(unsigned long)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to nonce updates for a given address. Only one subscription at a time per address is allowed. If a subscription already exists for the same address, old subscription will be discarded and replaced with the new one. Until unsubscribeNonce method is called with the same address, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeNonce will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>- address to receive nonce updates for </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive nonce updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ac1245151fda85294255234e0a3abf523">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6d22f7dda3d53e6f9877a609e3679cdc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeBalance </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(unsigned __int128)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent balance for a given address. Only one subscription at a time per address is allowed. If a subscription already exists for the same address, old subscription will be discarded and replaced with the new one. Until unsubscribeBalance method is called with the same address, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeBalance will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>- address to receive balance updates for </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive balance updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a9bb4dede1fc991fef1eb31a21547c859">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a0a04117025fa7294e540159a102177"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeBlockNumber </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(long long)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until unsubscribeBlockNumber method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeBlockNumber will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#af82b72a2595ad868f73be2609e88d4d3">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af73bb90d3220bcedf18a288fd00654bc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeEraAndSession </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(<a class="el" href="structEra.html">Era</a>, <a class="el" href="structSession.html">Session</a>)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to era and session. Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until subscribeEraAndSession method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeBlockNumber will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a73f0b668c14afb4f50eef56efb68a998">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af0d19365711fdd418038e8463f6a1701"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeAccountNonce </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates for address nonce.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>- address to stop receiving nonce updates for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a327505a0deff03c01a1023521f4ef18d">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6422c696fa18a0896456bb8a2b5eae7c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeBalance </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>- address to stop receiving balance updates for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a2c1fe8a822a04d7a9f0182667e802304">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad743ca6e723a8e98fc6a6fced686341d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeBlockNumber </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with most recent block number.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ab9cc0cd7a71ec2eb65a77fab35e3de96">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ada6a4f45cecca200c40a3045514cea22"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeEraAndSession </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with era and session.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a97bb1cf99dcf700547530215a4f4b8b5">CPolkaApi</a>.</p>
 
 </div>
 </div>

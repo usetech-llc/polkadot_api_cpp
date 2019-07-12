@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['loggerstub',['LoggerStub',['../classLoggerStub.html',1,'']]]
+  ['jsonrpcexception',['JsonRpcException',['../classJsonRpcException.html',1,'']]],
+  ['jsonrpcparams',['JsonRpcParams',['../structJsonRpcParams.html',1,'']]],
+  ['jsonrpcquery',['JsonRpcQuery',['../structJsonRpcQuery.html',1,'']]]
 ];

@@ -1,6 +1,0 @@
-<map id="Module" name="Module">
-<area shape="rect" id="node2" href="$structStorage.html" title="Storage" alt="" coords="5,196,72,223"/>
-<area shape="rect" id="node3" href="$structFunction.html" title="Function" alt="" coords="15,95,87,121"/>
-<area shape="rect" id="node4" href="$structArgItem.html" title="ArgItem" alt="" coords="63,5,131,32"/>
-<area shape="rect" id="node5" href="$structModuleContent.html" title="ModuleContent" alt="" coords="89,145,199,172"/>
-</map>

@@ -1,9 +1,4 @@
 var searchData=
 [
-  ['iapplication',['IApplication',['../classIApplication.html',1,'']]],
-  ['ijsonrpc',['IJsonRpc',['../classIJsonRpc.html',1,'']]],
-  ['ilogger',['ILogger',['../classILogger.html',1,'']]],
-  ['imessageobserver',['IMessageObserver',['../classIMessageObserver.html',1,'']]],
-  ['iwebsocketclient',['IWebSocketClient',['../classIWebSocketClient.html',1,'']]],
-  ['iwebsocketmessageobserver',['IWebSocketMessageObserver',['../classIWebSocketMessageObserver.html',1,'']]]
+  ['handlewsmessage',['handleWsMessage',['../classIWebSocketMessageObserver.html#a10f301bc911fdd40bb1f083f6ffbda86',1,'IWebSocketMessageObserver']]]
 ];

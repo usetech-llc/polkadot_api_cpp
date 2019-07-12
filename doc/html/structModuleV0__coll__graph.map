@@ -1,0 +1,9 @@
+<map id="ModuleV0" name="ModuleV0">
+<area shape="rect" id="node2" href="$structModuleContentV0.html" title="ModuleContentV0" alt="" coords="7,273,134,300"/>
+<area shape="rect" id="node3" href="$structCallV0.html" title="CallV0" alt="" coords="40,184,101,211"/>
+<area shape="rect" id="node4" href="$structFunctionCallV0.html" title="FunctionCallV0" alt="" coords="15,95,126,121"/>
+<area shape="rect" id="node5" href="$structFunctionCallArgV0.html" title="FunctionCallArgV0" alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node6" href="$structStorageV0.html" title="StorageV0" alt="" coords="159,273,241,300"/>
+<area shape="rect" id="node7" href="$structFunctionV0.html" title="FunctionV0" alt="" coords="156,184,244,211"/>
+<area shape="rect" id="node8" href="$structFuncTypeV0.html" title="FuncTypeV0" alt="" coords="152,95,248,121"/>
+</map>

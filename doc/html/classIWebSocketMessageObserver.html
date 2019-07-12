@@ -88,17 +88,60 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">IWebSocketMessageObserver Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for IWebSocketMessageObserver:</div>
+<div class="dyncontent">
+<div class="center"><img src="classIWebSocketMessageObserver__inherit__graph.png" border="0" usemap="#IWebSocketMessageObserver_inherit__map" alt="Inheritance graph"/></div>
+<map name="IWebSocketMessageObserver_inherit__map" id="IWebSocketMessageObserver_inherit__map">
+<area shape="rect" id="node2" href="classCPolkaApi.html" title="CPolkaApi" alt="" coords="63,80,147,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a987f618d7aa5ed387000ba5a0a9b2499"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a987f618d7aa5ed387000ba5a0a9b2499"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleWsMessage</b> (const Json &amp;message)=0</td></tr>
-<tr class="separator:a987f618d7aa5ed387000ba5a0a9b2499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10f301bc911fdd40bb1f083f6ffbda86"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIWebSocketMessageObserver.html#a10f301bc911fdd40bb1f083f6ffbda86">handleWsMessage</a> (const int subscriptionId, const Json &amp;message)=0</td></tr>
+<tr class="separator:a10f301bc911fdd40bb1f083f6ffbda86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="iwsmessageobserver_8h_source.html#l00001">1</a> of file <a class="el" href="iwsmessageobserver_8h_source.html">iwsmessageobserver.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a10f301bc911fdd40bb1f083f6ffbda86"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void IWebSocketMessageObserver::handleWsMessage </td>
+          <td>(</td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>subscriptionId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Json &amp;&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Do not call API in message handler thread </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/interfaces/<a class="el" href="iwsmessageobserver_8h_source.html">iwsmessageobserver.h</a></li>
 </ul>
 </div><!-- contents -->

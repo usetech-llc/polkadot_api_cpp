@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['storage',['Storage',['../structStorage.html',1,'']]],
-  ['systeminfo',['SystemInfo',['../structSystemInfo.html',1,'']]]
+  ['responsebase',['ResponseBase',['../structResponseBase.html',1,'']]],
+  ['runtimeversion',['RuntimeVersion',['../structRuntimeVersion.html',1,'']]]
 ];
