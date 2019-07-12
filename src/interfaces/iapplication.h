@@ -70,8 +70,9 @@ public:
     virtual unsigned long getAccountNonce(string address) = 0;
 
     /**
-     *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once completed, the
-     * callback will be called with completion result.
+     *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once transaction is
+     * accepted, the callback will be called with parameter "ready". Once completed, the callback will be called with
+     * completion result string equal to "finalized".
      *
      * @param sender - address of sender (who signs the transaction)
      * @param privateKey - 64 byte private key of signer in hex, 2 symbols per byte (e.g. "0102ABCD...")
