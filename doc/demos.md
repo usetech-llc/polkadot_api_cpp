@@ -65,10 +65,49 @@ bin/wssubscribeApp
 
 ### Balance subscription
 ```
-TBD
+bin/wssubscribeBalance
+```
+
+Expect output such as:
+```
+...
+2019-07-12 15:09:27,114 INFO [default] Subscribed with subscription ID: 2760311
+
+  Balance: 201020000000000
+
+2019-07-12 15:09:27,506 INFO [default] runWsMessages Thread exited
+success
 ```
 
 ### Current era and session subscription
 ```
 bin/wssubscribeAppEraNSession
+```
+
+## Deliverable 3 - Signing and Sending Transactions
+
+- One transaction type is supported - sending DOTs to another address
+- Transaction is serialized and prepared (formatted) appropriately for signing
+- Transaction can be signed with provided private key
+- Cryptogram can be sent to the substrate node to be processed and included in the blockchain
+- Command line tool is provided to execute all milestone deliverables
+```
+bin/transfer <sender address> <recipient address> <amount in fDOTs> <sender private key (hex)>
+
+for example:
+
+bin/transfer 5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr 5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht 1000000000000000000 0xABCDEF123.....123
+(private key was corrupted on purpose, both hex formats with or without leading 0x are supported)
+```
+
+Expect output such as:
+```
+2019-07-12 15:04:24,865 INFO [default] Message received: {"jsonrpc":"2.0","method":"author_extrinsicUpdate","params":{"result":{"finalized":"0x37361e7f88a9105b103b32458e2748ec4758ec8dca733da61c1403d9bda70d42"},"subscription":2758756}}
+
+
+   ---=== Transaction was mined! ===---
+
+
+2019-07-12 15:04:25,174 INFO [default] runWsMessages Thread exited
+success
 ```
