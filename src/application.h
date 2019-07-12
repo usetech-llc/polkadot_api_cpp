@@ -43,9 +43,10 @@ private:
     unique_ptr<Metadata> createMetadata(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
-    int getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName);
+    int getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName, bool skipZeroCalls);
     int getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
     int getStorageMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
+    bool hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex);
 
     ProtocolParameters _protocolPrm;
     long long _bestBlockNum;

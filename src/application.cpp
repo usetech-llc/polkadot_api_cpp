@@ -35,8 +35,9 @@ int CPolkaApi::connect() {
     auto mdresp = getMetadata(move(prm));
     _protocolPrm.FreeBalanceHasher = getFuncHasher(mdresp, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
-    _protocolPrm.BalanceModuleIndex = getModuleIndex(mdresp, string("Balances"));
-    _protocolPrm.TransferMethodIndex = getCallMethodIndex(mdresp, _protocolPrm.BalanceModuleIndex, string("transfer"));
+    _protocolPrm.BalanceModuleIndex = getModuleIndex(mdresp, string("Balances"), true);
+    _protocolPrm.TransferMethodIndex =
+        getCallMethodIndex(mdresp, getModuleIndex(mdresp, string("Balances"), false), string("transfer"));
 
     return result;
 }
@@ -54,7 +55,7 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
         hasher = XXHASH;
     } else if (meta->metadataV5) {
         // Find the module index in metadata
-        int moduleIndex = getModuleIndex(meta, moduleName);
+        int moduleIndex = getModuleIndex(meta, moduleName, false);
 
         // Find function by name in module and get its hasher
         string hasherStr = "";
@@ -73,10 +74,11 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
     return hasher;
 }
 
-int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName) {
+int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName, bool skipZeroCalls) {
 
     // Find the module index in metadata
     int moduleIndex = -1;
+    int zeroMethodModuleCount = 0;
     string moduleNameLower = moduleName;
     std::transform(moduleNameLower.begin(), moduleNameLower.end(), moduleNameLower.begin(), easytolower);
 
@@ -90,9 +92,13 @@ int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleNa
 
         if (name.length()) {
             std::transform(name.begin(), name.end(), name.begin(), easytolower);
+            if (!hasMethods(meta, i))
+                zeroMethodModuleCount++;
 
             if (moduleNameLower == name) {
                 moduleIndex = i;
+                if (skipZeroCalls)
+                    moduleIndex -= zeroMethodModuleCount;
                 break;
             }
         }
@@ -149,6 +155,37 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
     }
 
     return methodIndex;
+}
+
+bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
+    for (int i = 0; i < COLLECTION_SIZE; ++i) {
+
+        string name("");
+
+        // Check call methods
+        if (meta->metadataV0 && meta->metadataV0->module[i]) {
+            name = meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name;
+        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+            name = meta->metadataV5->module[moduleIndex]->call[i].name;
+        }
+
+        if (name.length() > 0) {
+            return true;
+        }
+
+        // Check storage methods
+        if (meta->metadataV0 && meta->metadataV0->module[i]) {
+            name = meta->metadataV0->module[moduleIndex]->storage.function[i].name;
+        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+            name = meta->metadataV5->module[moduleIndex]->storage[i].name;
+        }
+
+        if (name.length() > 0) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void CPolkaApi::disconnect() { _jsonRpc->disconnect(); }
@@ -333,30 +370,30 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             return;
         }
 
+        if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
+            auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
+            auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
+            auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
+            auto sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
+            auto currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
+
+            auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
+            auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
+
+            Era era;
+            era.currentEra = currentEra;
+            era.eraProgress = eraProgress;
+            Session session;
+            session.sessionIndex = currentIndexSubcription;
+            session.lastLengthChange = lastLengthChange;
+            session.sessionLength = sessionLength;
+            session.sessionProgress = sessionProgress;
+
+            _eraAndSessionSubscriber(era, session);
+        }
+
         usleep(100000);
         count++;
-    }
-
-    if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
-        auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
-        auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
-        auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
-        auto sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
-        auto currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
-
-        auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
-        auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
-
-        Era era;
-        era.currentEra = currentEra;
-        era.eraProgress = eraProgress;
-        Session session;
-        session.sessionIndex = currentIndexSubcription;
-        session.lastLengthChange = lastLengthChange;
-        session.sessionLength = sessionLength;
-        session.sessionProgress = sessionProgress;
-
-        _eraAndSessionSubscriber(era, session);
     }
 }
 
@@ -477,8 +514,7 @@ void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string rec
     // Format transaction
     TransferExtrinsic te;
     memset(&te, 0, sizeof(te));
-    te.method.moduleIndex =
-        _protocolPrm.BalanceModuleIndex - 1; // Not sure why index should be 3, asked in Tech channel
+    te.method.moduleIndex = _protocolPrm.BalanceModuleIndex;
     te.method.methodIndex = _protocolPrm.TransferMethodIndex;
     auto recipientPK = AddressUtils::getPublicKeyFromAddr(recipient);
     memcpy(te.method.receiverPublicKey, recipientPK.bytes, PUBLIC_KEY_LENGTH);
