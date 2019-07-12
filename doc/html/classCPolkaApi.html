@@ -434,7 +434,7 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once completed, the callback will be called with completion result.</p>
+<p>Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once transaction is accepted, the callback will be called with parameter "ready". Once completed, the callback will be called with completion result string equal to "finalized".</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">sender</td><td>- address of sender (who signs the transaction) </td></tr>
