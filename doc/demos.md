@@ -6,12 +6,14 @@ Milestone 1 deliverables are located in branch [release/milestone1](https://gith
 
 ### The project can be built with provided instructions on bare installation of Ubuntu Linux 16.04.
 
-First, please install prerequisites as described in [main README.md](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone1/README.md) file
+For convenience the Dockerfile is provided that installs all dependencies as needed, checks out the code for the API and builds it. In order to execute single API tests manually, please have docker CE installed, then clone this repository and run following commands (first one takes ~20 minutes to run for the first time):
+```
+$ docker build -t cppapi .
+$ docker run -it -rm cppapi /bin/sh
+# cd polkadot_api_cpp
+```
 
-```
-cmake .
-make
-```
+Now you are connected to a running docker container with API built, tested, and ready. You can execute following commands to examine deliverables.
 
 ### Connection:
 - Connection to a public Substrate node (at URL wss://poc3-rpc.polkadot.io:443/) can be established through WebSocket with API connect command.
