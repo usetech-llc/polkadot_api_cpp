@@ -9,7 +9,7 @@ Milestone 1 deliverables are located in branch [release/milestone1](https://gith
 For convenience the Dockerfile is provided that installs all dependencies as needed, checks out the code for the API and builds it. In order to execute single API tests manually, please have docker CE installed, then clone this repository and run following commands (first one takes ~20 minutes to run for the first time):
 ```
 $ docker build -t cppapi .
-$ docker run -it -rm cppapi /bin/sh
+$ docker run -it --rm cppapi /bin/sh
 # cd polkadot_api_cpp
 ```
 
