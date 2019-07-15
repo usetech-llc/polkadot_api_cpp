@@ -303,7 +303,10 @@ unique_ptr<Metadata> CPolkaApi::getMetadata(unique_ptr<GetMetadataParams> params
 
 unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params) {
 
-    Json query = Json::object{{"method", "chain_getRuntimeVersion"}, {"params", Json::array{params->blockHash}}};
+    Json prm = Json::array{};
+    if (params)
+        prm = Json::array{params->blockHash};
+    Json query = Json::object{{"method", "chain_getRuntimeVersion"}, {"params", prm}};
 
     Json response = _jsonRpc->request(query);
 
