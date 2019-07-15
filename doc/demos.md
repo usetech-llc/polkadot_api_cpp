@@ -64,12 +64,12 @@ Currently unit tests, see above
 
 ## Deliverable 2 - WebSocket Subscriptions
 
-### API can be subscribed and unsibscribed. Current block subscription.
+### API can be subscribed and unsibscribed. Current block subscription, which is provided by chain_subscribeNewHead subscription.
 ```
 bin/wssubscribeApp
 ```
 
-### Balance subscription
+### Balance subscription, which is provided by state_subscribeStorage subscription
 ```
 bin/wssubscribeBalance
 ```
