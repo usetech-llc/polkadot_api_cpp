@@ -118,8 +118,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9c48717e996037e94c957188dc30e043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a478d031a671ffea78d27fa41f7464812"><td class="memItemLeft" align="right" valign="top">virtual Json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a478d031a671ffea78d27fa41f7464812">request</a> (Json jsonMap)</td></tr>
 <tr class="separator:a478d031a671ffea78d27fa41f7464812"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af57c4864ebe82f2ba5d68b14bd5eb8c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af57c4864ebe82f2ba5d68b14bd5eb8c0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleMessage</b> (const string &amp;payload)</td></tr>
+<tr class="memitem:af57c4864ebe82f2ba5d68b14bd5eb8c0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#af57c4864ebe82f2ba5d68b14bd5eb8c0">handleMessage</a> (const string &amp;payload)</td></tr>
 <tr class="separator:af57c4864ebe82f2ba5d68b14bd5eb8c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a192b4108bb5be375c3d112ebf9c9fd4a"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a192b4108bb5be375c3d112ebf9c9fd4a">subscribeWs</a> (Json jsonMap, <a class="el" href="classIWebSocketMessageObserver.html">IWebSocketMessageObserver</a> *observer)</td></tr>
 <tr class="separator:a192b4108bb5be375c3d112ebf9c9fd4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,6 +183,35 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleMessage
 <p>Implements <a class="el" href="classIJsonRpc.html#ab9b05cfd42f34609cfe807b9e22e4e37">IJsonRpc</a>.</p>
 
 <p>Definition at line <a class="el" href="jsonrpc_8cpp_source.html#l00019">19</a> of file <a class="el" href="jsonrpc_8cpp_source.html">jsonrpc.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af57c4864ebe82f2ba5d68b14bd5eb8c0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CJsonRpc::handleMessage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>payload</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Do not call API in message handler thread </p>
+
+<p>Implements <a class="el" href="classIMessageObserver.html#ae2b0dca4a50b623592ad321873ba942c">IMessageObserver</a>.</p>
+
+<p>Definition at line <a class="el" href="jsonrpc_8cpp_source.html#l00062">62</a> of file <a class="el" href="jsonrpc_8cpp_source.html">jsonrpc.cpp</a>.</p>
 
 </div>
 </div>

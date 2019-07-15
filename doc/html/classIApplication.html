@@ -88,6 +88,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">IApplication Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="iapplication_8h_source.html">iapplication.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for IApplication:</div>
 <div class="dyncontent">
@@ -133,8 +135,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af0d19365711fdd418038e8463f6a1701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="iapplication_8h_source.html#l00001">1</a> of file <a class="el" href="iapplication_8h_source.html">iapplication.h</a>.</p>
+<div class="textblock"><p>Communication with Substrate node assumes establishing a secure WebSocket connection using <a class="el" href="classIApplication.html#ad0697a738044cc52a4869d1f85c3dd44">connect()</a> method, performing all operations as needed using the API calls defined in this interface, and closing connection using <a class="el" href="classIApplication.html#a5f05ea92d87b60d0f8637ddf3668655b">disconnect()</a> method.</p>
+<p>Connection can be left open for as long as needed, and it will be maintained by the API. For this reason API runs several maintenance threads and the process that established connection needs to be kept in memory and running.</p>
+<p>API calls are thread-safe, yet it is not guaranteed for asynchronous operations that commands will finish (and receive response) in the order they were sent. Also, many API methods use callback mechanism for asynchronous operations. Please do not insert blocking code in the callback handlers because it will block other commands from receiving responses. Responses may be lost and application may enter in a deadlock if handlers block. Also, please do not chain API methods by calling other API methond inside response handlers. </p>
+
+<p>Definition at line <a class="el" href="iapplication_8h_source.html#l00016">16</a> of file <a class="el" href="iapplication_8h_source.html">iapplication.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ad0697a738044cc52a4869d1f85c3dd44"></a>
 <div class="memitem">
@@ -157,7 +162,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Connects to WebSocket</p>
-<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following these instructions:</p>
+<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following instructions:</p>
 <ol type="1">
 <li>Execute <code>curl --insecure -v <a href="https://poc3-rpc.polkadot.io:443">https://poc3-rpc.polkadot.io:443</a></code></li>
 <li>Find "issuer" line in the output and download issuer certificate from their website</li>

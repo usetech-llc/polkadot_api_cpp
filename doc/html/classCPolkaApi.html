@@ -170,7 +170,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Connects to WebSocket</p>
-<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following these instructions:</p>
+<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following instructions:</p>
 <ol type="1">
 <li>Execute <code>curl --insecure -v <a href="https://poc3-rpc.polkadot.io:443">https://poc3-rpc.polkadot.io:443</a></code></li>
 <li>Find "issuer" line in the output and download issuer certificate from their website</li>

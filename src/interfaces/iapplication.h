@@ -1,3 +1,18 @@
+/**
+ *   Communication with Substrate node assumes establishing a secure WebSocket connection using connect() method,
+ * performing all operations as needed using the API calls defined in this interface, and closing connection using
+ * disconnect() method.
+ *
+ *   Connection can be left open for as long as needed, and it will be maintained by the API. For this reason API runs
+ * several maintenance threads and the process that established connection needs to be kept in memory and running.
+ *
+ *   API calls are thread-safe, yet it is not guaranteed for asynchronous operations that commands will finish (and
+ * receive response) in the order they were sent. Also, many API methods use callback mechanism for asynchronous
+ * operations. Please do not insert blocking code in the callback handlers because it will block other commands from
+ * receiving responses. Responses may be lost and application may enter in a deadlock if handlers block. Also, please do
+ * not chain API methods by calling other API methond inside response handlers.
+ */
+
 class IApplication {
 public:
     virtual ~IApplication() {}
@@ -9,7 +24,7 @@ public:
      * in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file
      * one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this
      * certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer
-     * certificate by executing following these instructions:
+     * certificate by executing following instructions:
      *
      *  1. Execute `curl --insecure -v https://poc3-rpc.polkadot.io:443`
      *  2. Find "issuer" line in the output and download issuer certificate from their website
