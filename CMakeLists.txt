@@ -1,12 +1,19 @@
 # General project setup
 cmake_minimum_required (VERSION 3.1)
-project (PolkadotCppAPI)
+project (PolkadotCppAPI C CXX)
 message("Building project ${PROJECT_NAME}")
 include(CTest)
 
 # Set compiler flags
 set(CMAKE_C_FLAGS "-ggdb -ldl")
 set(CMAKE_BUILD_TYPE Debug)
+if (CMAKE_VERSION VERSION_LESS "3.1")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+        endif ()
+else ()
+    set (CMAKE_CXX_STANDARD 11)
+endif ()
 
 # Take care of libpthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
