@@ -1,4 +1,7 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
+#undef NDEBUG
+#include <cassert>
 
 int main(int argc, char *argv[]) {
 
@@ -10,9 +13,14 @@ int main(int argc, char *argv[]) {
 
     CPolkaApi app(&logger, &jsonRpc);
 
-    app.connect();
+    string nodeUrl = getNodeUrlParam(argc, argv);
+    app.connect(nodeUrl);
 
     auto resp2 = app.getSystemInfo();
+    assert(strlen(resp2->chainId) > 0);
+    assert(strlen(resp2->chainName) > 0);
+    assert(strlen(resp2->tokenSymbol) > 0);
+
     cout << "Message received(connectApp - console app): " << endl
          << "  Chain ID       : " << resp2->chainId << endl
          << "  Chain Name     : " << resp2->chainName << endl

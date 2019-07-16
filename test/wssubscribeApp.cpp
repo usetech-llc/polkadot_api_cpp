@@ -1,4 +1,7 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
+#undef NDEBUG
+#include <cassert>
 
 int main(int argc, char *argv[]) {
 
@@ -10,12 +13,14 @@ int main(int argc, char *argv[]) {
     CJsonRpc jsonRpc(CWebSocketClient::getInstance(&logger), &logger, params);
 
     CPolkaApi app(&logger, &jsonRpc);
-    app.connect();
+    app.connect(getNodeUrlParam(argc, argv));
 
     // Subscribe to block number updates
     bool done = false;
+    long long blockNumber = 0;
     app.subscribeBlockNumber([&](long long blockNum) {
         cout << endl << "Most recent block: " << blockNum << endl << endl;
+        blockNumber = blockNum;
         done = true;
     });
 
@@ -23,8 +28,10 @@ int main(int argc, char *argv[]) {
     while (!done)
         usleep(10000);
 
+    assert(blockNumber > 0);
+
     // Uncomment if you want to watch for more blocks
-    //usleep(300000000);
+    // usleep(300000000);
 
     // Unsubscribe and close connection
     app.unsubscribeBlockNumber();

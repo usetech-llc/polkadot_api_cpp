@@ -31,7 +31,7 @@ public:
     static IWebSocketClient *getInstance(ILogger *logger);
     ~CWebSocketClient() override;
 
-    virtual int connect();
+    virtual int connect(string node_url = "");
     virtual bool isConnected();
     virtual void disconnect();
     virtual int send(const string &msg);

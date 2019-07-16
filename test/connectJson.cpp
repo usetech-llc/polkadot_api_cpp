@@ -1,4 +1,7 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
+#undef NDEBUG
+#include <cassert>
 
 int main(int argc, char *argv[]) {
 
@@ -8,10 +11,12 @@ int main(int argc, char *argv[]) {
 
     Json query = Json::object{{"method", "chain_getRuntimeVersion"}, {"params", Json::array{}}};
 
-    CWebSocketClient::getInstance(&log)->connect();
+    string nodeUrl = getNodeUrlParam(argc, argv);
+    CWebSocketClient::getInstance(&log)->connect(nodeUrl);
     CJsonRpc jr(CWebSocketClient::getInstance(&log), &log, params);
     Json response = jr.request(query);
 
+    assert(response.dump().length() > 10);
     cout << endl << "Message received(console app) " << response.dump() << endl;
 
     CWebSocketClient::getInstance(nullptr)->disconnect();

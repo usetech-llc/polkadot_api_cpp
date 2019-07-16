@@ -3,6 +3,9 @@
 int main(int argc, char *argv[]) {
 
     if (argc < 2) {
+        cout << "This is intended to be a manual test" << endl;
+        cout << "Only works with POC-3 (Alexander) node for now" << endl;
+        cout << "Usage: " << argv[0] << " <address>" << endl;
 
         cout << "success" << endl;
         return 0;

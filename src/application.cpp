@@ -14,11 +14,11 @@ CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc)
     _jsonRpc = jsonRpc;
 }
 
-int CPolkaApi::connect() {
+int CPolkaApi::connect(string node_url) {
     int result = PAPI_OK;
 
     // 1. Connect to WS
-    result = _jsonRpc->connect();
+    result = _jsonRpc->connect(node_url);
 
     // 2. Read genesis block hash
     unique_ptr<GetBlockHashParams> par(new GetBlockHashParams);
@@ -285,7 +285,10 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
 
 unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> params) {
 
-    Json query = Json::object{{"method", "chain_getBlockHash"}, {"params", Json::array{params->blockNumber}}};
+    Json prm = Json::array{};
+    if (params)
+        prm = Json::array{params->blockNumber};
+    Json query = Json::object{{"method", "chain_getBlockHash"}, {"params", prm}};
 
     Json response = _jsonRpc->request(query);
 
@@ -294,7 +297,10 @@ unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> par
 
 unique_ptr<Metadata> CPolkaApi::getMetadata(unique_ptr<GetMetadataParams> params) {
 
-    Json query = Json::object{{"method", "state_getMetadata"}, {"params", Json::array{params->blockHash}}};
+    Json prm = Json::array{};
+    if (params)
+        prm = Json::array{params->blockHash};
+    Json query = Json::object{{"method", "state_getMetadata"}, {"params", prm}};
 
     Json response = _jsonRpc->request(query);
 

@@ -72,7 +72,7 @@ public:
     CPolkaApi() = delete;
     CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc);
     virtual ~CPolkaApi() override {}
-    virtual int connect();
+    virtual int connect(string node_url = "");
     virtual void disconnect();
     virtual unique_ptr<SystemInfo> getSystemInfo();
     virtual unique_ptr<BlockHash> getBlockHash(unique_ptr<GetBlockHashParams> params);

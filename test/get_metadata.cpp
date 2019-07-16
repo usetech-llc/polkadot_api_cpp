@@ -1,4 +1,7 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
+#undef NDEBUG
+#include <cassert>
 
 int main(int argc, char *argv[]) {
     JsonRpcParams params;
@@ -9,9 +12,17 @@ int main(int argc, char *argv[]) {
 
     CPolkaApi app(&logger, &jsonRpc);
 
-    string blockHash = "0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa";
+    // Extract blockHash and URL parameters from command line
+    if ((argc != 1) && (argc != 3)) {
+        cout << "Usage: ";
+        cout << argv[0] << " <node uri> <block hash>" << endl;
+        cout << "failed" << endl;
+        return 0;
+    }
+    string nodeUrl = getNodeUrlParam(argc, argv);
+    string blockHash = getBlockHashParam(argc, argv);
 
-    app.connect();
+    app.connect(nodeUrl);
     unique_ptr<GetMetadataParams> par2(new GetMetadataParams);
     strcpy(par2->blockHash, blockHash.c_str());
     auto resp2 = app.getMetadata(move(par2));

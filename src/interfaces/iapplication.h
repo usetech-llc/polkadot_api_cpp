@@ -17,9 +17,10 @@ public:
      *  4. Check folder /usr/share/ca-certificates/mozilla if it has this CA certificate. If it does, copy content to
      *     ca-chain.cert.pem, otherwise return to step 2
      *
+     * $param node_url - Node URL to connect to. If set to default value of "", default node URL will be used
      * @return operation result
      */
-    virtual int connect() = 0;
+    virtual int connect(string node_url = "") = 0;
 
     /**
      *  Disconnects from WebSocket
