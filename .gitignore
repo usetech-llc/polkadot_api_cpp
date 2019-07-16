@@ -43,6 +43,7 @@ CMakeFiles
 *.cmake
 Makefile
 *.tcl
+install_manifest.txt
 
 # logs
 *.log

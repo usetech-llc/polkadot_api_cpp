@@ -38,20 +38,26 @@ git clone https://github.com/usetech-llc/polkadot_api_cpp
 cd polkadot_api_cpp
 cmake .
 make
+sudo make install
+```
+
+### Build "clip" example client
+```
+make clip
 ```
 
 ### Run connect basic example
 
-Connect example will establish WebSocket connection to the polkadot node and read and output basic node information.
+Connect example will establish WebSocket connection to the polkadot node and read and output basic information.
 ```
-bin/polkaclient connect
+bin/clip connect
 ```
 
 ### Read Address Balance Example
 
 Balance example will establish WebSocket connection and read and output address balance in DOTs.
 ```
-bin/polkaclient balance <your polkadot address>
+bin/clip balance <your polkadot address>
 ```
 
 
@@ -65,7 +71,12 @@ make test
 
 ### Files to include
 ```
-#include <polkadot/polkadot.h>
+#include <polkadotcpp/polkadot.h>
+```
+
+### Files to link
+```
+/usr/lib/polkadotcpp/libpolkacpp.a
 ```
 
 ### Library Initialization

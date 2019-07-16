@@ -21,20 +21,18 @@ extern "C" {
     #include "utils/sr25519.h"
 }
 
+
+#include "polkacpp.h"
+
 // Include structs
-#include "structs/responsebase.h"
-#include "structs/blockhash.h"
-#include "structs/runtimeversion.h"
-#include "structs/metadataV0.h"
-#include "structs/metadataV5.h"
-#include "structs/metadata.h"
-#include "structs/systeminfo.h"
 #include "structs/publickey.h"
 #include "structs/hasher.h"
-#include "structs/common.h"
 #include "structs/signaturepayload.h"
 #include "structs/extrinsic.h"
 #include "structs/transfer.h"
+
+
+
 
 #include "constants.h"
 #include "errors.h"
@@ -44,7 +42,7 @@ extern "C" {
 #include "interfaces/iwsclient.h"
 #include "interfaces/ijsonrpc.h"
 #include "interfaces/ilogger.h"
-#include "interfaces/iapplication.h"
+
 #include "utils/address.h"
 #include "utils/storage.h"
 #include "metadatafactory.h"

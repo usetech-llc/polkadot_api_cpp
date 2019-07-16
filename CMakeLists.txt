@@ -69,13 +69,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Build library code from src folder as shared object
 add_library(polkacpp ${src})
 
-# Build example sources as executables
-add_executable(polkaclient ${examples})
-target_link_libraries (polkaclient polkacpp)
-
-# Link dependency libraries to example project
-target_link_libraries( polkaclient ${DEPENDENCY_LIBS} )
-
 ###############################################################################
 # Unit tests
 
@@ -120,6 +113,29 @@ add_custom_target(
         -i
         ${ALL_SOURCE_FILES}
 )
+
+###############################################################################
+# Library installation
+
+install(FILES bin/libpolkacpp.a DESTINATION /usr/lib/polkacpp)
+
+file( GLOB_RECURSE INCLUDE_FILES ${PROJECT_SOURCE_DIR}/src/interfaces/*)
+install(FILES ${INCLUDE_FILES} DESTINATION /usr/include/polkacpp/interfaces)
+
+file( GLOB_RECURSE STRUCT_FILES ${PROJECT_SOURCE_DIR}/src/structs/*)
+install(FILES ${STRUCT_FILES} DESTINATION /usr/include/polkacpp/structs)
+
+install(FILES ${PROJECT_SOURCE_DIR}/src/polkacpp.h DESTINATION /usr/include/polkacpp)
+
+###############################################################################
+# Stand-alone Example
+
+# Build example sources as executables
+add_executable(clip EXCLUDE_FROM_ALL ${examples})
+target_link_libraries (clip polkacpp)
+
+# Link dependency libraries to example project
+target_link_libraries( clip ${DEPENDENCY_LIBS} )
 
 ###############################################################################
 # Doxygen

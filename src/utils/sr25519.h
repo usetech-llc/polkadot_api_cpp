@@ -27,19 +27,19 @@
 #define SR25519_VRF_PROOF_SIZE 64
 
 typedef enum Sr25519SignatureResult {
-  Ok,
-  EquationFalse,
-  PointDecompressionError,
-  ScalarFormatError,
-  BytesLengthError,
-  NotMarkedSchnorrkel,
-  MuSigAbsent,
-  MuSigInconsistent,
+    Ok,
+    EquationFalse,
+    PointDecompressionError,
+    ScalarFormatError,
+    BytesLengthError,
+    NotMarkedSchnorrkel,
+    MuSigAbsent,
+    MuSigInconsistent,
 } Sr25519SignatureResult;
 
 typedef struct VrfSignResult {
-  Sr25519SignatureResult result;
-  bool is_less;
+    Sr25519SignatureResult result;
+    bool is_less;
 } VrfSignResult;
 
 /**
@@ -48,9 +48,7 @@ typedef struct VrfSignResult {
  *  pair_ptr: existing keypair - input buffer of SR25519_KEYPAIR_SIZE bytes
  *  cc_ptr: chaincode - input buffer of SR25519_CHAINCODE_SIZE bytes
  */
-void sr25519_derive_keypair_hard(uint8_t *keypair_out,
-                                 const uint8_t *pair_ptr,
-                                 const uint8_t *cc_ptr);
+void sr25519_derive_keypair_hard(uint8_t *keypair_out, const uint8_t *pair_ptr, const uint8_t *cc_ptr);
 
 /**
  * Perform a derivation on a secret
@@ -58,9 +56,7 @@ void sr25519_derive_keypair_hard(uint8_t *keypair_out,
  *  pair_ptr: existing keypair - input buffer of SR25519_KEYPAIR_SIZE bytes
  *  cc_ptr: chaincode - input buffer of SR25519_CHAINCODE_SIZE bytes
  */
-void sr25519_derive_keypair_soft(uint8_t *keypair_out,
-                                 const uint8_t *pair_ptr,
-                                 const uint8_t *cc_ptr);
+void sr25519_derive_keypair_soft(uint8_t *keypair_out, const uint8_t *pair_ptr, const uint8_t *cc_ptr);
 
 /**
  * Perform a derivation on a publicKey
@@ -68,17 +64,14 @@ void sr25519_derive_keypair_soft(uint8_t *keypair_out,
  *  public_ptr: public key - input buffer of SR25519_PUBLIC_SIZE bytes
  *  cc_ptr: chaincode - input buffer of SR25519_CHAINCODE_SIZE bytes
  */
-void sr25519_derive_public_soft(uint8_t *pubkey_out,
-                                const uint8_t *public_ptr,
-                                const uint8_t *cc_ptr);
+void sr25519_derive_public_soft(uint8_t *pubkey_out, const uint8_t *public_ptr, const uint8_t *cc_ptr);
 
 /**
  * Generate a key pair.
  *  keypair_out: keypair [32b key | 32b nonce | 32b public], pre-allocated output buffer of SR25519_KEYPAIR_SIZE bytes
  *  seed: generation seed - input buffer of SR25519_SEED_SIZE bytes
  */
-void sr25519_keypair_from_seed(uint8_t *keypair_out,
-                               const uint8_t *seed_ptr);
+void sr25519_keypair_from_seed(uint8_t *keypair_out, const uint8_t *seed_ptr);
 
 /**
  * Sign a message
@@ -90,11 +83,8 @@ void sr25519_keypair_from_seed(uint8_t *keypair_out,
  *  message_ptr: Arbitrary message; input buffer of size message_length
  *  message_length: Length of a message
  */
-void sr25519_sign(uint8_t *signature_out,
-                  const uint8_t *public_ptr,
-                  const uint8_t *secret_ptr,
-                  const uint8_t *message_ptr,
-                  unsigned long message_length);
+void sr25519_sign(uint8_t *signature_out, const uint8_t *public_ptr, const uint8_t *secret_ptr,
+                  const uint8_t *message_ptr, unsigned long message_length);
 
 /**
  * Verify a message and its corresponding against a public key;
@@ -104,9 +94,7 @@ void sr25519_sign(uint8_t *signature_out,
  *  public_ptr: verify with this public key; input buffer of SR25519_PUBLIC_SIZE bytes
  *  returned true if signature is valid, false otherwise
  */
-bool sr25519_verify(const uint8_t *signature_ptr,
-                    const uint8_t *message_ptr,
-                    unsigned long message_length,
+bool sr25519_verify(const uint8_t *signature_ptr, const uint8_t *message_ptr, unsigned long message_length,
                     const uint8_t *public_ptr);
 
 /**
@@ -117,10 +105,8 @@ bool sr25519_verify(const uint8_t *signature_ptr,
  * @param message_ptr byte array to be signed
  * @param limit_ptr byte array, must be 32 bytes long
  */
-VrfSignResult sr25519_vrf_sign_if_less(uint8_t *out_and_proof_ptr,
-                                       const uint8_t *keypair_ptr,
-                                       const uint8_t *message_ptr,
-                                       unsigned long message_length,
+VrfSignResult sr25519_vrf_sign_if_less(uint8_t *out_and_proof_ptr, const uint8_t *keypair_ptr,
+                                       const uint8_t *message_ptr, unsigned long message_length,
                                        const uint8_t *limit_ptr);
 
 /**
@@ -130,10 +116,8 @@ VrfSignResult sr25519_vrf_sign_if_less(uint8_t *out_and_proof_ptr,
  * @param output_ptr the signature
  * @param proof_ptr the proof of the signature
  */
-Sr25519SignatureResult sr25519_vrf_verify(const uint8_t *public_key_ptr,
-                                          const uint8_t *message_ptr,
-                                          unsigned long message_length,
-                                          const uint8_t *output_ptr,
+Sr25519SignatureResult sr25519_vrf_verify(const uint8_t *public_key_ptr, const uint8_t *message_ptr,
+                                          unsigned long message_length, const uint8_t *output_ptr,
                                           const uint8_t *proof_ptr);
 
 #endif /* __SR25519_INCLUDE_GUARD_H__ */

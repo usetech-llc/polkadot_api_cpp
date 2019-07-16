@@ -2,24 +2,18 @@
 
 int main(int argc, char *argv[]) {
 
-    JsonRpcParams params;
-    params.jsonrpcVersion = "2.0";
+    auto app = polkadot::api::getInstance()->app();
 
-    EasyLogger logger;
-    CJsonRpc jsonRpc(CWebSocketClient::getInstance(&logger), &logger, params);
+    app->connect();
 
-    CPolkaApi app(&logger, &jsonRpc);
-
-    app.connect();
-
-    auto resp2 = app.getSystemInfo();
+    auto resp2 = app->getSystemInfo();
     cout << "Message received(connectApp - console app): " << endl
          << "  Chain ID       : " << resp2->chainId << endl
          << "  Chain Name     : " << resp2->chainName << endl
          << "  Token Decimals : " << resp2->tokenDecimals << endl
          << "  Token Symbol   : " << resp2->tokenSymbol << endl;
 
-    auto resp3 = app.getRuntimeVersion(nullptr);
+    auto resp3 = app->getRuntimeVersion(nullptr);
 
     cout << resp3->specName << endl;
     for (auto item : resp3->api) {
@@ -27,10 +21,9 @@ int main(int argc, char *argv[]) {
             cout << "num:      " << item.num << "id:      " << item.id << endl;
     }
 
-    app.disconnect();
+    app->disconnect();
 
     cout << "success" << endl;
 
-    delete CWebSocketClient::getInstance(nullptr);
     return 0;
 }

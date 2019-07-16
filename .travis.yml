@@ -46,3 +46,7 @@ script:
   - make
   # The project uses ctest. Let's enable this later
   - make test
+  # Test production installation
+  - make install
+  # Built command line tool
+  - make clip
