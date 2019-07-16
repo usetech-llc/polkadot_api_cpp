@@ -47,6 +47,8 @@ script:
   # The project uses ctest. Let's enable this later
   - make test
   # Test production installation
-  - make install
+  - sudo make install
   # Built command line tool
   - make clip
+  # Ensure clip does not throw
+  - bin/clip connect
