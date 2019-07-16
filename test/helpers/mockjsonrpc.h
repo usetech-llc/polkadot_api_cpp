@@ -13,7 +13,7 @@ protected:
 public:
     CMockJsonRpc() {}
     virtual ~CMockJsonRpc() override {}
-    virtual int connect() { return 0; }
+    virtual int connect(string node_url = "") { return 0; }
     virtual void disconnect() {}
     virtual Json request(Json jsonMap) {
         Json ret;

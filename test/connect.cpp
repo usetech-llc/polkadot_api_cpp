@@ -1,4 +1,7 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
+#undef NDEBUG
+#include <cassert>
 
 class TestMessageHandler : public IMessageObserver {
 public:
@@ -20,10 +23,12 @@ int main(int argc, char *argv[]) {
     TestMessageHandler tmh;
     EasyLogger log;
 
+    string nodeUrl = getNodeUrlParam(argc, argv);
+
     IWebSocketClient *ws = CWebSocketClient::getInstance(&log);
     ws->registerMessageObserver(&tmh);
     tmh.done = false;
-    int err = ws->connect();
+    int err = ws->connect(nodeUrl);
     if ((err == 0) && (ws->isConnected())) {
         std::string msg = "{\"id\":2,\"jsonrpc\":\"2.0\",\"method\":\"chain_getRuntimeVersion\",\"params\":[]}";
         ws->send(msg);

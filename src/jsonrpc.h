@@ -36,7 +36,7 @@ private:
 public:
     CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params);
     virtual ~CJsonRpc() override {}
-    virtual int connect();
+    virtual int connect(string node_url = "");
     virtual void disconnect();
     virtual Json request(Json jsonMap);
     virtual void handleMessage(const string &payload);

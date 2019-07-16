@@ -5,9 +5,10 @@ public:
     /**
      *  Connects to WebSocket
      *
+     * @param node_url - Node URL to connect to
      * @return operation result
      */
-    virtual int connect() = 0;
+    virtual int connect(string node_url = "") = 0;
 
     /**
      *  Disconnects from WebSocket

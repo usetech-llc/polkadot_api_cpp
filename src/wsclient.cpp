@@ -186,9 +186,13 @@ void CWebSocketClient::runWsMessages() {
     _logger->info("runWsMessages Thread exited");
 }
 
-int CWebSocketClient::connect() {
+int CWebSocketClient::connect(string node_url) {
 
-    std::string uri = _nodeUrl;
+    std::string uri;
+    if (node_url == "")
+        uri = _nodeUrl;
+    else
+        uri = node_url;
 
     try {
         // Disable websocket++ logging, we have our own

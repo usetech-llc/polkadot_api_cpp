@@ -8,8 +8,8 @@ CJsonRpc::CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params)
 
 int CJsonRpc::getNextId() { return ++_lastId; }
 
-int CJsonRpc::connect() {
-    int err = _wsc->connect();
+int CJsonRpc::connect(string node_url) {
+    int err = _wsc->connect(node_url);
     if ((err == 0) && (_wsc->isConnected())) {
         return PAPI_OK;
     }
@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
