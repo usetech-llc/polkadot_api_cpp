@@ -53,7 +53,7 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // Block until a timeout happens or response is received
     std::unique_lock<std::mutex> responseWaitLock(*query.completionMtx);
-    query.completionCV->wait_for(responseWaitLock, std::chrono::seconds(1));
+    query.completionCV->wait_for(responseWaitLock, std::chrono::seconds(RESPONSE_TIMEOUT_S));
 
     // Move response object and return it
     Json result = move(_queries[query.id].json);

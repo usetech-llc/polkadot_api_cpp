@@ -58,7 +58,7 @@ public:
         JsonRpcParams params;
         params.jsonrpcVersion = "2.0";
 
-        _logger = new NullLogger();
+        _logger = new EasyLogger();
         _jsonRpc = new CJsonRpc(CWebSocketClient::getInstance(_logger), _logger, params);
         _app = new CPolkaApi(_logger, _jsonRpc);
     }

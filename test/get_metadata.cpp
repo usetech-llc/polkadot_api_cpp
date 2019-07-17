@@ -25,10 +25,15 @@ int main(int argc, char *argv[]) {
     app.connect(nodeUrl);
     unique_ptr<GetMetadataParams> par2(new GetMetadataParams);
     strcpy(par2->blockHash, blockHash.c_str());
-    auto resp2 = app.getMetadata(move(par2));
+
+    unique_ptr<Metadata> resp2;
+    if (blockHash != "")
+        resp2 = app.getMetadata(move(par2));
+    else
+        resp2 = app.getMetadata(nullptr);
     app.disconnect();
 
-    assert(resp2->metadataV0 != nullptr || resp2->metadataV5 != nullptr);
+    assert(resp2->metadataV0 != nullptr || resp2->metadataV5 != nullptr || resp2->metadataV6 != nullptr);
     cout << endl << "--- Received metadata ---" << endl;
     if (resp2->metadataV0) {
         cout << "OuterEventWrapperV0.name: " << resp2->metadataV0->oew->name << endl;
@@ -39,6 +44,11 @@ int main(int argc, char *argv[]) {
     if (resp2->metadataV5) {
         cout << "ModuleV5[0].prefix: " << resp2->metadataV5->module[0]->prefix << endl;
         cout << "ModuleV5[1].prefix: " << resp2->metadataV5->module[1]->prefix << endl;
+        cout << "..." << endl;
+    }
+    if (resp2->metadataV6) {
+        cout << "ModuleV6[0].prefix: " << resp2->metadataV6->module[0]->prefix << endl;
+        cout << "ModuleV6[1].prefix: " << resp2->metadataV6->module[1]->prefix << endl;
         cout << "..." << endl;
     }
     cout << endl;

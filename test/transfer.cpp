@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
     // This is a manual test due to lack of test DOTs
     if (argc < 4) {
         cout << "This is intended to be a manual test" << endl;
-        cout << "Only works with POC-3 (Alexander) node for now";
+        cout << "Only works with POC-3 (Alexander) node for now" << endl;
         cout << "Usage: ";
         cout << argv[0] << " <sender address> <recipient address> <amount in fDOTs> <sender private key (hex)>" << endl;
         cout << "success" << endl;

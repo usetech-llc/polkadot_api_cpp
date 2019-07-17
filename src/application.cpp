@@ -20,7 +20,7 @@ int CPolkaApi::connect(string node_url) {
     // 1. Connect to WS
     result = _jsonRpc->connect(node_url);
 
-    // 2. Read genesis block hash
+    // 2. Read last block hash
     unique_ptr<GetBlockHashParams> par(new GetBlockHashParams);
     par->blockNumber = 0;
     auto genesisHashStr = getBlockHash(move(par));
@@ -28,11 +28,8 @@ int CPolkaApi::connect(string node_url) {
         _protocolPrm.GenesisBlockHash[i] = fromHexByte(genesisHashStr->hash + 2 + i * 2);
     }
 
-    // 3. Read metadata for some block and initialize protocol parameters
-    unique_ptr<GetMetadataParams> prm(new GetMetadataParams);
-    strcpy(prm->blockHash, genesisHashStr->hash);
-
-    auto mdresp = getMetadata(move(prm));
+    // 3. Read metadata for head block and initialize protocol parameters
+    auto mdresp = getMetadata(nullptr);
     _protocolPrm.FreeBalanceHasher = getFuncHasher(mdresp, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
     _protocolPrm.BalanceModuleIndex = getModuleIndex(mdresp, string("Balances"), true);

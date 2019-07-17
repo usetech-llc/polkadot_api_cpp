@@ -1,3 +1,5 @@
+#define RESPONSE_TIMEOUT_S 10
+
 struct JsonRpcParams {
     string jsonrpcVersion;
 };

@@ -318,32 +318,31 @@ EventArgV5 getEventV5(std::string &str) {
 
 ConstV6 getConstsV6(std::string &str) {
 
-	ConstV6 cons;
+    ConstV6 cons;
 
-	// extract name
-	int nameLen = decodeCompactInteger(str);
-	strcpy(cons.name, extractString(str, nameLen).c_str());
+    // extract name
+    int nameLen = decodeCompactInteger(str);
+    strcpy(cons.name, extractString(str, nameLen).c_str());
 
-	// extract type
-	int typeLen = decodeCompactInteger(str);
-	strcpy(cons.type, extractString(str, typeLen).c_str());
+    // extract type
+    int typeLen = decodeCompactInteger(str);
+    strcpy(cons.type, extractString(str, typeLen).c_str());
 
-	//// extract value
-	int valueLen = decodeCompactInteger(str);
-	auto value = str.substr(0, valueLen * 2);
-	str = str.substr(valueLen * 2);
-	strcpy(cons.value, value.c_str());
+    //// extract value
+    int valueLen = decodeCompactInteger(str);
+    auto value = str.substr(0, valueLen * 2);
+    str = str.substr(valueLen * 2);
+    strcpy(cons.value, value.c_str());
 
-	//// documents count
-	auto docCount = decodeCompactInteger(str);
-	for (int di = 0; di < docCount; di++)
-	{
-		auto docStringLen = decodeCompactInteger(str);
-		auto docItem = extractString(str, docStringLen);
-		strcpy(cons.documentation[di], docItem.c_str());
-	}
+    //// documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(cons.documentation[di], docItem.c_str());
+    }
 
-	return move(cons);
+    return move(cons);
 };
 
 unique_ptr<MDV5> fillV5Metadata(std::string str) {
@@ -405,80 +404,70 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
     return move(md);
 };
 
-unique_ptr<MDV6> fillV6Metadata(std::string str) 
-{
-	// magic bytes
-	auto magic1 = nextByte(str);
-	auto magic2 = nextByte(str);
-	auto magic3 = nextByte(str);
-	auto magic4 = nextByte(str);
-	auto magic5 = nextByte(str);
+unique_ptr<MDV6> fillV6Metadata(std::string str) {
+    // magic bytes
+    auto magic1 = nextByte(str);
+    auto magic2 = nextByte(str);
+    auto magic3 = nextByte(str);
+    auto magic4 = nextByte(str);
+    auto magic5 = nextByte(str);
 
-	unique_ptr<MDV6> md(new MDV6);
-	int mLen = decodeCompactInteger(str);
-	for (auto moduleIndex = 0; moduleIndex < mLen; moduleIndex++)
-	{
-		// create module instance
-		unique_ptr<ModuleV6> module(new ModuleV6);
-		md->module[moduleIndex] = move(module);
+    unique_ptr<MDV6> md(new MDV6);
+    int mLen = decodeCompactInteger(str);
+    for (auto moduleIndex = 0; moduleIndex < mLen; moduleIndex++) {
+        // create module instance
+        unique_ptr<ModuleV6> module(new ModuleV6);
+        md->module[moduleIndex] = move(module);
 
-		// get module name
-		int moduleNameLen = decodeCompactInteger(str);
-		strcpy(md->module[moduleIndex]->name, extractString(str, moduleNameLen).c_str());
+        // get module name
+        int moduleNameLen = decodeCompactInteger(str);
+        strcpy(md->module[moduleIndex]->name, extractString(str, moduleNameLen).c_str());
 
-		// get module prefix
-		int modulePrefixLen = decodeCompactInteger(str);
-		strcpy(md->module[moduleIndex]->prefix, extractString(str, modulePrefixLen).c_str());
+        // get module prefix
+        int modulePrefixLen = decodeCompactInteger(str);
+        strcpy(md->module[moduleIndex]->prefix, extractString(str, modulePrefixLen).c_str());
 
-		// ---------- Storage
-		// storage is not null
-		auto storageIsset = nextByte(str);
-		if (storageIsset != 0)
-		{
-			int storageLen = decodeCompactInteger(str);
-			for (int i = 0; i < storageLen; i++)
-			{
-				md->module[moduleIndex]->storage[i] = getStorageV5(str);
-			}
-		}
+        // ---------- Storage
+        // storage is not null
+        auto storageIsset = nextByte(str);
+        if (storageIsset != 0) {
+            int storageLen = decodeCompactInteger(str);
+            for (int i = 0; i < storageLen; i++) {
+                md->module[moduleIndex]->storage[i] = getStorageV5(str);
+            }
+        }
 
-		// ---------- Calls
-		// calls is not null
-		auto callsIsset = nextByte(str);
-		if (callsIsset != 0)
-		{
-			int callsCount = decodeCompactInteger(str);
-			for (int i = 0; i < callsCount; i++)
-			{
-				md->module[moduleIndex]->call[i] = getCallV5(str);
-			}
-		}
+        // ---------- Calls
+        // calls is not null
+        auto callsIsset = nextByte(str);
+        if (callsIsset != 0) {
+            int callsCount = decodeCompactInteger(str);
+            for (int i = 0; i < callsCount; i++) {
+                md->module[moduleIndex]->call[i] = getCallV5(str);
+            }
+        }
 
-		// ---------- Events
-		// events is not null
-		auto eventsIsset = nextByte(str);
-		if (eventsIsset != 0)
-		{
-			int eventsCount = decodeCompactInteger(str);
-			for (int i = 0; i < eventsCount; i++)
-			{
-				md->module[moduleIndex]->ev[i] = getEventV5(str);
-			}
-		}
+        // ---------- Events
+        // events is not null
+        auto eventsIsset = nextByte(str);
+        if (eventsIsset != 0) {
+            int eventsCount = decodeCompactInteger(str);
+            for (int i = 0; i < eventsCount; i++) {
+                md->module[moduleIndex]->ev[i] = getEventV5(str);
+            }
+        }
 
-		// ---------- Consts
-		// consts doesn`t have isset flag, straight count number instead of that 
-		auto constsCount = decodeCompactInteger(str);
-		if (constsCount != 0)
-		{
-			for (int i = 0; i < constsCount; i++)
-			{
-				md->module[moduleIndex]->cons[i] = getConstsV6(str);
-			}
-		}
-	}
+        // ---------- Consts
+        // consts doesn`t have isset flag, straight count number instead of that
+        auto constsCount = decodeCompactInteger(str);
+        if (constsCount != 0) {
+            for (int i = 0; i < constsCount; i++) {
+                md->module[moduleIndex]->cons[i] = getConstsV6(str);
+            }
+        }
+    }
 
-	return move(md);
+    return move(md);
 };
 
 MetadataFactory::MetadataFactory(ILogger *logger) {
@@ -544,6 +533,9 @@ int MetadataFactory::getVersion() {
 
     if (_version == -1)
         getMetadataV5();
+
+    if (_version == -1)
+        getMetadataV6();
 
     return _version;
 }
