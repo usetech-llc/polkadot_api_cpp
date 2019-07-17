@@ -10,6 +10,7 @@ using namespace std;
 #include "structs/blockhash.h"
 #include "structs/metadataV0.h"
 #include "structs/metadataV5.h"
+#include "structs/metadataV6.h"
 #include "structs/metadata.h"
 #include "structs/runtimeversion.h"
 #include "structs/common.h"

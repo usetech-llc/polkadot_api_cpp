@@ -3,6 +3,7 @@ struct Metadata {
 
     unique_ptr<MDV0> metadataV0;
     unique_ptr<MDV5> metadataV5;
+    unique_ptr<MDV6> metadataV6;
 };
 
 /*

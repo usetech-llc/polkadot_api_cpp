@@ -279,6 +279,7 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
 
     md->metadataV0 = mdf.getMetadataV0();
     md->metadataV5 = mdf.getMetadataV5();
+    md->metadataV6 = mdf.getMetadataV6();
 
     return md;
 }
