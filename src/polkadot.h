@@ -33,8 +33,7 @@ extern "C" {
 #include "structs/transfer.h"
 
 
-
-
+#include "config.h"
 #include "constants.h"
 #include "errors.h"
 #include "utils/converters.h"
