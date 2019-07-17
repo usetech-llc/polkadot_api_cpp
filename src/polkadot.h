@@ -9,6 +9,7 @@
 // Websockets
 #include <websocketpp/client.hpp>
 #include <websocketpp/config/asio_client.hpp>
+#include <websocketpp/config/asio_no_tls_client.hpp>
 
 #include "libs/easyloggingpp/easylogging++.h"
 #include "libs/json11/json11.hpp"
