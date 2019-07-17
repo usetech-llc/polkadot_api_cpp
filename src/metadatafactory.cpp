@@ -470,12 +470,112 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
     return move(md);
 };
 
+StorageV4 getStorageV4(std::string &str) {
+
+    StorageV4 storage;
+
+    int storageNameLen = decodeCompactInteger(str);
+    strcpy(storage.name, extractString(str, storageNameLen).c_str());
+
+    storage.modifier = nextByte(str);
+    storage.type.type = nextByte(str);
+
+    int type1Len = decodeCompactInteger(str);
+    auto type1 = extractString(str, type1Len);
+    strcpy(storage.type.key1, type1.c_str());
+
+    if (storage.type.type != 0) {
+        int secondTypeLen = decodeCompactInteger(str);
+        strcpy(storage.type.key2, extractString(str, secondTypeLen).c_str());
+        storage.type.hasher = nextByte(str);
+    }
+
+    // extract fallback as raw hex
+    auto fallbackLen = decodeCompactInteger(str);
+    auto fallback = str.substr(0, fallbackLen * 2);
+    str = str.substr(fallbackLen * 2);
+    strcpy(storage.fallback, fallback.c_str());
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(storage.documentation[di], docItem.c_str());
+    }
+
+    return move(storage);
+}
+
+unique_ptr<MDV4> fillV4Metadata(std::string str) {
+    // magic bytes
+    auto magic1 = nextByte(str);
+    auto magic2 = nextByte(str);
+    auto magic3 = nextByte(str);
+    auto magic4 = nextByte(str);
+    auto magic5 = nextByte(str);
+
+    unique_ptr<MDV4> md(new MDV4);
+    int mLen = decodeCompactInteger(str);
+    for (auto moduleIndex = 0; moduleIndex < mLen; moduleIndex++) {
+        // create module instance
+        unique_ptr<ModuleV4> module(new ModuleV4);
+        md->module[moduleIndex] = move(module);
+
+        // get module name
+        int moduleNameLen = decodeCompactInteger(str);
+        strcpy(md->module[moduleIndex]->name, extractString(str, moduleNameLen).c_str());
+
+        // get module prefix
+        int modulePrefixLen = decodeCompactInteger(str);
+        strcpy(md->module[moduleIndex]->prefix, extractString(str, modulePrefixLen).c_str());
+
+        // ---------- Storage
+        // storage is not null
+        auto storageIsset = nextByte(str);
+        if (storageIsset != 0) {
+            int storageLen = decodeCompactInteger(str);
+            for (int i = 0; i < storageLen; i++) {
+                md->module[moduleIndex]->storage[i] = getStorageV4(str);
+            }
+        }
+
+        // ---------- Calls
+        // calls is not null
+        auto callsIsset = nextByte(str);
+        if (callsIsset != 0) {
+            int callsCount = decodeCompactInteger(str);
+            for (int i = 0; i < callsCount; i++) {
+                md->module[moduleIndex]->call[i] = getCallV5(str);
+            }
+        }
+
+        // ---------- Events
+        // events is not null
+        auto eventsIsset = nextByte(str);
+        if (eventsIsset != 0) {
+            int eventsCount = decodeCompactInteger(str);
+            for (int i = 0; i < eventsCount; i++) {
+                md->module[moduleIndex]->ev[i] = getEventV5(str);
+            }
+        }
+    }
+
+    return move(md);
+};
+
 MetadataFactory::MetadataFactory(ILogger *logger) {
     _logger = logger;
     _version = -1;
 }
 
-void MetadataFactory::setInputData(string hexString) { _buffer = hexString; }
+void MetadataFactory::setInputData(string hexString) {
+    _buffer = hexString;
+
+    // ofstream out("lastMetadata.txt");
+    // out << hexString;
+    // out.close();
+}
 
 unique_ptr<MDV0> MetadataFactory::getMetadataV0() {
 
@@ -489,6 +589,23 @@ unique_ptr<MDV0> MetadataFactory::getMetadataV0() {
         }
     } catch (...) {
         _logger->info("Metadata version is not V0");
+    }
+
+    return result;
+}
+
+unique_ptr<MDV4> MetadataFactory::getMetadataV4() {
+
+    unique_ptr<MDV4> result;
+    try {
+        result = move(fillV4Metadata(_buffer.substr()));
+
+        if (result != nullptr) {
+            _version = 4;
+            _logger->info("Metadata version V4 detected");
+        }
+    } catch (...) {
+        _logger->info("Metadata version is not V4");
     }
 
     return result;

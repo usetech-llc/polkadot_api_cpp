@@ -29,6 +29,9 @@ int CPolkaApi::connect(string node_url) {
     }
 
     // 3. Read metadata for head block and initialize protocol parameters
+    // unique_ptr<GetMetadataParams> metadataPar(new GetMetadataParams);
+    // strcpy(metadataPar->blockHash, genesisHashStr->hash);
+
     auto mdresp = getMetadata(nullptr);
     _protocolPrm.FreeBalanceHasher = getFuncHasher(mdresp, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
@@ -275,6 +278,7 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
     mdf.setInputData(jsonObject.string_value().substr(2));
 
     md->metadataV0 = mdf.getMetadataV0();
+    md->metadataV4 = mdf.getMetadataV4();
     md->metadataV5 = mdf.getMetadataV5();
     md->metadataV6 = mdf.getMetadataV6();
 
