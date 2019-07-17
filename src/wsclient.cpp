@@ -176,7 +176,7 @@ context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl) {
 void CWebSocketClient::runWsMessages() {
     // will exit when this connection is closed.
     try {
-        _c.run();
+        _tls ? _c.run() : _c_no_tls.run();
     } catch (websocketpp::exception const &e) {
         CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance(nullptr);
         inst->_logger->error(string("Could not establish connection: ") + e.what());
@@ -184,6 +184,63 @@ void CWebSocketClient::runWsMessages() {
         inst->_connectionCV.notify_all();
     }
     _logger->info("runWsMessages Thread exited");
+}
+
+int CWebSocketClient::connect_tls(string node_url) {
+    // Disable websocket++ logging, we have our own
+    _c.set_access_channels(websocketpp::log::alevel::none);
+    _c.set_error_channels(websocketpp::log::elevel::none);
+
+    _c.set_open_handler(bind(&on_open, &_c, ::_1));
+
+    // Initialize ASIO
+    _c.init_asio();
+
+    // Register our message handler
+    _c.set_message_handler(&on_message);
+
+    // Support wss
+    _c.set_tls_init_handler(bind(&on_tls_init, node_url.c_str(), ::_1));
+
+    websocketpp::lib::error_code ec;
+    _connection = _c.get_connection(node_url, ec);
+    if (ec) {
+        _logger->error("Could not create connection: " + ec.message());
+        return PAPI_CANT_CONNECT;
+    }
+
+    // Note that connect here only requests a connection. No network messages are
+    // exchanged until the event loop starts running in the next line.
+    _c.connect(_connection);
+
+    return PAPI_OK;
+}
+
+int CWebSocketClient::connect_no_tls(string node_url) {
+    // Disable websocket++ logging, we have our own
+    _c_no_tls.set_access_channels(websocketpp::log::alevel::none);
+    _c_no_tls.set_error_channels(websocketpp::log::elevel::none);
+
+    _c_no_tls.set_open_handler(bind(&on_open, &_c, ::_1));
+
+    // Initialize ASIO
+    _c_no_tls.init_asio();
+
+    // Register our message handler
+    _c_no_tls.set_message_handler(&on_message);
+
+    websocketpp::lib::error_code ec;
+    _connection_no_tls = _c_no_tls.get_connection(node_url, ec);
+    if (ec) {
+        _logger->error("Could not create connection: " + ec.message());
+        return PAPI_CANT_CONNECT;
+    }
+
+    // Note that connect here only requests a connection. No network messages are
+    // exchanged until the event loop starts running in the next line.
+    _c_no_tls.connect(_connection_no_tls);
+
+    return PAPI_OK;
 }
 
 int CWebSocketClient::connect(string node_url) {
@@ -195,31 +252,24 @@ int CWebSocketClient::connect(string node_url) {
         uri = node_url;
 
     try {
-        // Disable websocket++ logging, we have our own
-        _c.set_access_channels(websocketpp::log::alevel::none);
-        _c.set_error_channels(websocketpp::log::elevel::none);
-
-        _c.set_open_handler(bind(&on_open, &_c, ::_1));
-
-        // Initialize ASIO
-        _c.init_asio();
-
-        // Register our message handler
-        _c.set_message_handler(&on_message);
-        _c.set_tls_init_handler(bind(&on_tls_init, uri.c_str(), ::_1));
-
-        websocketpp::lib::error_code ec;
-        _connection = _c.get_connection(uri, ec);
-        if (ec) {
-            _logger->error("Could not create connection: " + ec.message());
+        _logger->info(string("Connecting to ") + uri);
+        // Support both wss and ws
+        int err;
+        if (uri.substr(0, 4) == "wss:") {
+            _tls = true;
+            _logger->info("Connecting secure endpoint");
+            err = connect_tls(uri);
+        } else if (uri.substr(0, 3) == "ws:") {
+            _tls = false;
+            _logger->warning("Connecting to an insecure endpoint");
+            err = connect_no_tls(uri);
+        } else {
+            _logger->error("Protocol is not specified in URL. Should begin with either 'ws:' or 'wss:'");
             return PAPI_CANT_CONNECT;
         }
 
-        // Note that connect here only requests a connection. No network messages are
-        // exchanged until the event loop starts running in the next line.
-        _c.connect(_connection);
-
-        _logger->info(string("Connecting to ") + uri);
+        if (err != PAPI_OK)
+            return err;
 
         // Start the ASIO io_service run loop
         // this will cause a single connection to be made to the server. c.run()
@@ -253,7 +303,8 @@ int CWebSocketClient::connect(string node_url) {
 bool CWebSocketClient::isConnected() { return _connected; }
 
 void CWebSocketClient::disconnect() {
-    _c.close(_connection, websocketpp::close::status::going_away, "");
+    _tls ? _c.close(_connection, websocketpp::close::status::going_away, "")
+         : _c_no_tls.close(_connection_no_tls, websocketpp::close::status::going_away, "");
     _connected = false;
     _connectedThread->join();
     _connectedThread = nullptr;
@@ -263,7 +314,8 @@ void CWebSocketClient::disconnect() {
 int CWebSocketClient::send(const string &msg) {
     if (_connected) {
         _sendMtx.lock();
-        _c.send(_connection, msg, websocketpp::frame::opcode::text);
+        _tls ? _c.send(_connection, msg, websocketpp::frame::opcode::text)
+             : _c_no_tls.send(_connection_no_tls, msg, websocketpp::frame::opcode::text);
         _sendMtx.unlock();
         _logger->info(string("WS sent message: ") + msg);
         return PAPI_OK;
