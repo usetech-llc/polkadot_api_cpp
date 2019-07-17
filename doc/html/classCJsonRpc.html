@@ -112,8 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad1d65960a472863332530ea5c2d58ea6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1d65960a472863332530ea5c2d58ea6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CJsonRpc</b> (<a class="el" href="classIWebSocketClient.html">IWebSocketClient</a> *wsc, <a class="el" href="classILogger.html">ILogger</a> *logger, <a class="el" href="structJsonRpcParams.html">JsonRpcParams</a> params)</td></tr>
 <tr class="separator:ad1d65960a472863332530ea5c2d58ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83328c77dff6cf165bc02f86e491acaf"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a83328c77dff6cf165bc02f86e491acaf">connect</a> ()</td></tr>
-<tr class="separator:a83328c77dff6cf165bc02f86e491acaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3366f304c45d91ca8de985bcd7cd5388"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a3366f304c45d91ca8de985bcd7cd5388">connect</a> (string node_url=&quot;&quot;)</td></tr>
+<tr class="separator:a3366f304c45d91ca8de985bcd7cd5388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c48717e996037e94c957188dc30e043"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a9c48717e996037e94c957188dc30e043">disconnect</a> ()</td></tr>
 <tr class="separator:a9c48717e996037e94c957188dc30e043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a478d031a671ffea78d27fa41f7464812"><td class="memItemLeft" align="right" valign="top">virtual Json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCJsonRpc.html#a478d031a671ffea78d27fa41f7464812">request</a> (Json jsonMap)</td></tr>
@@ -127,9 +127,9 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="jsonrpc_8h_source.html#l00020">20</a> of file <a class="el" href="jsonrpc_8h_source.html">jsonrpc.h</a>.</p>
+<p>Definition at line <a class="el" href="jsonrpc_8h_source.html#l00022">22</a> of file <a class="el" href="jsonrpc_8h_source.html">jsonrpc.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a83328c77dff6cf165bc02f86e491acaf"></a>
+<a class="anchor" id="a3366f304c45d91ca8de985bcd7cd5388"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -139,7 +139,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">int CJsonRpc::connect </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>node_url</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -150,9 +151,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Connects to WebSocket</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node_url</td><td>- Node URL to connect to </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
-<p>Implements <a class="el" href="classIJsonRpc.html#a4df041cbca9cb27ba0bb8a10312e64b7">IJsonRpc</a>.</p>
+<p>Implements <a class="el" href="classIJsonRpc.html#a378cc4a12294ac6ea05450fafc4c788c">IJsonRpc</a>.</p>
 
 <p>Definition at line <a class="el" href="jsonrpc_8cpp_source.html#l00011">11</a> of file <a class="el" href="jsonrpc_8cpp_source.html">jsonrpc.cpp</a>.</p>
 

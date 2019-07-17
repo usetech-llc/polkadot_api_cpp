@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vrfsignresult',['VrfSignResult',['../structVrfSignResult.html',1,'']]]
+  ['transferextrinsic',['TransferExtrinsic',['../structTransferExtrinsic.html',1,'']]],
+  ['transfermethod',['TransferMethod',['../structTransferMethod.html',1,'']]]
 ];

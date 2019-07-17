@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['responsebase',['ResponseBase',['../structResponseBase.html',1,'']]],
-  ['runtimeversion',['RuntimeVersion',['../structRuntimeVersion.html',1,'']]]
+  ['protocolparameters',['ProtocolParameters',['../structProtocolParameters.html',1,'']]],
+  ['publickey',['PublicKey',['../structPublicKey.html',1,'']]]
 ];

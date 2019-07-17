@@ -112,8 +112,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a79f94628e4ddd4a1d2384ffdcc8fea1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79f94628e4ddd4a1d2384ffdcc8fea1f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CPolkaApi</b> (<a class="el" href="classILogger.html">ILogger</a> *logger, <a class="el" href="classIJsonRpc.html">IJsonRpc</a> *jsonRpc)</td></tr>
 <tr class="separator:a79f94628e4ddd4a1d2384ffdcc8fea1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed7eca283db0ba347a4f8bb241532b02"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#aed7eca283db0ba347a4f8bb241532b02">connect</a> ()</td></tr>
-<tr class="separator:aed7eca283db0ba347a4f8bb241532b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f769c53e8b457ae1e19c4782148559b"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a9f769c53e8b457ae1e19c4782148559b">connect</a> (string node_url=&quot;&quot;)</td></tr>
+<tr class="separator:a9f769c53e8b457ae1e19c4782148559b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae50b729de4c0676f4f55f2752002e991"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ae50b729de4c0676f4f55f2752002e991">disconnect</a> ()</td></tr>
 <tr class="separator:ae50b729de4c0676f4f55f2752002e991"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6a8bb4fb16abb2d9737cb58eda0991d"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structSystemInfo.html">SystemInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ad6a8bb4fb16abb2d9737cb58eda0991d">getSystemInfo</a> ()</td></tr>
@@ -149,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <div class="textblock">
 <p>Definition at line <a class="el" href="application_8h_source.html#l00035">35</a> of file <a class="el" href="application_8h_source.html">application.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aed7eca283db0ba347a4f8bb241532b02"></a>
+<a class="anchor" id="a9f769c53e8b457ae1e19c4782148559b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -159,7 +159,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">int CPolkaApi::connect </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>node_url</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -170,16 +171,20 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Connects to WebSocket</p>
-<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following instructions:</p>
+<p>In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA and Unfrastructure POC-3 server is using Amazon Root CA 1, so the content of these certificate files is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer certificate by executing following instructions:</p>
 <ol type="1">
 <li>Execute <code>curl --insecure -v <a href="https://poc3-rpc.polkadot.io:443">https://poc3-rpc.polkadot.io:443</a></code></li>
 <li>Find "issuer" line in the output and download issuer certificate from their website</li>
 <li>Execute <code>openssl x509 -in &lt;downloaded_cert_file&gt; -noout -issuer</code></li>
-<li>Check folder /usr/share/ca-certificates/mozilla if it has this CA certificate. If it does, copy content to ca-chain.cert.pem, otherwise return to step 2</li>
+<li><p class="startli">Check folder /usr/share/ca-certificates/mozilla if it has this CA certificate. If it does, copy content to ca-chain.cert.pem, otherwise return to step 2</p>
+<p class="startli">Configuration of Node URL</p>
+<p class="startli">There are a few options how node URL can be configured. If empty string is provided in parameter and no configuration file is present, the default URL is used. If config file is provided (in the same folder as executable is run from), it overrides default value. If node URL is provided in the parameter, it overrides all other options. Config file has JSON format. Example is provided in config_example.json file in project root on GitHub:</p>
+</li>
 </ol>
-<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+<p><a href="https://github.com/usetech-llc/polkadot_api_cpp">https://github.com/usetech-llc/polkadot_api_cpp</a></p>
+<p>$param node_url - Node URL to connect to. If set to default value of "", default node URL will be used </p><dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
-<p>Implements <a class="el" href="classIApplication.html#ad0697a738044cc52a4869d1f85c3dd44">IApplication</a>.</p>
+<p>Implements <a class="el" href="classIApplication.html#a4695f2ee940edb1fff42e4403de6ffaf">IApplication</a>.</p>
 
 <p>Definition at line <a class="el" href="application_8cpp_source.html#l00017">17</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
@@ -245,7 +250,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ae7dbe556c940f7040eba40beba1b22ae">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00313">313</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00324">324</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -281,7 +286,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a874c5af80d7342db07d7581d6f6f80fb">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00286">286</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00288">288</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -317,7 +322,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a0c578b10204f79d0da8cb6479cf0af45">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00295">295</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00300">300</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -353,7 +358,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#abdf60c651290fb77835f90ec826e2257">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00304">304</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00312">312</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -448,7 +453,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#aa56d2498932ac9c31f5f2a92a8ac6f77">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00505">505</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00516">516</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -495,7 +500,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad005e633533abd96b0b829c8c6abe16f">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00476">476</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00487">487</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -542,7 +547,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a6d22f7dda3d53e6f9877a609e3679cdc">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00450">450</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00461">461</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -578,7 +583,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00400">400</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00411">411</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -614,7 +619,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af73bb90d3220bcedf18a288fd00654bc">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00412">412</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00423">423</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -650,7 +655,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af0d19365711fdd418038e8463f6a1701">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00496">496</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00507">507</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -686,7 +691,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a6422c696fa18a0896456bb8a2b5eae7c">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00467">467</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00478">478</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -715,7 +720,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00441">441</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00452">452</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -744,7 +749,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ada6a4f45cecca200c40a3045514cea22">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00431">431</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00442">442</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>

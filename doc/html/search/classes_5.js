@@ -6,5 +6,6 @@ var searchData=
   ['functioncallv0',['FunctionCallV0',['../structFunctionCallV0.html',1,'']]],
   ['functionv0',['FunctionV0',['../structFunctionV0.html',1,'']]],
   ['functypev0',['FuncTypeV0',['../structFuncTypeV0.html',1,'']]],
+  ['functypev4',['FuncTypeV4',['../structFuncTypeV4.html',1,'']]],
   ['functypev5',['FuncTypeV5',['../structFuncTypeV5.html',1,'']]]
 ];
