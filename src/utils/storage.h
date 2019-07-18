@@ -2,6 +2,7 @@
 
 class StorageUtils {
 private:
+public:
     static string getStorageKey(const Hasher hasher, const unsigned char *data, int length);
 
 public:
