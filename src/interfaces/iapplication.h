@@ -114,7 +114,7 @@ public:
      * @param amount - amount (in femto DOTs) to transfer
      * @param callback - functor or lambda expression that will receive operation updates
      */
-    virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
+    virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback) = 0;
 
     /**
@@ -146,7 +146,7 @@ public:
      * @param callback - functor or lambda expression that will receive balance updates
      * @return operation result
      */
-    virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback) = 0;
+    virtual int subscribeBalance(string address, std::function<void(uint128)> callback) = 0;
 
     /**
      *  Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.

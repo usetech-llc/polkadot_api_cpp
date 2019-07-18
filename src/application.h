@@ -56,8 +56,8 @@ private:
 
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
-    map<string, std::function<void(unsigned __int128)>> _balanceSubscribers;
-    map<string, std::function<void(unsigned __int128)>> _nonceSubscribers;
+    map<string, std::function<void(uint128)>> _balanceSubscribers;
+    map<string, std::function<void(unsigned long)>> _nonceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
     std::function<void(string)> _transactionCompletionSubscriber;
 
@@ -80,12 +80,12 @@ public:
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params);
     virtual unsigned long getAccountNonce(string address);
 
-    virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
+    virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
-    virtual int subscribeBalance(string address, std::function<void(unsigned __int128)> callback);
+    virtual int subscribeBalance(string address, std::function<void(uint128)> callback);
     virtual int unsubscribeBalance(string address);
     virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
     virtual int unsubscribeEraAndSession();

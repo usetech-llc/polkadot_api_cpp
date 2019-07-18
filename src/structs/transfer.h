@@ -1,7 +1,7 @@
 
 struct TransferMethod : public Method {
     uint8_t receiverPublicKey[SR25519_PUBLIC_SIZE];
-    unsigned __int128 amount;
+    uint128 amount;
 };
 
 struct TransferExtrinsic : public Extrinsic {

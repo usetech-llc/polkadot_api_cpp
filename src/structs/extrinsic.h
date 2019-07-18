@@ -4,6 +4,6 @@ struct Method {
 };
 
 struct Extrinsic {
-    unsigned __int128 length;
+    uint128 length;
     Signature signature;
 };

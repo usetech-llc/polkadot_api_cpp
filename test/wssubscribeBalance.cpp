@@ -3,15 +3,15 @@
 #undef NDEBUG
 #include <cassert>
 
-std::ostream &operator<<(std::ostream &dest, unsigned __int128 value) {
+std::ostream &operator<<(std::ostream &dest, uint128 value) {
     std::ostream::sentry s(dest);
     if (s) {
-        __uint128_t tmp = value < 0 ? -value : value;
+        uint128 tmp = value < 0 ? -value : value;
         char buffer[128];
         char *d = std::end(buffer);
         do {
             --d;
-            *d = "0123456789"[tmp % 10];
+            *d = "0123456789"[(int)(tmp % 10)];
             tmp /= 10;
         } while (tmp != 0);
         if (value < 0) {
@@ -41,9 +41,9 @@ int main(int argc, char *argv[]) {
     // Subscribe to balance updates
     string addr("5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht");
     bool done = false;
-    unsigned __int128 balanceResult = (unsigned __int128)-1;
-    app.subscribeBalance(addr, [&](unsigned __int128 balance) {
-        cout << endl << "  Balance: " << balance << endl << endl;
+    uint128 balanceResult = (uint128)-1;
+    app.subscribeBalance(addr, [&](uint128 balance) {
+        cout << endl << "  Balance: " << (uint64_t)balance << endl << endl;
         balanceResult = balance;
         done = true;
     });
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     while (!done)
         usleep(10000);
 
-    assert(balanceResult < (unsigned __int128)-1);
+    assert(balanceResult < (uint128)-1);
 
     // Uncomment if you want to watch for more updates
     // usleep(30000000);

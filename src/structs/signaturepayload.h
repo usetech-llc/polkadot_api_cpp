@@ -8,12 +8,12 @@ typedef struct {
     uint8_t version;
     uint8_t signerPublicKey[SR25519_PUBLIC_SIZE];
     uint8_t sr25519Signature[SR25519_SIGNATURE_SIZE];
-    unsigned __int128 nonce;
+    uint128 nonce;
     ExtrinsicEra era;
 } Signature;
 
 typedef struct {
-    unsigned __int128 nonce;
+    uint128 nonce;
     uint8_t methodBytesLength;
     uint8_t *methodBytes;
     ExtrinsicEra era;

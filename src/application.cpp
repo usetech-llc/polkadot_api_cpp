@@ -372,8 +372,7 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
         // Handle Balance subscriptions
         for (auto const &sid : _balanceSubscriptionIds) {
             if (sid.second == subscriptionId) {
-                _balanceSubscribers[sid.first](
-                    fromHex<unsigned __int128>(message["changes"][0][1].string_value(), false));
+                _balanceSubscribers[sid.first](fromHex<uint128>(message["changes"][0][1].string_value(), false));
                 return;
             }
         }
@@ -469,7 +468,7 @@ int CPolkaApi::unsubscribeBlockNumber() {
     return PAPI_OK;
 }
 
-int CPolkaApi::subscribeBalance(string address, std::function<void(unsigned __int128)> callback) {
+int CPolkaApi::subscribeBalance(string address, std::function<void(uint128)> callback) {
     _balanceSubscribers[address] = callback;
 
     // Subscribe to websocket
@@ -524,7 +523,7 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     return PAPI_OK;
 }
 
-void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
+void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                     std::function<void(string)> callback) {
 
     _logger->info("=== Starting a Transfer Extrinsic ===");

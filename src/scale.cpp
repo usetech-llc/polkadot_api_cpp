@@ -1,3 +1,5 @@
+#include "libs/int128/int128.h"
+typedef absl::uint128 uint128;
 
 #include "scale.h"
 #include <cstring>
@@ -96,31 +98,31 @@ CompactInteger decodeCompactInteger(string &stream) {
     return CompactInteger{(long)number};
 };
 
-CompactIntegerLEBytes encodeCompactInteger(unsigned __int128 n) {
+CompactIntegerLEBytes encodeCompactInteger(uint128 n) {
 
     CompactIntegerLEBytes b;
     memset(&b, 0, sizeof(b));
 
     if (n <= 63) {
         b.length = 1;
-        b.bytes[0] = n << 2;
+        b.bytes[0] = (uint8_t)(n << 2);
     } else if (n <= 0x3FFF) {
         b.length = 2;
-        b.bytes[0] = ((n & 0x3F) << 2) | 0x01;
-        b.bytes[1] = ((n & 0xFC0) >> 6);
+        b.bytes[0] = (uint8_t)(((n & 0x3F) << 2) | 0x01);
+        b.bytes[1] = (uint8_t)((n & 0xFC0) >> 6);
     } else if (n <= 0x3FFFFFFF) {
         b.length = 4;
-        b.bytes[0] = ((n & 0x3F) << 2) | 0x02;
+        b.bytes[0] = (uint8_t)(((n & 0x3F) << 2) | 0x02);
         n >>= 6;
         for (int i = 1; i < 4; ++i) {
-            b.bytes[i] = (n & 0xFF);
+            b.bytes[i] = (uint8_t)(n & 0xFF);
             n >>= 8;
         }
     } else { // Big integer mode
         b.length = 1;
         int byteNum = 1;
         while (n) {
-            b.bytes[byteNum++] = (n & 0xFF);
+            b.bytes[byteNum++] = (uint8_t)(n & 0xFF);
             n >>= 8;
         }
         b.length = byteNum;

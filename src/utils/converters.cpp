@@ -21,7 +21,7 @@ uint8_t fromHexByte(const char *byteStr) {
     return byte;
 }
 
-__int128 atoi128(const char *s) {
+uint128 atoi128(const char *s) {
     while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '+')
         ++s;
     int sign = 1;
@@ -37,8 +37,8 @@ __int128 atoi128(const char *s) {
         scratch[i] = s[i] - '0';
     size_t scanstart = 0;
 
-    __int128 result = 0;
-    __int128 mask = 1;
+    uint128 result = 0;
+    uint128 mask = 1;
     while (scanstart < digits) {
         if (scratch[digits - 1] & 1)
             result |= mask;
@@ -113,4 +113,4 @@ template <> vector<uint8_t> fromHex<vector<uint8_t>>(string hexStr, bool bigEndi
 
 template long long fromHex<long long>(string hexStr, bool bigEndianBytes);
 template unsigned long fromHex<unsigned long>(string hexStr, bool bigEndianBytes);
-template unsigned __int128 fromHex<unsigned __int128>(string hexStr, bool bigEndianBytes);
+template uint128 fromHex<uint128>(string hexStr, bool bigEndianBytes);
