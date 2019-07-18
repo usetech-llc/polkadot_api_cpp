@@ -43,6 +43,13 @@ public:
      *
      *  https://github.com/usetech-llc/polkadot_api_cpp
      *
+     *
+     *   Dealing with Substrate Runtime updates
+     *
+     *   Client application should subscribe to runtimeVersion and, as soon as it receives an update that indicates that
+     * runtime version changed, it should disconnect and connect again to recalculate hashers and method and modlue
+     * indexes that are required for correct working of other methods.
+     *
      * $param node_url - Node URL to connect to. If set to default value of "", default node URL will be used
      * @return operation result
      */
