@@ -6,7 +6,6 @@ typedef websocketpp::lib::shared_ptr<websocketpp::lib::asio::ssl::context> conte
 
 class CWebSocketClient : public IWebSocketClient {
 private:
-    string _nodeUrl;
     ILogger *_logger;
     static CWebSocketClient *_instance;
     vector<IMessageObserver *> _observers;

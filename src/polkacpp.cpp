@@ -27,6 +27,7 @@ extern "C" {
 #include "interfaces/iwsclient.h"
 #include "interfaces/ijsonrpc.h"
 
+#include "config.h"
 #include "wsclient.h"
 #include "elog.h"
 #include "application.h"

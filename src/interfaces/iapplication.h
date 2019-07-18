@@ -18,19 +18,37 @@ public:
     virtual ~IApplication() {}
 
     /**
-     *  Connects to WebSocket
+     *   Connects to WebSocket
      *
      * In order to establish successful TLS connection, a root CA certificate needs to be present in pem file configured
      * in CConstants::certificate_file (currently ca-chain.cert.pem). You can put several certificates in this text file
-     * one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA, so the content of this
-     * certificate file is added to ca-chain.cert.pem, but in case if this changes, one can find out the issuer
-     * certificate by executing following instructions:
+     * one after the other. Currently Polkadot poc-3 server is using DST_Root_CA_X3 CA and Unfrastructure POC-3 server
+     * is using Amazon Root CA 1, so the content of these certificate files is added to ca-chain.cert.pem, but in case
+     * if this changes, one can find out the issuer certificate by executing following instructions:
      *
      *  1. Execute `curl --insecure -v https://poc3-rpc.polkadot.io:443`
      *  2. Find "issuer" line in the output and download issuer certificate from their website
      *  3. Execute `openssl x509 -in <downloaded_cert_file> -noout -issuer`
      *  4. Check folder /usr/share/ca-certificates/mozilla if it has this CA certificate. If it does, copy content to
      *     ca-chain.cert.pem, otherwise return to step 2
+     *
+     *
+     *   Configuration of Node URL
+     *
+     *   There are a few options how node URL can be configured. If empty string is provided in parameter and no
+     * configuration file is present, the default URL is used. If config file is provided (in the same folder as
+     * executable is run from), it overrides default value. If node URL is provided in the parameter, it overrides all
+     * other options. Config file has JSON format. Example is provided in config_example.json file in project root on
+     * GitHub:
+     *
+     *  https://github.com/usetech-llc/polkadot_api_cpp
+     *
+     *
+     *   Dealing with Substrate Runtime updates
+     *
+     *   Client application should subscribe to runtimeVersion and, as soon as it receives an update that indicates that
+     * runtime version changed, it should disconnect and connect again to recalculate hashers and method and modlue
+     * indexes that are required for correct working of other methods.
      *
      * $param node_url - Node URL to connect to. If set to default value of "", default node URL will be used
      * @return operation result
