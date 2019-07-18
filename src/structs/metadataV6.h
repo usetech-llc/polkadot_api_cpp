@@ -9,9 +9,9 @@ struct ConstV6 {
 struct ModuleV6 {
     char name[STRING_SIZE];
     char prefix[STRING_SIZE];
-    StorageV5 storage[COLLECTION_SIZE];
-    CallV5 call[COLLECTION_SIZE];
-    EventArgV5 ev[COLLECTION_SIZE];
+    unique_ptr<StorageV5> storage[COLLECTION_SIZE];
+    unique_ptr<CallV5> call[COLLECTION_SIZE];
+    unique_ptr<EventArgV5> ev[COLLECTION_SIZE];
     ConstV6 cons[COLLECTION_SIZE];
 };
 

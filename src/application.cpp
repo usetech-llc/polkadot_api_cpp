@@ -62,7 +62,7 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
         if (moduleIndex >= 0) {
             int methodIndex = getStorageMethodIndex(meta, moduleIndex, funcName);
             if (methodIndex > 0) {
-                hasherStr = meta->metadataV5->module[moduleIndex]->storage[methodIndex].type.hasher;
+                hasherStr = meta->metadataV5->module[moduleIndex]->storage[methodIndex]->type.hasher;
             }
         }
 
@@ -118,7 +118,7 @@ int CPolkaApi::getStorageMethodIndex(unique_ptr<Metadata> &meta, const int modul
         if (meta->metadataV0 && meta->metadataV0->module[i]) {
             name = meta->metadataV0->module[moduleIndex]->storage.function[i].name;
         } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
-            name = meta->metadataV5->module[moduleIndex]->storage[i].name;
+            name = meta->metadataV5->module[moduleIndex]->storage[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -143,7 +143,7 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
         if (meta->metadataV0 && meta->metadataV0->module[i]) {
             name = meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name;
         } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
-            name = meta->metadataV5->module[moduleIndex]->call[i].name;
+            name = meta->metadataV5->module[moduleIndex]->call[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -166,7 +166,11 @@ bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
         if (meta->metadataV0 && meta->metadataV0->module[i]) {
             name = meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name;
         } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
-            name = meta->metadataV5->module[moduleIndex]->call[i].name;
+
+            if (meta->metadataV5->module[moduleIndex]->call[i] == nullptr)
+                return false;
+
+            name = meta->metadataV5->module[moduleIndex]->call[i]->name;
         }
 
         if (name.length() > 0) {
@@ -177,7 +181,11 @@ bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
         if (meta->metadataV0 && meta->metadataV0->module[i]) {
             name = meta->metadataV0->module[moduleIndex]->storage.function[i].name;
         } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
-            name = meta->metadataV5->module[moduleIndex]->storage[i].name;
+
+            if (meta->metadataV5->module[moduleIndex]->storage[i] == nullptr)
+                return false;
+
+            name = meta->metadataV5->module[moduleIndex]->storage[i]->name;
         }
 
         if (name.length() > 0) {
