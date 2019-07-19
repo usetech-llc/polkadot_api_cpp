@@ -15,6 +15,7 @@ using namespace std;
 #include "structs/metadata.h"
 #include "structs/runtimeversion.h"
 #include "structs/common.h"
+#include "structs/signedblock.h"
 
 // Include application layer interface
 #include "interfaces/iapplication.h"

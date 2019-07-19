@@ -278,6 +278,67 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
     return rv;
 }
 
+unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
+
+    SignedBlock *result = new SignedBlock();
+    memset(result, 0, sizeof(SignedBlock));
+    unique_ptr<SignedBlock> sb(result);
+
+    strcpy(sb->block.header.parentHash, jsonObject["block"]["header"]["parentHash"].string_value().c_str());
+    sb->block.header.number = atoi128(jsonObject["block"]["header"]["parentHash"].string_value().substr(2).c_str());
+    strcpy(sb->block.header.stateRoot, jsonObject["block"]["header"]["stateRoot"].string_value().c_str());
+    strcpy(sb->block.header.extrinsicsRoot, jsonObject["block"]["header"]["extrinsicsRoot"].string_value().c_str());
+
+    int i = 0;
+    for (Json item : jsonObject["block"]["header"]["digest"]["logs"].array_items()) {
+        strcpy(sb->block.header.digest[i].value, item.string_value().c_str());
+        i++;
+    }
+
+    i = 0;
+    for (Json item : jsonObject["block"]["extrinsics"].array_items()) {
+        strcpy(sb->block.extrinsic[i], item.string_value().c_str());
+        i++;
+    }
+
+    memcpy(sb->justification, &jsonObject["justification"], sizeof(jsonObject["justification"]));
+
+    return sb;
+}
+
+unique_ptr<BlockHeader> CPolkaApi::createBlockHeader(Json jsonObject) {
+
+    BlockHeader *result = new BlockHeader();
+    memset(result, 0, sizeof(BlockHeader));
+    unique_ptr<BlockHeader> bh(result);
+
+    strcpy(bh->parentHash, jsonObject["parentHash"].string_value().c_str());
+    bh->number = atoi128(jsonObject["parentHash"].string_value().substr(2).c_str());
+    strcpy(bh->stateRoot, jsonObject["stateRoot"].string_value().c_str());
+    strcpy(bh->extrinsicsRoot, jsonObject["extrinsicsRoot"].string_value().c_str());
+
+    int i = 0;
+    for (Json item : jsonObject["digest"]["logs"].array_items()) {
+        strcpy(bh->digest[i].value, item.string_value().c_str());
+        i++;
+    }
+
+    return bh;
+}
+
+unique_ptr<FinalHead> CPolkaApi::createFinalHead(Json jsonObject) {
+
+    FinalHead *result = new FinalHead();
+    memset(result, 0, sizeof(FinalHead));
+    unique_ptr<FinalHead> fh(result);
+
+    ///    cout << endl<< endl<< endl << jsonObject.dump()     << endl<< endl<< endl<< endl;
+
+    strcpy(fh->blockHash, jsonObject.string_value().c_str());
+
+    return fh;
+}
+
 unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
     unique_ptr<Metadata> md(new Metadata);
     MetadataFactory mdf(_logger);
@@ -327,6 +388,39 @@ unique_ptr<RuntimeVersion> CPolkaApi::getRuntimeVersion(unique_ptr<GetRuntimeVer
     Json response = _jsonRpc->request(query);
 
     return move(deserialize<RuntimeVersion, &CPolkaApi::createRuntimeVersion>(response));
+}
+
+unique_ptr<SignedBlock> CPolkaApi::getBlock(unique_ptr<GetBlockParams> params) {
+
+    Json prm = Json::array{};
+    if (params)
+        prm = Json::array{params->blockHash};
+    Json query = Json::object{{"method", "chain_getBlock"}, {"params", prm}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<SignedBlock, &CPolkaApi::createBlock>(response));
+}
+
+unique_ptr<BlockHeader> CPolkaApi::getBlockHeader(unique_ptr<GetBlockParams> params) {
+
+    Json prm = Json::array{};
+    if (params)
+        prm = Json::array{params->blockHash};
+    Json query = Json::object{{"method", "chain_getHeader"}, {"params", prm}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<BlockHeader, &CPolkaApi::createBlockHeader>(response));
+}
+
+unique_ptr<FinalHead> CPolkaApi::getFinalizedHead() {
+
+    Json query = Json::object{{"method", "chain_getFinalizedHead"}, {"params", Json::array()}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<FinalHead, &CPolkaApi::createFinalHead>(response));
 }
 
 unsigned long CPolkaApi::getAccountNonce(string address) {

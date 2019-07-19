@@ -41,6 +41,9 @@ private:
     unique_ptr<BlockHash> createBlockHash(Json jsonObject);
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
+    unique_ptr<SignedBlock> createBlock(Json jsonObject);
+    unique_ptr<BlockHeader> createBlockHeader(Json jsonObject);
+    unique_ptr<FinalHead> createFinalHead(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
     int getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName, bool skipZeroCalls);
@@ -78,6 +81,9 @@ public:
     virtual unique_ptr<BlockHash> getBlockHash(unique_ptr<GetBlockHashParams> params);
     virtual unique_ptr<Metadata> getMetadata(unique_ptr<GetMetadataParams> params);
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params);
+    virtual unique_ptr<SignedBlock> getBlock(unique_ptr<GetBlockParams> params);
+    virtual unique_ptr<BlockHeader> getBlockHeader(unique_ptr<GetBlockParams> params);
+    virtual unique_ptr<FinalHead> getFinalizedHead();
     virtual unsigned long getAccountNonce(string address);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,

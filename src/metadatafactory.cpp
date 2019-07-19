@@ -378,7 +378,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
             for (int i = 0; i < storageLen; i++) {
                 md->module[moduleIndex]->storage[i] = getStorageV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->storage[i] = nullptr;
             }
@@ -392,7 +392,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
             for (int i = 0; i < callsCount; i++) {
                 md->module[moduleIndex]->call[i] = getCallV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->call[i] = nullptr;
             }
@@ -406,7 +406,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
             for (int i = 0; i < eventsCount; i++) {
                 md->module[moduleIndex]->ev[i] = getEventV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->ev[i] = nullptr;
             }
@@ -447,7 +447,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
             for (int i = 0; i < storageLen; i++) {
                 md->module[moduleIndex]->storage[i] = getStorageV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->storage[i] = nullptr;
             }
@@ -461,7 +461,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
             for (int i = 0; i < callsCount; i++) {
                 md->module[moduleIndex]->call[i] = getCallV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->call[i] = nullptr;
             }
@@ -475,7 +475,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
             for (int i = 0; i < eventsCount; i++) {
                 md->module[moduleIndex]->ev[i] = getEventV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->ev[i] = nullptr;
             }
@@ -562,7 +562,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
             for (int i = 0; i < storageLen; i++) {
                 md->module[moduleIndex]->storage[i] = getStorageV4(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->storage[i] = nullptr;
             }
@@ -576,7 +576,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
             for (int i = 0; i < callsCount; i++) {
                 md->module[moduleIndex]->call[i] = getCallV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->call[i] = nullptr;
             }
@@ -590,7 +590,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
             for (int i = 0; i < eventsCount; i++) {
                 md->module[moduleIndex]->ev[i] = getEventV5(str);
             }
-        }else {
+        } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
                 md->module[moduleIndex]->ev[i] = nullptr;
             }

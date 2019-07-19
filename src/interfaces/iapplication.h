@@ -78,6 +78,29 @@ public:
     virtual unique_ptr<RuntimeVersion> getRuntimeVersion(unique_ptr<GetRuntimeVersionParams> params) = 0;
 
     /**
+     * Get header and body of a relay chain block
+     *
+     * @param struct with blockHash 64 diget number in hex format
+     * @return SignedBlock struct with result
+     */
+    virtual unique_ptr<SignedBlock> getBlock(unique_ptr<GetBlockParams> params) = 0;
+
+    /**
+     * Retrieves the header for a specific block
+     *
+     * @param struct with blockHash 64 diget number in hex format
+     * @return BlockHeader struct with result
+     */
+    virtual unique_ptr<BlockHeader> getBlockHeader(unique_ptr<GetBlockParams> params) = 0;
+
+    /**
+     * Get hash of the last finalized block in the chain
+     *
+     * @return FinalHead struct with result
+     */
+    virtual unique_ptr<FinalHead> getFinalizedHead() = 0;
+
+    /**
      *  Retreives the current nonce for specific address
      *
      *  @param address - the address to get nonce for
