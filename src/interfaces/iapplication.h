@@ -101,6 +101,13 @@ public:
     virtual unique_ptr<FinalHead> getFinalizedHead() = 0;
 
     /**
+     * Return health status of the node
+     *
+     * @return SystemHealth struct with result
+     */
+    virtual unique_ptr<SystemHealth> getSystemHealth() = 0;
+
+    /**
      *  Retreives the current nonce for specific address
      *
      *  @param address - the address to get nonce for

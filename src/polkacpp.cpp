@@ -20,7 +20,6 @@ extern "C" {
 #include "structs/hasher.h"
 #include "structs/signaturepayload.h"
 
-
 #include "interfaces/ilogger.h"
 #include "interfaces/imessageobserver.h"
 #include "interfaces/iwsmessageobserver.h"

@@ -6,3 +6,9 @@ struct SystemInfo {
     int tokenDecimals;
     char tokenSymbol[STRING_SIZE];
 };
+
+struct SystemHealth{
+    long peers;
+    bool isSyncing;
+    bool shouldHavePeers;
+};

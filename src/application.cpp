@@ -332,11 +332,24 @@ unique_ptr<FinalHead> CPolkaApi::createFinalHead(Json jsonObject) {
     memset(result, 0, sizeof(FinalHead));
     unique_ptr<FinalHead> fh(result);
 
-    ///    cout << endl<< endl<< endl << jsonObject.dump()     << endl<< endl<< endl<< endl;
-
     strcpy(fh->blockHash, jsonObject.string_value().c_str());
 
     return fh;
+}
+
+unique_ptr<SystemHealth> CPolkaApi::createSystemHealth(Json jsonObject) {
+
+    SystemHealth *result = new SystemHealth();
+    memset(result, 0, sizeof(SystemHealth));
+    unique_ptr<SystemHealth> sh(result);
+
+    // cout << endl<< endl<< endl << jsonObject.dump()     << endl<< endl<< endl<< endl;
+
+    sh->peers = jsonObject["peers"].int_value();
+    sh->isSyncing = jsonObject["isSyncing"].bool_value();
+    sh->shouldHavePeers = jsonObject["shouldHavePeers"].bool_value();
+
+    return sh;
 }
 
 unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
@@ -412,6 +425,15 @@ unique_ptr<BlockHeader> CPolkaApi::getBlockHeader(unique_ptr<GetBlockParams> par
     Json response = _jsonRpc->request(query);
 
     return move(deserialize<BlockHeader, &CPolkaApi::createBlockHeader>(response));
+}
+
+unique_ptr<SystemHealth> CPolkaApi::getSystemHealth() {
+ 
+    Json query = Json::object{{"method", "system_health"}, {"params", Json::array()}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<SystemHealth, &CPolkaApi::createSystemHealth>(response));   
 }
 
 unique_ptr<FinalHead> CPolkaApi::getFinalizedHead() {
