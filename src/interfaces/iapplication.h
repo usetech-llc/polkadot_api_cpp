@@ -108,6 +108,13 @@ public:
     virtual unique_ptr<SystemHealth> getSystemHealth() = 0;
 
     /**
+     * Returns the currently connected peers
+     *
+     * @return PeersInfo struct with result
+     */
+    virtual unique_ptr<PeersInfo> getSystemPeers() = 0;
+
+    /**
      *  Retreives the current nonce for specific address
      *
      *  @param address - the address to get nonce for

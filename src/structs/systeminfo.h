@@ -7,8 +7,20 @@ struct SystemInfo {
     char tokenSymbol[STRING_SIZE];
 };
 
-struct SystemHealth{
+struct SystemHealth {
     long peers;
     bool isSyncing;
     bool shouldHavePeers;
+};
+
+struct PeerInfo {
+    char bestHash[STRING_SIZE];
+    unsigned long bestNumber;
+    char peerId[STRING_SIZE];
+    unsigned int protocolVersion;
+    char roles[STRING_SIZE];
+};
+
+struct PeersInfo {
+    PeerInfo peers[COLLECTION_SIZE * STRING_SIZE];
 };

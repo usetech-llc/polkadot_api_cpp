@@ -367,6 +367,27 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
     return md;
 }
 
+unique_ptr<PeersInfo> CPolkaApi::createPeerInfo(Json jsonObject) {
+
+    PeersInfo *result = new PeersInfo();
+    memset(result, 0, sizeof(PeersInfo));
+    unique_ptr<PeersInfo> pi(result);
+
+    int i = 0;
+    for (Json item : jsonObject.array_items()) {
+
+        strcpy(pi->peers[i].bestHash, item["bestHash"].string_value().c_str());
+        pi->peers[i].bestNumber = item["betNumber"].int_value();
+        strcpy(pi->peers[i].peerId, item["peerId"].string_value().c_str());
+        pi->peers[i].protocolVersion = item["protocolVersion"].int_value();
+        strcpy(pi->peers[i].roles, item["roles"].string_value().c_str());
+
+        i++;
+    }
+
+    return pi;
+}
+
 unique_ptr<BlockHash> CPolkaApi::getBlockHash(unique_ptr<GetBlockHashParams> params) {
 
     Json prm = Json::array{};
@@ -428,12 +449,12 @@ unique_ptr<BlockHeader> CPolkaApi::getBlockHeader(unique_ptr<GetBlockParams> par
 }
 
 unique_ptr<SystemHealth> CPolkaApi::getSystemHealth() {
- 
+
     Json query = Json::object{{"method", "system_health"}, {"params", Json::array()}};
 
     Json response = _jsonRpc->request(query);
 
-    return move(deserialize<SystemHealth, &CPolkaApi::createSystemHealth>(response));   
+    return move(deserialize<SystemHealth, &CPolkaApi::createSystemHealth>(response));
 }
 
 unique_ptr<FinalHead> CPolkaApi::getFinalizedHead() {
@@ -443,6 +464,15 @@ unique_ptr<FinalHead> CPolkaApi::getFinalizedHead() {
     Json response = _jsonRpc->request(query);
 
     return move(deserialize<FinalHead, &CPolkaApi::createFinalHead>(response));
+}
+
+unique_ptr<PeersInfo> CPolkaApi::getSystemPeers() {
+
+    Json query = Json::object{{"method", "system_peers"}, {"params", Json::array()}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<PeersInfo, &CPolkaApi::createPeerInfo>(response));
 }
 
 unsigned long CPolkaApi::getAccountNonce(string address) {
