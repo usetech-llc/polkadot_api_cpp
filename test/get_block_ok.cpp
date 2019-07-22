@@ -4,7 +4,7 @@
 #include <cassert>
 
 int main(int argc, char *argv[]) {
- 
+
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 
     // Check hash
     assert(strcmp(resp3->block.header.parentHash, resp4->parentHash) == 0);
+    assert(strlen(resp4->parentHash) == 66); // "64 bytes with 0x prefix"
 
     app->disconnect();
 
