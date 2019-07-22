@@ -10,8 +10,8 @@ int main(int argc, char *argv[]) {
 
     auto resp3 = app->getSystemPeers();
 
-    for(auto item : resp3->peers){
-        assert(item.peerId > 0);
+    for(auto i = 0; i < resp3->count; i++){
+        assert(resp3->peers[i].protocolVersion > 0);
     }
 
     app->disconnect();

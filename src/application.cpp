@@ -447,8 +447,19 @@ unique_ptr<PeersInfo> CPolkaApi::createPeerInfo(Json jsonObject) {
     memset(result, 0, sizeof(PeersInfo));
     unique_ptr<PeersInfo> pi(result);
 
+    auto items = jsonObject.array_items();
+    pi->count = items.size();
+
+    // Too many peers exception
+    if (pi->count > MAX_PEER_COUNT){
+        auto message = "Number of records exceeded " + to_string(MAX_PEER_COUNT) + "actual value: " + to_string(pi->count);
+        _logger->error(message);
+        throw ApplicationException(message);
+        return nullptr;
+    }
+
     int i = 0;
-    for (Json item : jsonObject.array_items()) {
+    for (Json item : items) {
 
         strcpy(pi->peers[i].bestHash, item["bestHash"].string_value().c_str());
         pi->peers[i].bestNumber = item["betNumber"].int_value();

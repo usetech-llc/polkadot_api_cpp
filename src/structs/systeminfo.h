@@ -22,7 +22,8 @@ struct PeerInfo {
 };
 
 struct PeersInfo {
-    PeerInfo peers[COLLECTION_SIZE * STRING_SIZE];
+    int count;
+    PeerInfo peers[MAX_PEER_COUNT];
 };
 
 struct Endpoint {
