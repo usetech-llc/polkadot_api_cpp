@@ -1,6 +1,6 @@
 # Manual Demos
 
-Milestone 1 deliverables are located in branch [release/milestone1](https://github.com/usetech-llc/polkadot_api_cpp/tree/release/milestone1)
+Milestone 1 deliverables are marked by tag [milestone1](https://github.com/usetech-llc/polkadot_api_cpp/tree/milestone1)
 
 ## Deliverable 1
 

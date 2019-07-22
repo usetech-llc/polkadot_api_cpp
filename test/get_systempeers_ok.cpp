@@ -4,13 +4,14 @@
 #include <cassert>
 
 int main(int argc, char *argv[]) {
- 
+
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
+    cout << endl << endl << "============================ Get Peers ============================" << endl;
     auto resp3 = app->getSystemPeers();
 
-    for(auto item : resp3->peers){
+    for (auto item : resp3->peers) {
         assert(item.peerId > 0);
     }
 
