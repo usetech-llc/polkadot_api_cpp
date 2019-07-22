@@ -99,8 +99,8 @@ Inheritance diagram for IJsonRpc:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4df041cbca9cb27ba0bb8a10312e64b7"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#a4df041cbca9cb27ba0bb8a10312e64b7">connect</a> ()=0</td></tr>
-<tr class="separator:a4df041cbca9cb27ba0bb8a10312e64b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a378cc4a12294ac6ea05450fafc4c788c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#a378cc4a12294ac6ea05450fafc4c788c">connect</a> (string node_url=&quot;&quot;)=0</td></tr>
+<tr class="separator:a378cc4a12294ac6ea05450fafc4c788c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9b05cfd42f34609cfe807b9e22e4e37"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#ab9b05cfd42f34609cfe807b9e22e4e37">disconnect</a> ()=0</td></tr>
 <tr class="separator:ab9b05cfd42f34609cfe807b9e22e4e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99c78860e4c7f6774b35a6026fda7e2c"><td class="memItemLeft" align="right" valign="top">virtual Json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#a99c78860e4c7f6774b35a6026fda7e2c">request</a> (Json jsonMap)=0</td></tr>
@@ -114,7 +114,7 @@ Public Member Functions</h2></td></tr>
 <div class="textblock">
 <p>Definition at line <a class="el" href="ijsonrpc_8h_source.html#l00001">1</a> of file <a class="el" href="ijsonrpc_8h_source.html">ijsonrpc.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a4df041cbca9cb27ba0bb8a10312e64b7"></a>
+<a class="anchor" id="a378cc4a12294ac6ea05450fafc4c788c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -124,7 +124,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">virtual int IJsonRpc::connect </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>node_url</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -135,9 +136,15 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Connects to WebSocket</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node_url</td><td>- Node URL to connect to </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
-<p>Implemented in <a class="el" href="classCJsonRpc.html#a83328c77dff6cf165bc02f86e491acaf">CJsonRpc</a>.</p>
+<p>Implemented in <a class="el" href="classCJsonRpc.html#a3366f304c45d91ca8de985bcd7cd5388">CJsonRpc</a>.</p>
 
 </div>
 </div>

@@ -3,6 +3,9 @@
 #include <websocketpp/config/asio_client.hpp>
 #include <websocketpp/config/asio_no_tls_client.hpp>
 
+#include "libs/int128/int128.h"
+typedef absl::uint128 uint128;
+
 #include "libs/easyloggingpp/easylogging++.h"
 #include "libs/json11/json11.hpp"
 #include "scale.h"
@@ -26,6 +29,7 @@ extern "C" {
 #include "interfaces/iwsclient.h"
 #include "interfaces/ijsonrpc.h"
 
+#include "config.h"
 #include "wsclient.h"
 #include "elog.h"
 #include "application.h"

@@ -2,6 +2,8 @@
 #undef NDEBUG
 #include <cassert>
 
+#include "../src/libs/xxhash/xxhash.h"
+
 int main(int argc, char *argv[]) {
 
     Address addr;

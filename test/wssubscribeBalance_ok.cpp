@@ -6,15 +6,15 @@
 #define SUBSCRIPTION_ID 123
 #define EXPECTED_BALANCE 445240000000000
 
-std::ostream &operator<<(std::ostream &dest, unsigned __int128 value) {
+std::ostream &operator<<(std::ostream &dest, uint128 value) {
     std::ostream::sentry s(dest);
     if (s) {
-        __uint128_t tmp = value < 0 ? -value : value;
+        uint128 tmp = value < 0 ? -value : value;
         char buffer[128];
         char *d = std::end(buffer);
         do {
             --d;
-            *d = "0123456789"[tmp % 10];
+            *d = "0123456789"[(int)(tmp % 10)];
             tmp /= 10;
         } while (tmp != 0);
         if (value < 0) {
@@ -67,8 +67,8 @@ int main(int argc, char *argv[]) {
     // Subscribe to balance updates
     string addr("5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht");
     bool done = false;
-    app.subscribeBalance(addr, [&](unsigned __int128 balance) {
-        cout << endl << "  Balance: " << balance << endl << endl;
+    app.subscribeBalance(addr, [&](uint128 balance) {
+        cout << endl << "  Balance: " << (uint64_t)balance << endl << endl;
         assert(EXPECTED_BALANCE == balance);
         done = true;
     });

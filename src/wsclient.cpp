@@ -4,8 +4,7 @@ CWebSocketClient *CWebSocketClient::_instance = nullptr;
 chrono::seconds CWebSocketClient::ConnectionTimeout(5); // 5 second connection timeout
 
 CWebSocketClient::CWebSocketClient(ILogger *logger)
-    : _nodeUrl(CConstants::parity_node_url), _logger(logger), _connectedThread(nullptr), _healthThread(nullptr),
-      _connected(false) {}
+    : _logger(logger), _connectedThread(nullptr), _healthThread(nullptr), _connected(false) {}
 
 CWebSocketClient::~CWebSocketClient() {
     delete _connectedThread;
@@ -247,7 +246,7 @@ int CWebSocketClient::connect(string node_url) {
 
     std::string uri;
     if (node_url == "")
-        uri = _nodeUrl;
+        uri = CConfig::getNodeUrl();
     else
         uri = node_url;
 
@@ -328,7 +327,10 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+        {"id", INT_MAX},
+        {"jsonrpc", "2.0"},
+        {"method", "system_health"},
+        {"params", Json::array()},
     };
 
     long period_counter = 0;

@@ -13,9 +13,9 @@ int main(int argc, char *argv[]) {
     CPolkaApi app(&logger, &jsonRpc);
 
     // Extract blockHash and URL parameters from command line
-    if ((argc != 1) && (argc != 3)) {
+    if ((argc != 1) && (argc != 2) && (argc != 3)) {
         cout << "Usage: ";
-        cout << argv[0] << " <node uri> <block hash>" << endl;
+        cout << argv[0] << " <node uri (optional)> <block hash (optional)>" << endl;
         cout << "failed" << endl;
         return 0;
     }
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
         resp2 = app.getMetadata(nullptr);
     app.disconnect();
 
-    assert(resp2->metadataV0 != nullptr || resp2->metadataV4 != nullptr || resp2->metadataV5 != nullptr  || resp2->metadataV6 != nullptr);
+    assert(resp2->metadataV0 || resp2->metadataV4 || resp2->metadataV5 || resp2->metadataV6);
     cout << endl << "--- Received metadata ---" << endl;
     if (resp2->metadataV0) {
         cout << "OuterEventWrapperV0.name: " << resp2->metadataV0->oew->name << endl;
@@ -44,8 +44,6 @@ int main(int argc, char *argv[]) {
     if (resp2->metadataV4) {
         cout << "ModuleV4[0].prefix: " << resp2->metadataV4->module[0]->prefix << endl;
         cout << "ModuleV4[1].prefix: " << resp2->metadataV4->module[1]->prefix << endl;
-        cout << "ModuleV4[2].prefix: " << resp2->metadataV4->module[2]->prefix << endl;
-        cout << "ModuleV4[3].prefix: " << resp2->metadataV4->module[3]->prefix << endl;
         cout << "..." << endl;
     }
     if (resp2->metadataV5) {

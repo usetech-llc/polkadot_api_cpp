@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#include "libs/int128/int128.h"
+typedef absl::uint128 uint128;
+
 // Include structs
 #include "structs/responsebase.h"
 #include "structs/systeminfo.h"

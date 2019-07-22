@@ -18,6 +18,6 @@ uint8_t nextByte(string &stream);
 string extractString(string &stream, int len);
 CompactInteger decodeCompactInteger(string &stream);
 
-CompactIntegerLEBytes encodeCompactInteger(unsigned __int128 n);
+CompactIntegerLEBytes encodeCompactInteger(uint128 n);
 long writeCompactToBuf(CompactIntegerLEBytes ci, uint8_t *buf);
 } // namespace scale

@@ -47,3 +47,6 @@ install_manifest.txt
 
 # logs
 *.log
+
+# local config file
+config.json

@@ -6,3 +6,5 @@ const string CConstants::certificate_file("ca-chain.cert.pem");
 
 // delay for system_health call (mircoseconds)
 const long CConstants::health_check_delay_time = 15000000;
+
+const string CConstants::config_file("config.json");
