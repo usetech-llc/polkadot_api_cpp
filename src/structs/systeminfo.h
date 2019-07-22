@@ -24,3 +24,46 @@ struct PeerInfo {
 struct PeersInfo {
     PeerInfo peers[COLLECTION_SIZE * STRING_SIZE];
 };
+
+struct Endpoint {
+    char dialing[STRING_SIZE];
+};
+
+struct ConnectedPeerTime {
+    unsigned long nanos;
+    unsigned long secs;
+};
+
+struct ConnectedPeerInfo {
+    bool enabled;
+    Endpoint endpoint;
+    char knownAddresses[COLLECTION_SIZE][STRING_SIZE];
+    ConnectedPeerTime latestPingTime;
+    bool open;
+    char versionString[STRING_SIZE];
+};
+
+struct NotConnectedPeerInfo {
+    char knownAddresses[COLLECTION_SIZE][STRING_SIZE];
+};
+
+struct ConnectedPeer {
+    char key[STRING_SIZE];
+    ConnectedPeerInfo connectedPeerInfo;
+};
+
+struct NotConnectedPeer {
+    char key[STRING_SIZE];
+    NotConnectedPeerInfo notConnectedPeerInfo;
+};
+
+struct NetworkState {
+    unsigned int AverageDownloadPerSec;
+    unsigned int AverageUploadPerSec;
+    ConnectedPeer connectedPeers[COLLECTION_SIZE];
+    char externalAddresses[COLLECTION_SIZE][STRING_SIZE];
+    char listenedAddresses[COLLECTION_SIZE][STRING_SIZE];
+    NotConnectedPeer notConnectedPeers[COLLECTION_SIZE];
+    char peerId[STRING_SIZE];
+    char peerset[STRING_SIZE];
+};

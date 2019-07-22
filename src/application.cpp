@@ -343,13 +343,83 @@ unique_ptr<SystemHealth> CPolkaApi::createSystemHealth(Json jsonObject) {
     memset(result, 0, sizeof(SystemHealth));
     unique_ptr<SystemHealth> sh(result);
 
-    // cout << endl<< endl<< endl << jsonObject.dump()     << endl<< endl<< endl<< endl;
-
     sh->peers = jsonObject["peers"].int_value();
     sh->isSyncing = jsonObject["isSyncing"].bool_value();
     sh->shouldHavePeers = jsonObject["shouldHavePeers"].bool_value();
 
     return sh;
+}
+
+unique_ptr<NetworkState> CPolkaApi::createNetworkState(Json jsonObject) {
+    NetworkState *result = new NetworkState();
+    memset(result, 0, sizeof(NetworkState));
+    unique_ptr<NetworkState> ns(result);
+
+    ns->AverageDownloadPerSec = jsonObject["averageDownloadPerSec"].int_value();
+    ns->AverageUploadPerSec = jsonObject["averageUploadPerSec"].int_value();
+
+    // parse items as map<string, Json>
+    int i = 0;
+    for (auto const &item : jsonObject["connectedPeers"].object_items()) {
+
+        strcpy(ns->connectedPeers[i].key, item.first.c_str());
+        ns->connectedPeers[i].connectedPeerInfo.enabled = item.second["enabled"].bool_value();
+
+        // endpoint -> dealing
+        Endpoint ep;
+        strcpy(ep.dialing, item.second["dialing"].string_value().c_str());
+        ns->connectedPeers[i].connectedPeerInfo.endpoint = ep;
+
+        // knownAddresses
+        int kai = 0;
+        for (Json kaitem : item.second["knownAddresses"].array_items()) {
+            strcpy(ns->connectedPeers[i].connectedPeerInfo.knownAddresses[kai], kaitem.string_value().c_str());
+            kai++;
+        }
+
+        // latestPingTime
+        ConnectedPeerTime cpt;
+        cpt.nanos = item.second["latestPingTime"]["nanos"].int_value();
+        cpt.secs = item.second["latestPingTime"]["secs"].int_value();
+        ns->connectedPeers[i].connectedPeerInfo.latestPingTime = cpt;
+
+        ns->connectedPeers[i].connectedPeerInfo.open = item.second["open"].bool_value();
+
+        strcpy(ns->connectedPeers[i].connectedPeerInfo.versionString,
+               item.second["versionString"].string_value().c_str());
+
+        i++;
+    }
+
+    i = 0;
+    for (Json item : jsonObject["externalAddresses"].array_items()) {
+        strcpy(ns->externalAddresses[i], item.string_value().c_str());
+        i++;
+    }
+
+    i = 0;
+    for (Json item : jsonObject["listenedAddresses"].array_items()) {
+        strcpy(ns->listenedAddresses[i], item.string_value().c_str());
+        i++;
+    }
+
+    i = 0;
+    for (auto const &item : jsonObject["notConnectedPeers"].object_items()) {
+
+        strcpy(ns->notConnectedPeers[i].key, item.first.c_str());
+
+        // knownAddresses
+        int kai = 0;
+        for (Json kaitem : item.second["knownAddresses"].array_items()) {
+            strcpy(ns->notConnectedPeers[i].notConnectedPeerInfo.knownAddresses[kai], kaitem.string_value().c_str());
+            kai++;
+        }
+    }
+
+    strcpy(ns->peerId, jsonObject["peerId"].string_value().c_str());
+    strcpy(ns->peerset, jsonObject["peerset"].string_value().c_str());
+
+    return ns;
 }
 
 unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
@@ -381,7 +451,6 @@ unique_ptr<PeersInfo> CPolkaApi::createPeerInfo(Json jsonObject) {
         strcpy(pi->peers[i].peerId, item["peerId"].string_value().c_str());
         pi->peers[i].protocolVersion = item["protocolVersion"].int_value();
         strcpy(pi->peers[i].roles, item["roles"].string_value().c_str());
-
         i++;
     }
 
@@ -473,6 +542,15 @@ unique_ptr<PeersInfo> CPolkaApi::getSystemPeers() {
     Json response = _jsonRpc->request(query);
 
     return move(deserialize<PeersInfo, &CPolkaApi::createPeerInfo>(response));
+}
+
+unique_ptr<NetworkState> CPolkaApi::getNetworkState() {
+
+    Json query = Json::object{{"method", "system_networkState"}, {"params", Json::array()}};
+
+    Json response = _jsonRpc->request(query);
+
+    return move(deserialize<NetworkState, &CPolkaApi::createNetworkState>(response));
 }
 
 unsigned long CPolkaApi::getAccountNonce(string address) {

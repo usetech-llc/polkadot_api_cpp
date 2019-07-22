@@ -94,6 +94,13 @@ public:
     virtual unique_ptr<BlockHeader> getBlockHeader(unique_ptr<GetBlockParams> params) = 0;
 
     /**
+     * Returns current state of the network
+     *
+     * @return NetworkState struct with result
+     */
+    virtual unique_ptr<NetworkState> getNetworkState() = 0;
+
+    /**
      * Get hash of the last finalized block in the chain
      *
      * @return FinalHead struct with result

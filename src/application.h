@@ -46,6 +46,7 @@ private:
     unique_ptr<FinalHead> createFinalHead(Json jsonObject);
     unique_ptr<SystemHealth> createSystemHealth(Json jsonObject);
     unique_ptr<PeersInfo> createPeerInfo(Json jsonObject);
+    unique_ptr<NetworkState> createNetworkState(Json jsonObject);
     template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> deserialize(Json jsonObject);
     Hasher getFuncHasher(unique_ptr<Metadata> &meta, const string &moduleName, const string &funcName);
     int getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleName, bool skipZeroCalls);
@@ -88,6 +89,7 @@ public:
     virtual unique_ptr<FinalHead> getFinalizedHead();
     virtual unique_ptr<SystemHealth> getSystemHealth();
     virtual unique_ptr<PeersInfo> getSystemPeers();
+    virtual unique_ptr<NetworkState> getNetworkState();
     virtual unsigned long getAccountNonce(string address);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, unsigned __int128 amount,
