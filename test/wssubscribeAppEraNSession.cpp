@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     assert(currentEra > 0);
     assert(sessionIndex > 0);
     assert(eraProgress > 0);
-    assert(sessionProgress > 0);
+    assert(sessionProgress >= 0);
 
     // Unsubscribe and close connection
     app.unsubscribeEraAndSession();
