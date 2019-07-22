@@ -288,7 +288,8 @@ unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
     unique_ptr<SignedBlock> sb(result);
 
     strcpy(sb->block.header.parentHash, jsonObject["block"]["header"]["parentHash"].string_value().c_str());
-    sb->block.header.number = (unsigned long long) atoi128(jsonObject["block"]["header"]["parentHash"].string_value().substr(2).c_str());
+    sb->block.header.number =
+        (unsigned long long)atoi128(jsonObject["block"]["header"]["parentHash"].string_value().substr(2).c_str());
     strcpy(sb->block.header.stateRoot, jsonObject["block"]["header"]["stateRoot"].string_value().c_str());
     strcpy(sb->block.header.extrinsicsRoot, jsonObject["block"]["header"]["extrinsicsRoot"].string_value().c_str());
 
@@ -316,7 +317,7 @@ unique_ptr<BlockHeader> CPolkaApi::createBlockHeader(Json jsonObject) {
     unique_ptr<BlockHeader> bh(result);
 
     strcpy(bh->parentHash, jsonObject["parentHash"].string_value().c_str());
-    bh->number = (unsigned long long) atoi128(jsonObject["parentHash"].string_value().substr(2).c_str());
+    bh->number = (unsigned long long)atoi128(jsonObject["parentHash"].string_value().substr(2).c_str());
     strcpy(bh->stateRoot, jsonObject["stateRoot"].string_value().c_str());
     strcpy(bh->extrinsicsRoot, jsonObject["extrinsicsRoot"].string_value().c_str());
 
