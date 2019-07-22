@@ -4,6 +4,8 @@ The easiest way to build this API library for RaspberryPi is to cross-compile sr
 
 1. Clone this fork of sr25519-crust: https://github.com/usetech-llc/sr25519-crust and follow build instructions in it. Copy built files to RPI
 
+If you are using RaspberryPi 3, you can use pre-built binaries: https://github.com/usetech-llc/sr25519-crust/releases/tag/RaspberryPi
+
 2. Install latest cmake on RPI:
 ```
 git clone https://github.com/Kitware/cmake && cd cmake
