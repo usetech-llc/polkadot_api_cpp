@@ -462,7 +462,7 @@ unique_ptr<PeersInfo> CPolkaApi::createPeerInfo(Json jsonObject) {
     for (Json item : items) {
 
         strcpy(pi->peers[i].bestHash, item["bestHash"].string_value().c_str());
-        pi->peers[i].bestNumber = item["betNumber"].int_value();
+        pi->peers[i].bestNumber = item["bestNumber"].int_value();
         strcpy(pi->peers[i].peerId, item["peerId"].string_value().c_str());
         pi->peers[i].protocolVersion = item["protocolVersion"].int_value();
         strcpy(pi->peers[i].roles, item["roles"].string_value().c_str());
