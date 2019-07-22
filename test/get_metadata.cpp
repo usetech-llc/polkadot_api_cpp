@@ -33,12 +33,19 @@ int main(int argc, char *argv[]) {
         resp2 = app.getMetadata(nullptr);
     app.disconnect();
 
-    assert(resp2->metadataV0 != nullptr || resp2->metadataV5 != nullptr || resp2->metadataV6 != nullptr);
+    assert(resp2->metadataV0 != nullptr || resp2->metadataV4 != nullptr || resp2->metadataV5 != nullptr  || resp2->metadataV6 != nullptr);
     cout << endl << "--- Received metadata ---" << endl;
     if (resp2->metadataV0) {
         cout << "OuterEventWrapperV0.name: " << resp2->metadataV0->oew->name << endl;
         cout << "ModuleV0[0].prefix: " << resp2->metadataV0->module[0]->prefix << endl;
         cout << "ModuleV0[1].prefix: " << resp2->metadataV0->module[1]->prefix << endl;
+        cout << "..." << endl;
+    }
+    if (resp2->metadataV4) {
+        cout << "ModuleV4[0].prefix: " << resp2->metadataV4->module[0]->prefix << endl;
+        cout << "ModuleV4[1].prefix: " << resp2->metadataV4->module[1]->prefix << endl;
+        cout << "ModuleV4[2].prefix: " << resp2->metadataV4->module[2]->prefix << endl;
+        cout << "ModuleV4[3].prefix: " << resp2->metadataV4->module[3]->prefix << endl;
         cout << "..." << endl;
     }
     if (resp2->metadataV5) {
