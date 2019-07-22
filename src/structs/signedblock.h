@@ -43,7 +43,7 @@ struct DigestItem {
 
 struct BlockHeader {
     char parentHash[STRING_SIZE];
-    long number;
+    unsigned long long number;
     char stateRoot[STRING_SIZE];
     char extrinsicsRoot[STRING_SIZE];
     DigestItem digest[COLLECTION_SIZE];
