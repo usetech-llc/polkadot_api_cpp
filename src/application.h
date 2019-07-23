@@ -17,6 +17,7 @@ typedef struct ProtocolParameters {
     int BalanceModuleIndex;
     int TransferMethodIndex;
     uint8_t GenesisBlockHash[BLOCK_HASH_SIZE];
+    unique_ptr<Metadata> metadata;
 } ProtocolParameters;
 
 typedef struct SubscriptionUpdate {

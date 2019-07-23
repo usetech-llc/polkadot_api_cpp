@@ -29,12 +29,12 @@ int CPolkaApi::connect(string node_url) {
     }
 
     // 3. Read metadata for head block and initialize protocol parameters
-    auto mdresp = getMetadata(nullptr);
-    _protocolPrm.FreeBalanceHasher = getFuncHasher(mdresp, string("Balances"), string("FreeBalance"));
+    _protocolPrm.metadata = getMetadata(nullptr);
+    _protocolPrm.FreeBalanceHasher = getFuncHasher(_protocolPrm.metadata, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
-    _protocolPrm.BalanceModuleIndex = 3; // getModuleIndex(mdresp, string("Balances"), true);
-    _protocolPrm.TransferMethodIndex =
-        getCallMethodIndex(mdresp, getModuleIndex(mdresp, string("Balances"), false), string("transfer"));
+    _protocolPrm.BalanceModuleIndex = 3; // getModuleIndex(_protocolPrm.metadata, string("Balances"), true);
+    _protocolPrm.TransferMethodIndex = getCallMethodIndex(
+        _protocolPrm.metadata, getModuleIndex(_protocolPrm.metadata, string("Balances"), false), string("transfer"));
 
     if (_protocolPrm.FreeBalanceHasher == XXHASH)
         _logger->info("FreeBalance hash function is xxHash");
@@ -451,8 +451,9 @@ unique_ptr<PeersInfo> CPolkaApi::createPeerInfo(Json jsonObject) {
     pi->count = items.size();
 
     // Too many peers exception
-    if (pi->count > MAX_PEER_COUNT){
-        auto message = "Number of records exceeded " + to_string(MAX_PEER_COUNT) + "actual value: " + to_string(pi->count);
+    if (pi->count > MAX_PEER_COUNT) {
+        auto message =
+            "Number of records exceeded " + to_string(MAX_PEER_COUNT) + "actual value: " + to_string(pi->count);
         _logger->error(message);
         throw ApplicationException(message);
         return nullptr;
