@@ -34,15 +34,19 @@ TBD
 
 state_getKeys
 ```
-TBD
+bin/get_keys
 ```
 
 state_getStorage
 ```
-TBD
+bin/get_storage
 ```
 
 state_getStorageHash
+```
+bin/get_storage_hash
+```
+
 state_getStorageSize
 state_getChildKeys
 state_getChildStorage
