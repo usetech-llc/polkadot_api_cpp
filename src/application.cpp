@@ -650,6 +650,21 @@ string CPolkaApi::getStorageHash(const string &jsonPrm, const string &module, co
     return retval;
 }
 
+int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const string &variable) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    string key = getKeys(jsonPrm, module, variable);
+    Json query = Json::object{{"method", "state_getStorageSize"}, {"params", Json::array{key, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return atoi(retval.c_str());
+}
+
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
     // TODO: DOT-55, fix with proper producer-consumer

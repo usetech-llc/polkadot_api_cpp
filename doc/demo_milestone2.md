@@ -28,9 +28,10 @@ bin/get_blockfinalhead_ok
 ```
 
 state_call
-```
-TBD
-```
+The method is available in API (just in case), but without test. Per Gavin on July 23 2019:
+"it's probably fine to omit it for now, yeah.
+if anyone wanted to make a parachain collator in c++, then it could be useful since you'd need it to query consensus stuff
+but it's not especially useful for general applications"
 
 state_getKeys
 ```
@@ -48,6 +49,10 @@ bin/get_storage_hash
 ```
 
 state_getStorageSize
+```
+bin/get_storage_size
+```
+
 state_getChildKeys
 state_getChildStorage
 state_getChildStorageHash
@@ -70,4 +75,22 @@ bin/get_systempeers_ok
 system_networkState
 ```
 bin/get_system_networkstate_ok
+```
+
+## Deliverable 4 - Expanded Support of Transactions
+
+### Support following RPC methods
+
+author_submitExtrinsic
+author_pendingExtrinsics
+author_removeExtrinsic
+```
+TBD
+```
+
+### Support following WebSocket subscriptions
+
+author_extrinsicUpdate
+```
+TBD
 ```

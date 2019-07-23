@@ -180,7 +180,7 @@ public:
     virtual string getStorage(const string &jsonPrm, const string &module, const string &variable) = 0;
 
     /**
-     *  Returns hash of the block that stores given State Variable for a given Module defined by parameter and prefix.
+     *  Returns storage hash of given State Variable for a given Module defined by parameter.
      * Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type
      * should be one of type strings defined above. Value should correspond to the type. Example:
      *
@@ -194,6 +194,22 @@ public:
      * @param variable - state variable (as in metadata for given module)
      */
     virtual string getStorageHash(const string &jsonPrm, const string &module, const string &variable) = 0;
+
+    /**
+     *  Returns storage size for a given State Variable for a given Module defined by parameter.
+     * Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type
+     * should be one of type strings defined above. Value should correspond to the type. Example:
+     *
+     *    {"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}
+     *
+     *   Information about Modules and State variables (with parameters and their types) is returned by getMetadata
+     * method.
+     *
+     * @param jsonPrm - JSON string that contains parameter and its type
+     * @param module - module (as in metadata)
+     * @param variable - state variable (as in metadata for given module)
+     */
+    virtual int getStorageSize(const string &jsonPrm, const string &module, const string &variable) = 0;
 
     /**
      *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once transaction is
