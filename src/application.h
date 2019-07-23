@@ -54,6 +54,7 @@ private:
     int getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
     int getStorageMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
     bool hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex);
+    bool isStateVariablePlain(unique_ptr<Metadata> &meta, const int moduleIndex, const int varIndex);
 
     ProtocolParameters _protocolPrm;
     long long _bestBlockNum;
@@ -92,6 +93,9 @@ public:
     virtual unique_ptr<PeersInfo> getSystemPeers();
     virtual unique_ptr<NetworkState> getNetworkState();
     virtual unsigned long getAccountNonce(string address);
+    virtual string getKeys(const string &jsonPrm, const string &module, const string &variable);
+    virtual string getStorage(const string &jsonPrm, const string &module, const string &variable);
+    virtual string getStorageHash(const string &jsonPrm, const string &module, const string &variable);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);

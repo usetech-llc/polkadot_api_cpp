@@ -57,3 +57,54 @@ string StorageUtils::getAddressStorageKey(const Hasher hasher, const Address &ad
 string StorageUtils::getAddressStorageKey(const Hasher hasher, const Address &address, const char *prefix) {
     return getAddressStorageKey(hasher, address, string(prefix));
 }
+
+string StorageUtils::getMappedStorageKey(const Hasher hasher, const string &jsonPrm, const string &prefix) {
+
+    // Parse parameters
+    Json json;
+    try {
+        string err;
+        json = Json::parse(jsonPrm, err);
+
+        if (err.length() > 0) {
+            throw ApplicationException(string("Invalid parameter string: ") + err);
+        }
+    } catch (ApplicationException) {
+        throw;
+    } catch (std::exception &e) {
+        throw ApplicationException(string("Invalid parameter string was provided. Should be a JSON string and have two "
+                                          "fields: type and value. Provided: ") +
+                                   jsonPrm);
+    }
+
+    string type(json["type"].string_value());
+    if (type == STORAGE_TYPE_ADDRESS) {
+        Address addr;
+        memcpy(addr.symbols, json["value"].string_value().c_str(), ADDRESS_LENGTH);
+        return getAddressStorageKey(hasher, addr, prefix);
+    } else if ((type == STORAGE_TYPE_BLOCK_NUMBER) || (type == STORAGE_TYPE_U32) ||
+               (type == STORAGE_TYPE_ACCOUNT_INDEX) || (type == STORAGE_TYPE_PROPOSAL_INDEX) ||
+               (type == STORAGE_TYPE_REFERENDUM_INDEX) || (type == STORAGE_TYPE_PARACHAIN_ID)) {
+        char data[128] = {0};
+        sprintf(data, "%s%s", prefix.c_str(), json["value"].string_value().c_str());
+        return getStorageKey(hasher, (const unsigned char *)data, strlen(data));
+    } else if (type == STORAGE_TYPE_HASH) {
+        char data[256] = {0};
+        sprintf(data, "%s%s", prefix.c_str(), json["value"].string_value().c_str());
+        return getStorageKey(hasher, (const unsigned char *)data, strlen(data));
+    }
+
+    throw ApplicationException(string("Invalid parameter type: ") + json["type"].string_value());
+}
+
+string StorageUtils::getMappedStorageKey(const Hasher hasher, const char *jsonPrm, const char *prefix) {
+    return getMappedStorageKey(hasher, string(jsonPrm), string(prefix));
+}
+
+string StorageUtils::getPlainStorageKey(const Hasher hasher, const string &prefix) {
+    return getStorageKey(hasher, (const unsigned char *)prefix.c_str(), prefix.length());
+}
+
+string StorageUtils::getPlainStorageKey(const Hasher hasher, const char *prefix) {
+    return getPlainStorageKey(hasher, string(prefix));
+}

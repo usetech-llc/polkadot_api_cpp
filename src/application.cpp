@@ -187,16 +187,30 @@ bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
         if (meta->metadataV0 && meta->metadataV0->module[i]) {
             if (strlen(meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name))
                 return true;
-        } else if (meta->metadataV4 && meta->metadataV4->module[i]) {
+        } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
             return (meta->metadataV4->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV5 && meta->metadataV5->module[i]) {
+        } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
             return (meta->metadataV5->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
+        } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
             return (meta->metadataV6->module[moduleIndex]->call[i] != nullptr);
         }
     }
 
     return false;
+}
+
+bool CPolkaApi::isStateVariablePlain(unique_ptr<Metadata> &meta, const int moduleIndex, const int varIndex) {
+    if (meta->metadataV0 && meta->metadataV0->module[moduleIndex]) {
+        return (meta->metadataV0->module[moduleIndex]->storage.function[varIndex].type[0].typeName == 0);
+    } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
+        return (meta->metadataV4->module[moduleIndex]->storage[varIndex]->type.type == 0);
+    } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
+        return (meta->metadataV5->module[moduleIndex]->storage[varIndex]->type.type == 0);
+    } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
+        return (meta->metadataV6->module[moduleIndex]->storage[varIndex]->type.type == 0);
+    }
+    throw ApplicationException(string("Module + State variable not found: ") + to_string(moduleIndex) + ":" +
+                               to_string(varIndex));
 }
 
 void CPolkaApi::disconnect() { _jsonRpc->disconnect(); }
@@ -213,7 +227,6 @@ template <typename T, unique_ptr<T> (CPolkaApi::*F)(Json)> unique_ptr<T> CPolkaA
         string errstr("Cannot deserialize data ");
         _logger->error(errstr + e.what());
         throw ApplicationException(errstr + e.what());
-        return nullptr;
     }
 }
 
@@ -585,6 +598,56 @@ unsigned long CPolkaApi::getAccountNonce(string address) {
     unsubscribeAccountNonce(address);
 
     return result;
+}
+
+string CPolkaApi::getKeys(const string &jsonPrm, const string &module, const string &variable) {
+    // Determine if parameters are required for given module + variable
+    // Find the module and variable indexes in metadata
+    int moduleIndex = getModuleIndex(_protocolPrm.metadata, module, false);
+    if (moduleIndex == -1)
+        throw ApplicationException("Module not found");
+    int variableIndex = getStorageMethodIndex(_protocolPrm.metadata, moduleIndex, variable);
+    if (variableIndex == -1)
+        throw ApplicationException("Variable not found");
+
+    string key;
+    if (isStateVariablePlain(_protocolPrm.metadata, moduleIndex, variableIndex)) {
+        key = StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, module + " " + variable);
+    } else {
+        key = StorageUtils::getMappedStorageKey(_protocolPrm.FreeBalanceHasher, jsonPrm, module + " " + variable);
+    }
+    return key;
+}
+
+string CPolkaApi::getStorage(const string &jsonPrm, const string &module, const string &variable) {
+
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    string key = getKeys(jsonPrm, module, variable);
+    Json query = Json::object{{"method", "state_getStorage"}, {"params", Json::array{key, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+string CPolkaApi::getStorageHash(const string &jsonPrm, const string &module, const string &variable) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    string key = getKeys(jsonPrm, module, variable);
+    Json query = Json::object{{"method", "state_getStorageHash"}, {"params", Json::array{key, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
 }
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
