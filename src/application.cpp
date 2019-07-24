@@ -32,7 +32,7 @@ int CPolkaApi::connect(string node_url) {
     _protocolPrm.metadata = getMetadata(nullptr);
     _protocolPrm.FreeBalanceHasher = getFuncHasher(_protocolPrm.metadata, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
-    _protocolPrm.BalanceModuleIndex = 3; // getModuleIndex(_protocolPrm.metadata, string("Balances"), true);
+    _protocolPrm.BalanceModuleIndex = getModuleIndex(_protocolPrm.metadata, string("Balances"), true);
     _protocolPrm.TransferMethodIndex = getCallMethodIndex(
         _protocolPrm.metadata, getModuleIndex(_protocolPrm.metadata, string("Balances"), false), string("transfer"));
 
@@ -181,19 +181,15 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
 }
 
 bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
-    for (int i = 0; i < COLLECTION_SIZE; ++i) {
-
-        // Check call methods
-        if (meta->metadataV0 && meta->metadataV0->module[i]) {
-            if (strlen(meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name))
-                return true;
-        } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
-            return (meta->metadataV4->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
-            return (meta->metadataV5->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
-            return (meta->metadataV6->module[moduleIndex]->call[i] != nullptr);
-        }
+    // Check call methods
+    if (meta->metadataV0) {
+        throw ApplicationException(string("Metadata V0 is obsolete and should not be used for module index search"));
+    } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
+        return (meta->metadataV4->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
+        return (meta->metadataV5->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
+        return (meta->metadataV6->module[moduleIndex]->call[0] != nullptr);
     }
 
     return false;
