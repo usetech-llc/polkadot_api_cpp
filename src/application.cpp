@@ -182,8 +182,8 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
 
 bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
     // Check call methods
-    if (meta->metadataV0) {
-        throw ApplicationException(string("Metadata V0 is obsolete and should not be used for module index search"));
+    if (meta->metadataV0 && meta->metadataV0->module[moduleIndex]) {
+        return (strlen(meta->metadataV0->module[moduleIndex]->storage.function[0].name) > 0);
     } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
         return (meta->metadataV4->module[moduleIndex]->call[0] != nullptr);
     } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
@@ -659,6 +659,73 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     if (retval[0] == '\"')
         retval = retval.substr(1, retval.length() - 2);
     return atoi(retval.c_str());
+}
+
+string CPolkaApi::getChildKeys(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildKeys"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+string CPolkaApi::getChildStorage(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorage"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+string CPolkaApi::getChildStorageHash(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorageHash"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+int CPolkaApi::getChildStorageSize(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorageSize"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return atoi(retval.c_str());
+}
+
+string CPolkaApi::stateCall(const string &name, const string &data, const string &hash) {
+    Json query = Json::object{{"method", "state_call"}, {"params", Json::array{name, data, hash}}};
+    Json response = _jsonRpc->request(query);
+
+    return response.dump();
 }
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {

@@ -57,6 +57,12 @@ state_getChildKeys
 state_getChildStorage
 state_getChildStorageHash
 state_getChildStorageSize
+
+Currently these methods are not available. The node returns error: {"code":-32601,"message":"Method not found"}. We implemented them with hex-string child storage key and storage key parameters and they will return string response as is from the RPC call, but there are no concrete examples in unit tests since none of them would work anyway.
+```
+bin/get_child_storage
+```
+
 state_queryStorage
 ```
 TBD

@@ -97,6 +97,11 @@ public:
     virtual string getStorage(const string &jsonPrm, const string &module, const string &variable);
     virtual string getStorageHash(const string &jsonPrm, const string &module, const string &variable);
     virtual int getStorageSize(const string &jsonPrm, const string &module, const string &variable);
+    virtual string getChildKeys(const string &childStorageKey, const string &storageKey);
+    virtual string getChildStorage(const string &childStorageKey, const string &storageKey);
+    virtual string getChildStorageHash(const string &childStorageKey, const string &storageKey);
+    virtual int getChildStorageSize(const string &childStorageKey, const string &storageKey);
+    virtual string stateCall(const string &name, const string &data, const string &hash);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);

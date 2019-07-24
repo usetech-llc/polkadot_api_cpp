@@ -212,6 +212,52 @@ public:
     virtual int getStorageSize(const string &jsonPrm, const string &module, const string &variable) = 0;
 
     /**
+     *  Calls storage_getChildKeys RPC method with given child storage key and storage key
+     *
+     * @param childStorageKey - string with 0x prefixed child storage key hex value
+     * @param storageKey - string with 0x prefixed storage key hex value
+     * @return string response from RPC method
+     */
+    virtual string getChildKeys(const string &childStorageKey, const string &storageKey) = 0;
+
+    /**
+     *  Calls storage_getChildStorage RPC method with given child storage key and storage key
+     *
+     * @param childStorageKey - string with 0x prefixed child storage key hex value
+     * @param storageKey - string with 0x prefixed storage key hex value
+     * @return string response from RPC method
+     */
+    virtual string getChildStorage(const string &childStorageKey, const string &storageKey) = 0;
+
+    /**
+     *  Calls storage_getChildStorageHash RPC method with given child storage key and storage key
+     *
+     * @param childStorageKey - string with 0x prefixed child storage key hex value
+     * @param storageKey - string with 0x prefixed storage key hex value
+     * @return string response from RPC method
+     */
+    virtual string getChildStorageHash(const string &childStorageKey, const string &storageKey) = 0;
+
+    /**
+     *  Calls storage_getChildStorageSize RPC method with given child storage key and storage key
+     *
+     * @param childStorageKey - string with 0x prefixed child storage key hex value
+     * @param storageKey - string with 0x prefixed storage key hex value
+     * @return int response from RPC method
+     */
+    virtual int getChildStorageSize(const string &childStorageKey, const string &storageKey) = 0;
+
+    /**
+     *  Calls state_call RPC method
+     *
+     * @param name - name of call
+     * @param data - hex encoded data with 0x prefix
+     * @param hash - hex encoded block hash with 0x prefix
+     * @return string raw RPC call return
+     */
+    virtual string stateCall(const string &name, const string &data, const string &hash) = 0;
+
+    /**
      *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once transaction is
      * accepted, the callback will be called with parameter "ready". Once completed, the callback will be called with
      * completion result string equal to "finalized".
