@@ -1,3 +1,21 @@
+
+struct FunctionCallArgV4 {
+    char name[STRING_SIZE];
+    char type[STRING_SIZE];
+};
+
+struct EventArgV4 {
+    char name[STRING_SIZE];
+    char args[COLLECTION_SIZE][STRING_SIZE];
+    char documentation[COLLECTION_SIZE][STRING_SIZE];
+};
+
+struct CallV4 {
+    char name[STRING_SIZE];
+    FunctionCallArgV4 args[STRING_SIZE];
+    char documentation[COLLECTION_SIZE][STRING_SIZE];
+};
+
 struct FuncTypeV4 {
     // 0 - plain, 1 - map
     unsigned int type;
@@ -19,8 +37,8 @@ struct ModuleV4 {
     char name[STRING_SIZE];
     char prefix[STRING_SIZE];
     unique_ptr<StorageV4> storage[COLLECTION_SIZE];
-    unique_ptr<CallV5> call[COLLECTION_SIZE];
-    unique_ptr<EventArgV5> ev[COLLECTION_SIZE];
+    unique_ptr<CallV4> call[COLLECTION_SIZE];
+    unique_ptr<EventArgV4> ev[COLLECTION_SIZE];
 };
 
 struct MDV4 {

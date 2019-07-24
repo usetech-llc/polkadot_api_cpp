@@ -200,6 +200,64 @@ unique_ptr<MDV0> fillV0Metadata(string str) {
     return move(md);
 };
 
+//--------------------------- V4
+
+unique_ptr<CallV4> getCallV4(std::string &str) {
+
+    unique_ptr<CallV4> call(new CallV4);
+
+    int callNameLen = decodeCompactInteger(str);
+    strcpy(call->name, extractString(str, callNameLen).c_str());
+
+    // args count
+    int args = decodeCompactInteger(str);
+    for (int i = 0; i < args; i++) {
+        FunctionCallArgV4 arg;
+
+        int argNameLen = decodeCompactInteger(str);
+        strcpy(arg.name, extractString(str, argNameLen).c_str());
+
+        int argTypeLen = decodeCompactInteger(str);
+        strcpy(arg.type, extractString(str, argTypeLen).c_str());
+        call->args[i] = move(arg);
+    }
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(call->documentation[di], docItem.c_str());
+    }
+
+    return move(call);
+};
+
+unique_ptr<EventArgV4> getEventV4(std::string &str) {
+
+    unique_ptr<EventArgV4> ea(new EventArgV4);
+
+    int callNameLen = decodeCompactInteger(str);
+    strcpy(ea->name, extractString(str, callNameLen).c_str());
+
+    // args count
+    int args = decodeCompactInteger(str);
+    for (int i = 0; i < args; i++) {
+        int argLen = decodeCompactInteger(str);
+        strcpy(ea->args[i], extractString(str, argLen).c_str());
+    }
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(ea->documentation[di], docItem.c_str());
+    }
+
+    return move(ea);
+}
+
 //--------------------------- V5
 
 unique_ptr<StorageV5> getStorageV5(std::string &str) {
@@ -294,6 +352,122 @@ unique_ptr<CallV5> getCallV5(std::string &str) {
 unique_ptr<EventArgV5> getEventV5(std::string &str) {
 
     unique_ptr<EventArgV5> ea(new EventArgV5);
+
+    int callNameLen = decodeCompactInteger(str);
+    strcpy(ea->name, extractString(str, callNameLen).c_str());
+
+    // args count
+    int args = decodeCompactInteger(str);
+    for (int i = 0; i < args; i++) {
+        int argLen = decodeCompactInteger(str);
+        strcpy(ea->args[i], extractString(str, argLen).c_str());
+    }
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(ea->documentation[di], docItem.c_str());
+    }
+
+    return move(ea);
+}
+
+//--------------------------- V6
+
+unique_ptr<StorageV6> getStorageV6(std::string &str) {
+
+    unique_ptr<StorageV6> storage(new StorageV6);
+
+    int storageNameLen = decodeCompactInteger(str);
+    strcpy(storage->name, extractString(str, storageNameLen).c_str());
+
+    storage->modifier = nextByte(str);
+    auto hasSecondType = nextByte(str);
+
+    storage->type.type = hasSecondType != 0 ? nextByte(str) : 0;
+
+    int type1Len = decodeCompactInteger(str);
+    auto type1 = extractString(str, type1Len);
+    strcpy(storage->type.key1, type1.c_str());
+
+    // map
+    if (hasSecondType == 1) {
+        // get value
+        int valLen = decodeCompactInteger(str);
+        auto value = extractString(str, valLen);
+        strcpy(storage->type.value, value.c_str());
+    }
+
+    // double map
+    if (hasSecondType == 2) {
+        // get second key
+        int type2Len = decodeCompactInteger(str);
+        auto type2 = extractString(str, type2Len);
+        strcpy(storage->type.value, type2.c_str());
+
+        // get value
+        int valLen = decodeCompactInteger(str);
+        auto value = extractString(str, valLen);
+        strcpy(storage->type.value, value.c_str());
+    }
+
+    if (hasSecondType != 0) {
+        storage->type.isLinked = nextByte(str);
+    }
+
+    // extract fallback as raw hex
+    auto fallbackLen = decodeCompactInteger(str);
+    auto fallback = str.substr(0, fallbackLen * 2);
+    str = str.substr(fallbackLen * 2);
+    strcpy(storage->fallback, fallback.c_str());
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(storage->documentation[di], docItem.c_str());
+    }
+
+    return move(storage);
+}
+
+unique_ptr<CallV6> getCallV6(std::string &str) {
+
+    unique_ptr<CallV6> call(new CallV6);
+
+    int callNameLen = decodeCompactInteger(str);
+    strcpy(call->name, extractString(str, callNameLen).c_str());
+
+    // args count
+    int args = decodeCompactInteger(str);
+    for (int i = 0; i < args; i++) {
+        FunctionCallArgV6 arg;
+
+        int argNameLen = decodeCompactInteger(str);
+        strcpy(arg.name, extractString(str, argNameLen).c_str());
+
+        int argTypeLen = decodeCompactInteger(str);
+        strcpy(arg.type, extractString(str, argTypeLen).c_str());
+        call->args[i] = move(arg);
+    }
+
+    // documents count
+    auto docCount = decodeCompactInteger(str);
+    for (int di = 0; di < docCount; di++) {
+        auto docStringLen = decodeCompactInteger(str);
+        auto docItem = extractString(str, docStringLen);
+        strcpy(call->documentation[di], docItem.c_str());
+    }
+
+    return move(call);
+};
+
+unique_ptr<EventArgV6> getEventV6(std::string &str) {
+
+    unique_ptr<EventArgV6> ea(new EventArgV6);
 
     int callNameLen = decodeCompactInteger(str);
     strcpy(ea->name, extractString(str, callNameLen).c_str());
@@ -445,7 +619,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         if (storageIsset != 0) {
             int storageLen = decodeCompactInteger(str);
             for (int i = 0; i < storageLen; i++) {
-                md->module[moduleIndex]->storage[i] = getStorageV5(str);
+                md->module[moduleIndex]->storage[i] = getStorageV6(str);
             }
         } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
@@ -459,7 +633,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         if (callsIsset != 0) {
             int callsCount = decodeCompactInteger(str);
             for (int i = 0; i < callsCount; i++) {
-                md->module[moduleIndex]->call[i] = getCallV5(str);
+                md->module[moduleIndex]->call[i] = getCallV6(str);
             }
         } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
@@ -473,7 +647,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         if (eventsIsset != 0) {
             int eventsCount = decodeCompactInteger(str);
             for (int i = 0; i < eventsCount; i++) {
-                md->module[moduleIndex]->ev[i] = getEventV5(str);
+                md->module[moduleIndex]->ev[i] = getEventV6(str);
             }
         } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
@@ -574,7 +748,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
         if (callsIsset != 0) {
             int callsCount = decodeCompactInteger(str);
             for (int i = 0; i < callsCount; i++) {
-                md->module[moduleIndex]->call[i] = getCallV5(str);
+                md->module[moduleIndex]->call[i] = getCallV4(str);
             }
         } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
@@ -588,7 +762,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
         if (eventsIsset != 0) {
             int eventsCount = decodeCompactInteger(str);
             for (int i = 0; i < eventsCount; i++) {
-                md->module[moduleIndex]->ev[i] = getEventV5(str);
+                md->module[moduleIndex]->ev[i] = getEventV4(str);
             }
         } else {
             for (int i = 0; i < COLLECTION_SIZE; i++) {
