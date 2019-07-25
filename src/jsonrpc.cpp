@@ -18,7 +18,7 @@ int CJsonRpc::connect(string node_url) {
 
 void CJsonRpc::disconnect() { _wsc->disconnect(); }
 
-Json CJsonRpc::request(Json jsonMap) {
+Json CJsonRpc::request(Json jsonMap, long timeout_s) {
 
     // Generate new request Id and place request in query map
     _queryMtx.lock();
@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -50,7 +53,7 @@ Json CJsonRpc::request(Json jsonMap) {
 
     // Block until a timeout happens or response is received
     std::unique_lock<std::mutex> responseWaitLock(*query.completionMtx);
-    query.completionCV->wait_for(responseWaitLock, std::chrono::seconds(RESPONSE_TIMEOUT_S));
+    query.completionCV->wait_for(responseWaitLock, std::chrono::seconds(timeout_s));
 
     // Move response object and return it
     Json result = move(_queries[query.id].json);

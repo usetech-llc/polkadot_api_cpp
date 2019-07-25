@@ -102,6 +102,8 @@ public:
     virtual string getChildStorageHash(const string &childStorageKey, const string &storageKey);
     virtual int getChildStorageSize(const string &childStorageKey, const string &storageKey);
     virtual string stateCall(const string &name, const string &data, const string &hash);
+    virtual int queryStorage(const string &key, const string &startHash, const string &stopHash, StorageItem *itemBuf,
+                             int itemBufSize);
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);

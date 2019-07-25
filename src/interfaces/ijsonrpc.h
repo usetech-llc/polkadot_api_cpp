@@ -1,3 +1,5 @@
+#define RESPONSE_TIMEOUT_S 10
+
 class IJsonRpc {
 public:
     virtual ~IJsonRpc() {}
@@ -19,9 +21,10 @@ public:
      *  Synchronously send request and wait for result
      *
      * @param jsonMap JSON object with command parameters
+     * @param timeout_s - timeout of response in seconds
      * @return JSON object that contains parsed node response
      */
-    virtual Json request(Json jsonMap) = 0;
+    virtual Json request(Json jsonMap, long timeout_s = RESPONSE_TIMEOUT_S) = 0;
 
     /**
      *  Send a command to subscribe to websocket updates, e.g. state_subscribeStorage

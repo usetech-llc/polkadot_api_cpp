@@ -15,7 +15,7 @@ public:
     virtual ~CMockJsonRpc() override {}
     virtual int connect(string node_url = "") { return 0; }
     virtual void disconnect() {}
-    virtual Json request(Json jsonMap) {
+    virtual Json request(Json jsonMap, long timeout = 10) {
         Json ret;
 
         if (jsonMap["method"] == "chain_getRuntimeVersion") {
@@ -48,7 +48,7 @@ protected:
 public:
     CMockJsonRpcMD0() {}
     virtual ~CMockJsonRpcMD0() override {}
-    virtual Json request(Json jsonMap) {
+    virtual Json request(Json jsonMap, long timeout = 10) {
         Json ret;
 
         if (jsonMap["method"] == "chain_getRuntimeVersion") {
@@ -95,7 +95,7 @@ protected:
 public:
     CMockJsonRpcStateGetHashBlock() {}
     virtual ~CMockJsonRpcStateGetHashBlock() override {}
-    virtual Json request(Json jsonMap) {
+    virtual Json request(Json jsonMap, long timeout = 10) {
         Json ret;
 
         if (jsonMap["method"] == "chain_getBlockHash") {
@@ -124,7 +124,7 @@ protected:
 public:
     CMockJsonRpcSystemInfo() {}
     virtual ~CMockJsonRpcSystemInfo() override {}
-    virtual Json request(Json jsonMap) {
+    virtual Json request(Json jsonMap, long timeout = 10) {
         Json ret;
 
         if (jsonMap["method"] == "system_properties") {

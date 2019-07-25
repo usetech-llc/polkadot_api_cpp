@@ -64,8 +64,10 @@ bin/get_child_storage
 ```
 
 state_queryStorage
+
+This E2E test queries timestamp from last 10 blocks. All timestamps must be different and there should be at least 10 of them.
 ```
-TBD
+bin/query_storage
 ```
 
 system_health

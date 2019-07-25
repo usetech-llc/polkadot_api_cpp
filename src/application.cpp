@@ -297,8 +297,7 @@ unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
     unique_ptr<SignedBlock> sb(result);
 
     strcpy(sb->block.header.parentHash, jsonObject["block"]["header"]["parentHash"].string_value().c_str());
-    sb->block.header.number =
-        (unsigned long long)atoi128(jsonObject["block"]["header"]["parentHash"].string_value().substr(2).c_str());
+    sb->block.header.number = fromHex<long long>(jsonObject["block"]["header"]["number"].string_value());
     strcpy(sb->block.header.stateRoot, jsonObject["block"]["header"]["stateRoot"].string_value().c_str());
     strcpy(sb->block.header.extrinsicsRoot, jsonObject["block"]["header"]["extrinsicsRoot"].string_value().c_str());
 
@@ -726,6 +725,22 @@ string CPolkaApi::stateCall(const string &name, const string &data, const string
     Json response = _jsonRpc->request(query);
 
     return response.dump();
+}
+
+int CPolkaApi::queryStorage(const string &key, const string &startHash, const string &stopHash, StorageItem *itemBuf,
+                            int itemBufSize) {
+    Json query =
+        Json::object{{"method", "state_queryStorage"}, {"params", Json::array{Json::array{key}, startHash, stopHash}}};
+    Json response = _jsonRpc->request(query, 30);
+    int i = 0;
+    while ((i < itemBufSize) && (response[i].dump() != "null")) {
+        strcpy(itemBuf[i].blockHash, response[i]["block"].string_value().c_str());
+        strcpy(itemBuf[i].key, response[i]["changes"][0][0].string_value().c_str());
+        strcpy(itemBuf[i].value, response[i]["changes"][0][1].string_value().c_str());
+        i++;
+    }
+
+    return i;
 }
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {

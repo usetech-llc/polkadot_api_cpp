@@ -258,6 +258,19 @@ public:
     virtual string stateCall(const string &name, const string &data, const string &hash) = 0;
 
     /**
+     *  Calls state_queryStorage RPC method to get historical information about storage at a key
+     *
+     * @param key - storage key to query
+     * @param startHash - hash of block to start with
+     * @param stopHsah - hash of block to stop at
+     * @param itemBuf - preallocated array of StorageItem elements
+     * @param itemBufSize - size of preallocated array of StorageItem elements
+     * @return number of retrieved items
+     */
+    virtual int queryStorage(const string &key, const string &startHash, const string &stopHash, StorageItem *itemBuf,
+                             int itemBufSize) = 0;
+
+    /**
      *  Sign a transfer with provided private key, submit it to blockchain, and wait for completion. Once transaction is
      * accepted, the callback will be called with parameter "ready". Once completed, the callback will be called with
      * completion result string equal to "finalized".
