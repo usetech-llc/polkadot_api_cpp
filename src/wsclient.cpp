@@ -282,7 +282,6 @@ int CWebSocketClient::connect(string node_url) {
             _logger->info("Connection established");
         } else {
             _connectedThread->join();
-            _healthThread->join();
             delete _connectedThread;
             _connectedThread = nullptr;
             _logger->error("Connection failed");
@@ -304,8 +303,9 @@ void CWebSocketClient::disconnect() {
          : _c_no_tls.close(_connection_no_tls, websocketpp::close::status::going_away, "");
     _connected = false;
     _connectedThread->join();
-    _connectedThread = nullptr;
-    _healthThread->join();
+    if (_healthThread) {
+        _healthThread->join();
+    }
 }
 
 int CWebSocketClient::send(const string &msg) {
