@@ -83,6 +83,18 @@ system_networkState
 bin/get_system_networkstate_ok
 ```
 
+### Support following WebSocket subscriptions:
+
+chain_newHead
+```
+bin/wssubscribeApp
+```
+
+chain_finalizedHead
+state_runtimeVersion
+state_storage
+
+
 ## Deliverable 4 - Expanded Support of Transactions
 
 ### Support following RPC methods
