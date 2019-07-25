@@ -225,6 +225,10 @@ public:
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback) = 0;
 
+
+    virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender, string privateKey, 
+                                    string recipient, std::function<void(Json)> callback) = 0;                              
+
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already
      * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeBlockNumber method is

@@ -101,6 +101,9 @@ public:
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
 
+    virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender,
+                 string privateKey, string recipient, std::function<void(Json)> callback);                     
+
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(uint128)> callback);
