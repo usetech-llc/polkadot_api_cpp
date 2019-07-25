@@ -864,7 +864,7 @@ int CPolkaApi::subscribeBalance(string address, std::function<void(uint128)> cal
 }
 
 int CPolkaApi::unsubscribeBalance(string address) {
-    if (_balanceSubscriptionIds.count(address) == 0) {
+    if (_balanceSubscriptionIds.count(address) != 0) {
         _jsonRpc->unsubscribeWs(_balanceSubscriptionIds[address]);
         _balanceSubscribers[address] = nullptr;
         _balanceSubscriptionIds.erase(address);
@@ -893,7 +893,7 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
 }
 
 int CPolkaApi::unsubscribeAccountNonce(string address) {
-    if (_nonceSubscriptionIds.count(address) == 0) {
+    if (_nonceSubscriptionIds.count(address) != 0) {
         _jsonRpc->unsubscribeWs(_nonceSubscriptionIds[address]);
         _nonceSubscribers[address] = nullptr;
         _nonceSubscriptionIds.erase(address);
