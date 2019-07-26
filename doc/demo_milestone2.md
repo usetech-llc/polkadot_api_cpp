@@ -92,10 +92,10 @@ chain_newHead
 bin/wssubscribeApp
 ```
 
-chain_finalizedHead
-state_runtimeVersion
-state_storage
-
+chain_finalizedHead, state_runtimeVersion, state_storage
+```
+bin/wssubscribe_all
+```
 
 ## Deliverable 4 - Expanded Support of Transactions
 
