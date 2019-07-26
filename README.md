@@ -87,32 +87,67 @@ make test
 ### Library Initialization
 Parity node URL is the only required parameter, though URL must include port. Example:
 ```
-string parity_node_url("wss://poc3-rpc.polkadot.io:443/");
-CWebSocketClient ws(parity_node_url);
+auto api = polkadot::api::getInstance()->app();
 ```
 
 ### Eastablishing and maintaining connection
-This call will establish connection and start message thread:
+This call will establish connection and start message thread. It will also ping the node several times per minute with "health" request to keep the connection alive.
 ```
-ws.connect();
-```
-
-The websocket subscriptions will provide data via the callback. In order to subscribe to an endpoint, call:
-```
-ws.subscribe(endpoint);
-```
-
-In order to stop subscription, call:
-```
-ws.unsubscribe(endpoint);
-```
-
-When connection is not needed anymore, call
-```
-ws.disconnect();
+api->connect("wss://poc3-rpc.polkadot.io:443/");
 ```
 
 ### Reading data from polkadot node
-The data is returned as C structures. Documentation TBD.
+The data is returned as C structures. This example shows how to read (and output) system info:
+```
+auto systemInfo = api->getSystemInfo();
 
-### Sending extrincics
+cout << "  Chain ID       : " << systemInfo->chainId << endl
+     << "  Chain Name     : " << systemInfo->chainName << endl
+     << "  Token Decimals : " << systemInfo->tokenDecimals << endl
+     << "  Token Symbol   : " << systemInfo->tokenSymbol << endl;
+```
+
+### Subscribing for updates
+
+Subscribing is done by calling a matching subscribe method with parameters (if needed) and a callback (or a lambda function). This example subscribes for balance updates and prints new balance when it arrives:
+```
+api->subscribeBalance(address, [&](uint128 balance) {
+    cout << endl << "  Balance: " << (uint64_t)balance << endl << endl;
+});
+```
+
+In order to stop subscription, call matching unsubsribe method:
+```
+api->unsubscribeBalance();
+```
+
+### Sending transactions (signed Extrinsics)
+
+This example sends some DOTs between addresses and waits for execution. Transaction is signed with private key.
+```
+api->signAndSendTransfer(senderAddr, senderPrivateKeyStr, recipientAddr, amount, [&](string result) {
+    if (result == "ready")
+        cout << endl << endl << "   ---=== Transaction was registered in network ===--- " << endl << endl << endl;
+    if (result == "finalized") {
+        cout << endl << endl << "   ---=== Transaction was mined! ===--- " << endl << endl << endl;
+        done = true;
+    }
+});
+```
+
+### Finishing work
+
+When connection is not needed anymore, call
+```
+api->disconnect();
+```
+
+### More Information
+
+The complete documentation of API interface can be found at this starting point:
+https://htmlpreview.github.io/?https://github.com/usetech-llc/polkadot_api_cpp/blob/master/doc/html/classIApplication.html
+
+For more examples see:
+- [examples](https://github.com/usetech-llc/polkadot_api_cpp/tree/master/examples) folder,
+- [test](https://github.com/usetech-llc/polkadot_api_cpp/tree/master/test) folder with unit and E2E tests,
+- [polkadot_ui](https://github.com/usetech-llc/polkadot_ui) repository, which implements a GTK 3.0 UI and uses this API.

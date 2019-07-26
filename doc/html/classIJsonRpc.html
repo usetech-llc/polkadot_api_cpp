@@ -103,16 +103,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a378cc4a12294ac6ea05450fafc4c788c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9b05cfd42f34609cfe807b9e22e4e37"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#ab9b05cfd42f34609cfe807b9e22e4e37">disconnect</a> ()=0</td></tr>
 <tr class="separator:ab9b05cfd42f34609cfe807b9e22e4e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99c78860e4c7f6774b35a6026fda7e2c"><td class="memItemLeft" align="right" valign="top">virtual Json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#a99c78860e4c7f6774b35a6026fda7e2c">request</a> (Json jsonMap)=0</td></tr>
-<tr class="separator:a99c78860e4c7f6774b35a6026fda7e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4445f9a969b6c5e1791950ca58265dd"><td class="memItemLeft" align="right" valign="top">virtual Json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#ab4445f9a969b6c5e1791950ca58265dd">request</a> (Json jsonMap, long timeout_s=RESPONSE_TIMEOUT_S)=0</td></tr>
+<tr class="separator:ab4445f9a969b6c5e1791950ca58265dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfc8ed5e1b098de7fe7997744eca92f5"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#acfc8ed5e1b098de7fe7997744eca92f5">subscribeWs</a> (Json jsonMap, <a class="el" href="classIWebSocketMessageObserver.html">IWebSocketMessageObserver</a> *observer)=0</td></tr>
 <tr class="separator:acfc8ed5e1b098de7fe7997744eca92f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7fd8ba32c5d68034a1b71aa6ce870f9"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#ad7fd8ba32c5d68034a1b71aa6ce870f9">unsubscribeWs</a> (int subscriptionId)=0</td></tr>
-<tr class="separator:ad7fd8ba32c5d68034a1b71aa6ce870f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d793eb248b49b7d51ad58639dfdad3d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIJsonRpc.html#a6d793eb248b49b7d51ad58639dfdad3d">unsubscribeWs</a> (int subscriptionId, string method)=0</td></tr>
+<tr class="separator:a6d793eb248b49b7d51ad58639dfdad3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="ijsonrpc_8h_source.html#l00001">1</a> of file <a class="el" href="ijsonrpc_8h_source.html">ijsonrpc.h</a>.</p>
+<p>Definition at line <a class="el" href="ijsonrpc_8h_source.html#l00003">3</a> of file <a class="el" href="ijsonrpc_8h_source.html">ijsonrpc.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a378cc4a12294ac6ea05450fafc4c788c"></a>
 <div class="memitem">
@@ -174,7 +174,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a99c78860e4c7f6774b35a6026fda7e2c"></a>
+<a class="anchor" id="ab4445f9a969b6c5e1791950ca58265dd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -185,8 +185,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual Json IJsonRpc::request </td>
           <td>(</td>
           <td class="paramtype">Json&#160;</td>
-          <td class="paramname"><em>jsonMap</em></td><td>)</td>
+          <td class="paramname"><em>jsonMap</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>timeout_s</em> = <code>RESPONSE_TIMEOUT_S</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -199,12 +209,13 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">jsonMap</td><td>JSON object with command parameters </td></tr>
+    <tr><td class="paramname">timeout_s</td><td>- timeout of response in seconds </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>JSON object that contains parsed node response </dd></dl>
 
-<p>Implemented in <a class="el" href="classCJsonRpc.html#a478d031a671ffea78d27fa41f7464812">CJsonRpc</a>.</p>
+<p>Implemented in <a class="el" href="classCJsonRpc.html#a6b680c40680379c906f0644cf28cb34d">CJsonRpc</a>.</p>
 
 </div>
 </div>
@@ -253,7 +264,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad7fd8ba32c5d68034a1b71aa6ce870f9"></a>
+<a class="anchor" id="a6d793eb248b49b7d51ad58639dfdad3d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -264,8 +275,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">virtual int IJsonRpc::unsubscribeWs </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>subscriptionId</em></td><td>)</td>
+          <td class="paramname"><em>subscriptionId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -283,7 +304,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>command execution result </dd></dl>
 
-<p>Implemented in <a class="el" href="classCJsonRpc.html#adfc37cfcd7229dcae5e6cc831f99fb71">CJsonRpc</a>.</p>
+<p>Implemented in <a class="el" href="classCJsonRpc.html#af072397044d6b56494fa3de00c54097b">CJsonRpc</a>.</p>
 
 </div>
 </div>

@@ -113,16 +113,60 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0c578b10204f79d0da8cb6479cf0af45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf60c651290fb77835f90ec826e2257"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#abdf60c651290fb77835f90ec826e2257">getRuntimeVersion</a> (unique_ptr&lt; <a class="el" href="structGetRuntimeVersionParams.html">GetRuntimeVersionParams</a> &gt; params)=0</td></tr>
 <tr class="separator:abdf60c651290fb77835f90ec826e2257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d489ec30c93c7f0a8904241e470a0e8"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structSignedBlock.html">SignedBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a5d489ec30c93c7f0a8904241e470a0e8">getBlock</a> (unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt; params)=0</td></tr>
+<tr class="separator:a5d489ec30c93c7f0a8904241e470a0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a032059682a287393103d3d655ae7da77"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structBlockHeader.html">BlockHeader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a032059682a287393103d3d655ae7da77">getBlockHeader</a> (unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt; params)=0</td></tr>
+<tr class="separator:a032059682a287393103d3d655ae7da77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0379a5cd2b4c5b2ab68cc6a35e424df8"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structNetworkState.html">NetworkState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a0379a5cd2b4c5b2ab68cc6a35e424df8">getNetworkState</a> ()=0</td></tr>
+<tr class="separator:a0379a5cd2b4c5b2ab68cc6a35e424df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0910cbd82cdb26c44ccb21d6c7807ec"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structFinalHead.html">FinalHead</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ac0910cbd82cdb26c44ccb21d6c7807ec">getFinalizedHead</a> ()=0</td></tr>
+<tr class="separator:ac0910cbd82cdb26c44ccb21d6c7807ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60bd46792a397ccef4152d0e18afb7e6"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structSystemHealth.html">SystemHealth</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a60bd46792a397ccef4152d0e18afb7e6">getSystemHealth</a> ()=0</td></tr>
+<tr class="separator:a60bd46792a397ccef4152d0e18afb7e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a244abecf803f46caea395b7924da23e7"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structPeersInfo.html">PeersInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a244abecf803f46caea395b7924da23e7">getSystemPeers</a> ()=0</td></tr>
+<tr class="separator:a244abecf803f46caea395b7924da23e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7dbe556c940f7040eba40beba1b22ae"><td class="memItemLeft" align="right" valign="top">virtual unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ae7dbe556c940f7040eba40beba1b22ae">getAccountNonce</a> (string address)=0</td></tr>
 <tr class="separator:ae7dbe556c940f7040eba40beba1b22ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa56d2498932ac9c31f5f2a92a8ac6f77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#aa56d2498932ac9c31f5f2a92a8ac6f77">signAndSendTransfer</a> (string sender, string privateKey, string recipient, unsigned __int128 amount, std::function&lt; void(string)&gt; callback)=0</td></tr>
-<tr class="separator:aa56d2498932ac9c31f5f2a92a8ac6f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a528795695111ed8602a237af9eb4ab93"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a528795695111ed8602a237af9eb4ab93">getKeys</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)=0</td></tr>
+<tr class="separator:a528795695111ed8602a237af9eb4ab93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ebe2542237d023c6ccb43c235cf6eed"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6ebe2542237d023c6ccb43c235cf6eed">getStorage</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)=0</td></tr>
+<tr class="separator:a6ebe2542237d023c6ccb43c235cf6eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3db5a43716118e0265db8c52d9088b9"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ab3db5a43716118e0265db8c52d9088b9">getStorageHash</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)=0</td></tr>
+<tr class="separator:ab3db5a43716118e0265db8c52d9088b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb517cbf28bd8fdea2092b8e56912789"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#aeb517cbf28bd8fdea2092b8e56912789">getStorageSize</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)=0</td></tr>
+<tr class="separator:aeb517cbf28bd8fdea2092b8e56912789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f238f867d7249507716e824755a0b9"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a93f238f867d7249507716e824755a0b9">getChildKeys</a> (const string &amp;childStorageKey, const string &amp;storageKey)=0</td></tr>
+<tr class="separator:a93f238f867d7249507716e824755a0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a111068b55be523ef4b391c7efe77400a"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a111068b55be523ef4b391c7efe77400a">getChildStorage</a> (const string &amp;childStorageKey, const string &amp;storageKey)=0</td></tr>
+<tr class="separator:a111068b55be523ef4b391c7efe77400a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6bf7b09a77a7abcab0017a1ba7a06be"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ab6bf7b09a77a7abcab0017a1ba7a06be">getChildStorageHash</a> (const string &amp;childStorageKey, const string &amp;storageKey)=0</td></tr>
+<tr class="separator:ab6bf7b09a77a7abcab0017a1ba7a06be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89211a617600becc8547925057c5103d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a89211a617600becc8547925057c5103d">getChildStorageSize</a> (const string &amp;childStorageKey, const string &amp;storageKey)=0</td></tr>
+<tr class="separator:a89211a617600becc8547925057c5103d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ee7f495cfdb2e78d59a7b0389ccc257"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6ee7f495cfdb2e78d59a7b0389ccc257">stateCall</a> (const string &amp;name, const string &amp;data, const string &amp;hash)=0</td></tr>
+<tr class="separator:a6ee7f495cfdb2e78d59a7b0389ccc257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4db994d5b804b1a9c614968ae31b7343"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a4db994d5b804b1a9c614968ae31b7343">queryStorage</a> (const string &amp;key, const string &amp;startHash, const string &amp;stopHash, <a class="el" href="structStorageItem.html">StorageItem</a> *itemBuf, int itemBufSize)=0</td></tr>
+<tr class="separator:a4db994d5b804b1a9c614968ae31b7343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07e2a5b696fa391f6e9c5fb51721dd4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad07e2a5b696fa391f6e9c5fb51721dd4">signAndSendTransfer</a> (string sender, string privateKey, string recipient, uint128 amount, std::function&lt; void(string)&gt; callback)=0</td></tr>
+<tr class="separator:ad07e2a5b696fa391f6e9c5fb51721dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a0a04117025fa7294e540159a102177"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">subscribeBlockNumber</a> (std::function&lt; void(long long)&gt; callback)=0</td></tr>
 <tr class="separator:a1a0a04117025fa7294e540159a102177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad743ca6e723a8e98fc6a6fced686341d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">unsubscribeBlockNumber</a> ()=0</td></tr>
 <tr class="separator:ad743ca6e723a8e98fc6a6fced686341d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d22f7dda3d53e6f9877a609e3679cdc"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6d22f7dda3d53e6f9877a609e3679cdc">subscribeBalance</a> (string address, std::function&lt; void(unsigned __int128)&gt; callback)=0</td></tr>
-<tr class="separator:a6d22f7dda3d53e6f9877a609e3679cdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a670a5bca569810701e32167fdb05f858"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a670a5bca569810701e32167fdb05f858">subscribeFinalizedBlock</a> (std::function&lt; void(const <a class="el" href="structBlockHeader.html">BlockHeader</a> &amp;)&gt; callback)=0</td></tr>
+<tr class="separator:a670a5bca569810701e32167fdb05f858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a978da4e26e10c2c8eba6c4a2bf0d1a16"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a978da4e26e10c2c8eba6c4a2bf0d1a16">unsubscribeFinalizedBlock</a> ()=0</td></tr>
+<tr class="separator:a978da4e26e10c2c8eba6c4a2bf0d1a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe114766f62c22f6f7a21eaf3f494283"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#abe114766f62c22f6f7a21eaf3f494283">subscribeRuntimeVersion</a> (std::function&lt; void(const <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &amp;)&gt; callback)=0</td></tr>
+<tr class="separator:abe114766f62c22f6f7a21eaf3f494283"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a770f959f96907e1417d6225b01b36103"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a770f959f96907e1417d6225b01b36103">unsubscribeRuntimeVersion</a> ()=0</td></tr>
+<tr class="separator:a770f959f96907e1417d6225b01b36103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad12da13245536999799f508d44aab8a"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#aad12da13245536999799f508d44aab8a">subscribeStorage</a> (string key, std::function&lt; void(const string &amp;)&gt; callback)=0</td></tr>
+<tr class="separator:aad12da13245536999799f508d44aab8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5cda3426c157d49772b28f458f9a474"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#af5cda3426c157d49772b28f458f9a474">unsubscribeStorage</a> (string key)=0</td></tr>
+<tr class="separator:af5cda3426c157d49772b28f458f9a474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e124c122a6d96ac42ac4cbae1f77bce"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a1e124c122a6d96ac42ac4cbae1f77bce">subscribeBalance</a> (string address, std::function&lt; void(uint128)&gt; callback)=0</td></tr>
+<tr class="separator:a1e124c122a6d96ac42ac4cbae1f77bce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6422c696fa18a0896456bb8a2b5eae7c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a6422c696fa18a0896456bb8a2b5eae7c">unsubscribeBalance</a> (string address)=0</td></tr>
 <tr class="separator:a6422c696fa18a0896456bb8a2b5eae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af73bb90d3220bcedf18a288fd00654bc"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#af73bb90d3220bcedf18a288fd00654bc">subscribeEraAndSession</a> (std::function&lt; void(<a class="el" href="structEra.html">Era</a>, <a class="el" href="structSession.html">Session</a>)&gt; callback)=0</td></tr>
@@ -174,6 +218,8 @@ Public Member Functions</h2></td></tr>
 </li>
 </ol>
 <p><a href="https://github.com/usetech-llc/polkadot_api_cpp">https://github.com/usetech-llc/polkadot_api_cpp</a></p>
+<p>Dealing with Substrate Runtime updates</p>
+<p>Client application should subscribe to runtimeVersion and, as soon as it receives an update that indicates that runtime version changed, it should disconnect and connect again to recalculate hashers and method and modlue indexes that are required for correct working of other methods.</p>
 <p>$param node_url - Node URL to connect to. If set to default value of "", default node URL will be used </p><dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#a9f769c53e8b457ae1e19c4782148559b">CPolkaApi</a>.</p>
@@ -240,6 +286,40 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5d489ec30c93c7f0a8904241e470a0e8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structSignedBlock.html">SignedBlock</a>&gt; IApplication::getBlock </td>
+          <td>(</td>
+          <td class="paramtype">unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt;&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get header and body of a relay chain block</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">struct</td><td>with blockHash 64 diget number in hex format </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSignedBlock.html">SignedBlock</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#af7d1cd31d047ee0fc153a49010696e04">CPolkaApi</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a874c5af80d7342db07d7581d6f6f80fb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -271,6 +351,300 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structBlockHash.html">BlockHash</a> struct with result </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#a828eab434832ff0a2ee4019aac633972">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a032059682a287393103d3d655ae7da77"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structBlockHeader.html">BlockHeader</a>&gt; IApplication::getBlockHeader </td>
+          <td>(</td>
+          <td class="paramtype">unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt;&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Retrieves the header for a specific block</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">struct</td><td>with blockHash 64 diget number in hex format </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structBlockHeader.html">BlockHeader</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#afc9715c2e9fefe4962be9f398d11a1f0">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a93f238f867d7249507716e824755a0b9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getChildKeys </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildKeys RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ac50dd82b918e52a61e0a98871cf6ff5b">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a111068b55be523ef4b391c7efe77400a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getChildStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorage RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#aca90f90d940fae497dc86b77def3e9de">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6bf7b09a77a7abcab0017a1ba7a06be"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getChildStorageHash </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorageHash RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a1d2f7fb7d0b43f28523eb23e64f7d2d7">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a89211a617600becc8547925057c5103d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::getChildStorageSize </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorageSize RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int response from RPC method </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a76534a8467551a104be74934be280b27">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac0910cbd82cdb26c44ccb21d6c7807ec"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structFinalHead.html">FinalHead</a>&gt; IApplication::getFinalizedHead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get hash of the last finalized block in the chain</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structFinalHead.html">FinalHead</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a59a00310657c4cf0f09d4692f2bfb9c9">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a528795695111ed8602a237af9eb4ab93"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getKeys </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates storage key for a certain Module and State variable defined by parameter and prefix. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a5b260a1019ec65084faa54a5766f0971">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -308,6 +682,33 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a0379a5cd2b4c5b2ab68cc6a35e424df8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structNetworkState.html">NetworkState</a>&gt; IApplication::getNetworkState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns current state of the network</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structNetworkState.html">NetworkState</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a3b38e304102ac980d032f9f1f1955fa9">CPolkaApi</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="abdf60c651290fb77835f90ec826e2257"></a>
 <div class="memitem">
 <div class="memproto">
@@ -342,6 +743,192 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6ebe2542237d023c6ccb43c235cf6eed"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Reads storage for a certain Module and State variable defined by parameter and prefix. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a0d9f1cab6dde3712b404fa46a31d52b0">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab3db5a43716118e0265db8c52d9088b9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::getStorageHash </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns storage hash of given State Variable for a given Module defined by parameter. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a8a81976762f64712c485819fa2c7920e">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb517cbf28bd8fdea2092b8e56912789"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::getStorageSize </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns storage size for a given State Variable for a given Module defined by parameter. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#aec33eeebe8772a96123313558c9a2df7">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a60bd46792a397ccef4152d0e18afb7e6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structSystemHealth.html">SystemHealth</a>&gt; IApplication::getSystemHealth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return health status of the node</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSystemHealth.html">SystemHealth</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a15396075e47ad46d7084d0c984841eb1">CPolkaApi</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="acb0100dfc23034f7ce58ddc0eed4820d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -369,7 +956,100 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa56d2498932ac9c31f5f2a92a8ac6f77"></a>
+<a class="anchor" id="a244abecf803f46caea395b7924da23e7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual unique_ptr&lt;<a class="el" href="structPeersInfo.html">PeersInfo</a>&gt; IApplication::getSystemPeers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the currently connected peers</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structPeersInfo.html">PeersInfo</a> struct with result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#aa5b379d52f022f05731aa22688c5bdb2">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4db994d5b804b1a9c614968ae31b7343"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::queryStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>startHash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>stopHash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structStorageItem.html">StorageItem</a> *&#160;</td>
+          <td class="paramname"><em>itemBuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>itemBufSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls state_queryStorage RPC method to get historical information about storage at a key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to query </td></tr>
+    <tr><td class="paramname">startHash</td><td>- hash of block to start with </td></tr>
+    <tr><td class="paramname">stopHsah</td><td>- hash of block to stop at </td></tr>
+    <tr><td class="paramname">itemBuf</td><td>- preallocated array of <a class="el" href="structStorageItem.html">StorageItem</a> elements </td></tr>
+    <tr><td class="paramname">itemBufSize</td><td>- size of preallocated array of <a class="el" href="structStorageItem.html">StorageItem</a> elements </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of retrieved items </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a5182c1b2b2413ad4a66e11cfa2b9c2f9">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad07e2a5b696fa391f6e9c5fb51721dd4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -397,7 +1077,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned __int128&#160;</td>
+          <td class="paramtype">uint128&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
         </tr>
         <tr>
@@ -430,7 +1110,59 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classCPolkaApi.html#ae45eba6a20e32034f436e26ed5b0b9bd">CPolkaApi</a>.</p>
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a6c484c6e69dfea9549640e4f226868fd">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6ee7f495cfdb2e78d59a7b0389ccc257"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::stateCall </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>hash</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls state_call RPC method</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>- name of call </td></tr>
+    <tr><td class="paramname">data</td><td>- hex encoded data with 0x prefix </td></tr>
+    <tr><td class="paramname">hash</td><td>- hex encoded block hash with 0x prefix </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string raw RPC call return </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ae682d626f8d59f211318327cbc767acb">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -479,7 +1211,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6d22f7dda3d53e6f9877a609e3679cdc"></a>
+<a class="anchor" id="a1e124c122a6d96ac42ac4cbae1f77bce"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -495,7 +1227,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(unsigned __int128)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; void(uint128)&gt;&#160;</td>
           <td class="paramname"><em>callback</em>&#160;</td>
         </tr>
         <tr>
@@ -520,7 +1252,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
-<p>Implemented in <a class="el" href="classCPolkaApi.html#a9bb4dede1fc991fef1eb31a21547c859">CPolkaApi</a>.</p>
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ace1845dfd005b1d9deecf0f4b4784384">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -589,6 +1321,120 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#a73f0b668c14afb4f50eef56efb68a998">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a670a5bca569810701e32167fdb05f858"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeFinalizedBlock </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const <a class="el" href="structBlockHeader.html">BlockHeader</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent finalized block. Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until unsubscribeFinalizedBlock method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeFinalizedBlock will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a36ef78b36b2138586242305543accf22">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abe114766f62c22f6f7a21eaf3f494283"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeRuntimeVersion </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent runtime version. This subscription is necessary for applications that keep connection for a long time. If update about runtime version arrives, it will be necessary to disconnect and reconnect since module and method indexes might have changed.</p>
+<p>Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until unsubscribeRuntimeVersion method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeRuntimeVersion will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ade0e7d71ed3224adb94976c10b93ca8b">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aad12da13245536999799f508d44aab8a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::subscribeStorage </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(const string &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent value updates for a given storage key. Only one subscription at a time per address is allowed. If a subscription already exists for the same storage key, old subscription will be discarded and replaced with the new one. Until unsubscribeStorage method is called with the same storage key, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeStorage will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to receive updates for (e.g. "0x66F795B8D457430EDDA717C3CBA459B9") </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive balance updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a92fefb0d05fe32526bfb33074e019e26">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -711,6 +1557,94 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#a97bb1cf99dcf700547530215a4f4b8b5">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a978da4e26e10c2c8eba6c4a2bf0d1a16"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeFinalizedBlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with most recent finalized block.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a6bf5e5445c1f5f416efb0a8e7557d21b">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a770f959f96907e1417d6225b01b36103"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeRuntimeVersion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with most recent Runtime Version.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#ac770b5a7e97df9ecc7a2698c3a5979ca">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af5cda3426c157d49772b28f458f9a474"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::unsubscribeStorage </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to stop receiving updates for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a1bc18feaade5f8b16c0d0d0f87cb4173">CPolkaApi</a>.</p>
 
 </div>
 </div>
