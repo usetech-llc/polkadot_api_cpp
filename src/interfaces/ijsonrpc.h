@@ -41,5 +41,5 @@ public:
      * @param subscriptionId Id of subscription to unsubscribe from
      * @return command execution result
      */
-    virtual int unsubscribeWs(int subscriptionId) = 0;
+    virtual int unsubscribeWs(int subscriptionId, string method) = 0;
 };

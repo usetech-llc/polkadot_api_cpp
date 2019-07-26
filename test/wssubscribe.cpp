@@ -44,7 +44,7 @@ public:
 
     void close() {
         // Unsubscribe
-        jr->unsubscribeWs(subscriptionId);
+        jr->unsubscribeWs(subscriptionId, "");
 
         // Disconnect
         CWebSocketClient::getInstance(nullptr)->disconnect();

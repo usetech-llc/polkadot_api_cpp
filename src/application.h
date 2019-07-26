@@ -42,6 +42,7 @@ private:
     unique_ptr<BlockHash> createBlockHash(Json jsonObject);
     unique_ptr<RuntimeVersion> createRuntimeVersion(Json jsonObject);
     unique_ptr<Metadata> createMetadata(Json jsonObject);
+    void decodeBlockHeader(BlockHeader *b, Json jsonObject);
     unique_ptr<SignedBlock> createBlock(Json jsonObject);
     unique_ptr<BlockHeader> createBlockHeader(Json jsonObject);
     unique_ptr<FinalHead> createFinalHead(Json jsonObject);
@@ -64,17 +65,23 @@ private:
 
     // Subscriber functors
     std::function<void(long long)> _blockNumberSubscriber;
-    map<string, std::function<void(uint128)>> _balanceSubscribers;
+    map<string, std::function<void(uint128)>> _balanceSubscribers; // Maps callbacks to addresses
     map<string, std::function<void(unsigned long)>> _nonceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
     std::function<void(string)> _transactionCompletionSubscriber;
+    std::function<void(const BlockHeader &)> _finalizedBlockSubscriber;
+    std::function<void(const RuntimeVersion &)> _runtimeVersionSubscriber;
+    map<string, std::function<void(const string &)>> _storageSubscribers;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
-    map<string, int> _balanceSubscriptionIds;
+    map<string, int> _balanceSubscriptionIds; // Maps subscription IDs to addresses
     map<string, int> _nonceSubscriptionIds;
     int _eraAndSessionSubscriptionId;
     int _transactionCompletionSubscriptionId;
+    int _finalizedBlockSubscriptionId;
+    int _runtimeVersionSubscriptionId;
+    map<string, int> _storageSubscriptionIds;
 
 public:
     CPolkaApi() = delete;
@@ -116,4 +123,10 @@ public:
     virtual int unsubscribeEraAndSession();
     virtual int subscribeAccountNonce(string address, std::function<void(unsigned long)> callback);
     virtual int unsubscribeAccountNonce(string address);
+    virtual int subscribeFinalizedBlock(std::function<void(const BlockHeader &)> callback);
+    virtual int unsubscribeFinalizedBlock();
+    virtual int subscribeRuntimeVersion(std::function<void(const RuntimeVersion &)> callback);
+    virtual int unsubscribeRuntimeVersion();
+    virtual int subscribeStorage(string key, std::function<void(const string &)> callback);
+    virtual int unsubscribeStorage(string key);
 };

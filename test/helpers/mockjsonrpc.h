@@ -25,7 +25,7 @@ public:
         return move(ret);
     }
     virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) { return 0; }
-    virtual int unsubscribeWs(int subscriptionId) { return 0; }
+    virtual int unsubscribeWs(int subscriptionId, string method) { return 0; }
 };
 
 class CMockJsonRpcMD0 : public CMockJsonRpc {

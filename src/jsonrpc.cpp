@@ -116,11 +116,10 @@ int CJsonRpc::subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) {
     return subscriptionId;
 }
 
-int CJsonRpc::unsubscribeWs(int subscriptionId) {
+int CJsonRpc::unsubscribeWs(int subscriptionId, string method) {
     // Send unsubscribe request
     if (subscriptionId) {
-        Json unsubscribeQuery =
-            Json::object{{"method", "state_unsubscribeStorage"}, {"params", Json::array{subscriptionId}}};
+        Json unsubscribeQuery = Json::object{{"method", method.c_str()}, {"params", Json::array{subscriptionId}}};
 
         request(unsubscribeQuery);
         _logger->info(string("Unsubscribed from subscription ID: ") + to_string(subscriptionId));

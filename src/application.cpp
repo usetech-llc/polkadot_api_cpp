@@ -290,32 +290,33 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
     return rv;
 }
 
-unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
-
-    SignedBlock *result = new SignedBlock();
-    memset(result, 0, sizeof(SignedBlock));
-    unique_ptr<SignedBlock> sb(result);
-
-    strcpy(sb->block.header.parentHash, jsonObject["block"]["header"]["parentHash"].string_value().c_str());
-    sb->block.header.number = fromHex<long long>(jsonObject["block"]["header"]["number"].string_value());
-    strcpy(sb->block.header.stateRoot, jsonObject["block"]["header"]["stateRoot"].string_value().c_str());
-    strcpy(sb->block.header.extrinsicsRoot, jsonObject["block"]["header"]["extrinsicsRoot"].string_value().c_str());
+void CPolkaApi::decodeBlockHeader(BlockHeader *b, Json jsonObject) {
+    strcpy(b->parentHash, jsonObject["parentHash"].string_value().c_str());
+    b->number = fromHex<long long>(jsonObject["number"].string_value());
+    strcpy(b->stateRoot, jsonObject["stateRoot"].string_value().c_str());
+    strcpy(b->extrinsicsRoot, jsonObject["extrinsicsRoot"].string_value().c_str());
 
     int i = 0;
-    for (Json item : jsonObject["block"]["header"]["digest"]["logs"].array_items()) {
-        strcpy(sb->block.header.digest[i].value, item.string_value().c_str());
+    for (Json item : jsonObject["digest"]["logs"].array_items()) {
+        strcpy(b->digest[i].value, item.string_value().c_str());
+        i++;
+    }
+}
+
+unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
+    SignedBlock *result = new SignedBlock();
+    memset(result, 0, sizeof(SignedBlock));
+    decodeBlockHeader(&result->block.header, jsonObject["block"]["header"]);
+
+    int i = 0;
+    for (Json item : jsonObject["extrinsics"].array_items()) {
+        strcpy(result->block.extrinsic[i], item.string_value().c_str());
         i++;
     }
 
-    i = 0;
-    for (Json item : jsonObject["block"]["extrinsics"].array_items()) {
-        strcpy(sb->block.extrinsic[i], item.string_value().c_str());
-        i++;
-    }
+    strcpy(result->justification, jsonObject["justification"].string_value().c_str());
 
-    memcpy(sb->justification, &jsonObject["justification"], sizeof(jsonObject["justification"]));
-
-    return sb;
+    return unique_ptr<SignedBlock>(result);
 }
 
 unique_ptr<BlockHeader> CPolkaApi::createBlockHeader(Json jsonObject) {
@@ -784,6 +785,7 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             return;
         }
 
+        // Handle Era and Session subscription
         if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
             auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
             auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
@@ -804,6 +806,31 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             session.sessionProgress = sessionProgress;
 
             _eraAndSessionSubscriber(era, session);
+        }
+
+        // Handle finalized head subscription
+        if (_finalizedBlockSubscriptionId == subscriptionId) {
+            BlockHeader blockHeader;
+            decodeBlockHeader(&blockHeader, message);
+            _finalizedBlockSubscriber(blockHeader);
+            return;
+        }
+
+        // Handle runtime version subscription
+        if (_runtimeVersionSubscriptionId == subscriptionId) {
+            auto rtvPtr = createRuntimeVersion(message);
+            RuntimeVersion *rtv = rtvPtr.release();
+            _runtimeVersionSubscriber(*rtv);
+            delete rtv;
+            return;
+        }
+
+        // Handle storage subscriptions
+        for (auto const &sid : _storageSubscriptionIds) {
+            if (sid.second == subscriptionId) {
+                _storageSubscribers[sid.first](message["changes"][0][1].string_value());
+                return;
+            }
         }
 
         usleep(100000);
@@ -844,7 +871,7 @@ int CPolkaApi::subscribeEraAndSession(std::function<void(Era, Session)> callback
 
 int CPolkaApi::unsubscribeEraAndSession() {
     if (_eraAndSessionSubscriptionId) {
-        _jsonRpc->unsubscribeWs(_eraAndSessionSubscriptionId);
+        _jsonRpc->unsubscribeWs(_eraAndSessionSubscriptionId, "state_unsubscribeStorage");
         _eraAndSessionSubscriber = nullptr;
         _eraAndSessionSubscriptionId = 0;
     }
@@ -854,7 +881,7 @@ int CPolkaApi::unsubscribeEraAndSession() {
 
 int CPolkaApi::unsubscribeBlockNumber() {
     if (_blockNumberSubscriptionId) {
-        _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId);
+        _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId, "chain_unsubscribeNewHead");
         _blockNumberSubscriber = nullptr;
         _blockNumberSubscriptionId = 0;
     }
@@ -880,8 +907,8 @@ int CPolkaApi::subscribeBalance(string address, std::function<void(uint128)> cal
 
 int CPolkaApi::unsubscribeBalance(string address) {
     if (_balanceSubscriptionIds.count(address) != 0) {
-        _jsonRpc->unsubscribeWs(_balanceSubscriptionIds[address]);
-        _balanceSubscribers[address] = nullptr;
+        _jsonRpc->unsubscribeWs(_balanceSubscriptionIds[address], "state_unsubscribeStorage");
+        _balanceSubscribers.erase(address);
         _balanceSubscriptionIds.erase(address);
     }
     return PAPI_OK;
@@ -909,9 +936,73 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
 
 int CPolkaApi::unsubscribeAccountNonce(string address) {
     if (_nonceSubscriptionIds.count(address) != 0) {
-        _jsonRpc->unsubscribeWs(_nonceSubscriptionIds[address]);
-        _nonceSubscribers[address] = nullptr;
+        _jsonRpc->unsubscribeWs(_nonceSubscriptionIds[address], "state_unsubscribeStorage");
+        _nonceSubscribers.erase(address);
         _nonceSubscriptionIds.erase(address);
+    }
+    return PAPI_OK;
+}
+
+int CPolkaApi::subscribeFinalizedBlock(std::function<void(const BlockHeader &)> callback) {
+    _finalizedBlockSubscriber = callback;
+
+    // Subscribe to websocket
+    if (!_finalizedBlockSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "chain_subscribeFinalizedHeads"}, {"params", Json::array{}}};
+        _finalizedBlockSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeFinalizedBlock() {
+    if (_finalizedBlockSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_finalizedBlockSubscriptionId, "chain_unsubscribeFinalizedHeads");
+        _finalizedBlockSubscriber = nullptr;
+        _finalizedBlockSubscriptionId = 0;
+    }
+    return PAPI_OK;
+}
+
+int CPolkaApi::subscribeRuntimeVersion(std::function<void(const RuntimeVersion &)> callback) {
+    _runtimeVersionSubscriber = callback;
+
+    // Subscribe to websocket
+    if (!_runtimeVersionSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "state_subscribeRuntimeVersion"}, {"params", Json::array{}}};
+        _runtimeVersionSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeRuntimeVersion() {
+    if (_runtimeVersionSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_runtimeVersionSubscriptionId, "state_unsubscribeRuntimeVersion");
+        _runtimeVersionSubscriber = nullptr;
+        _runtimeVersionSubscriptionId = 0;
+    }
+    return PAPI_OK;
+}
+
+int CPolkaApi::subscribeStorage(string key, std::function<void(const string &)> callback) {
+    _storageSubscribers[key] = callback;
+
+    // Subscribe to websocket
+    if (_storageSubscriptionIds.count(key) == 0) {
+        Json subscribeQuery =
+            Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{key}}}};
+        _storageSubscriptionIds[key] = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeStorage(string key) {
+    if (_storageSubscriptionIds.count(key) != 0) {
+        _jsonRpc->unsubscribeWs(_storageSubscriptionIds[key], "state_unsubscribeStorage");
+        _storageSubscribers.erase(key);
+        _storageSubscriptionIds.erase(key);
     }
     return PAPI_OK;
 }

@@ -303,6 +303,67 @@ public:
     virtual int unsubscribeBlockNumber() = 0;
 
     /**
+     *  Subscribe to most recent finalized block. Only one subscription at a time is allowed. If a subscription already
+     * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeFinalizedBlock method
+     * is called, the API will be receiving updates and forwarding them to subscribed object/function. Only
+     * unsubscribeFinalizedBlock will physically unsubscribe from WebSocket endpoint updates.
+     *
+     * @param callback - functor or lambda expression that will receive updates
+     * @return operation result
+     */
+    virtual int subscribeFinalizedBlock(std::function<void(const BlockHeader &)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates with most recent finalized block.
+     *
+     * @return operation result
+     */
+    virtual int unsubscribeFinalizedBlock() = 0;
+
+    /**
+     *  Subscribe to most recent runtime version. This subscription is necessary for applications that keep connection
+     * for a long time. If update about runtime version arrives, it will be necessary to disconnect and reconnect since
+     * module and method indexes might have changed.
+     *
+     * Only one subscription at a time is allowed. If a subscription already
+     * exists, old subscription will be discarded and replaced with the new one. Until unsubscribeRuntimeVersion method
+     * is called, the API will be receiving updates and forwarding them to subscribed object/function. Only
+     * unsubscribeRuntimeVersion will physically unsubscribe from WebSocket endpoint updates.
+     *
+     * @param callback - functor or lambda expression that will receive updates
+     * @return operation result
+     */
+    virtual int subscribeRuntimeVersion(std::function<void(const RuntimeVersion &)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates with most recent Runtime Version.
+     *
+     * @return operation result
+     */
+    virtual int unsubscribeRuntimeVersion() = 0;
+
+    /**
+     *  Subscribe to most recent value updates for a given storage key. Only one subscription at a time per address is
+     * allowed. If a subscription already exists for the same storage key, old subscription will be discarded and
+     * replaced with the new one. Until unsubscribeStorage method is called with the same storage key, the API will be
+     * receiving updates and forwarding them to subscribed object/function. Only unsubscribeStorage will physically
+     * unsubscribe from WebSocket endpoint updates.
+     *
+     * @param key - storage key to receive updates for (e.g. "0x66F795B8D457430EDDA717C3CBA459B9")
+     * @param callback - functor or lambda expression that will receive balance updates
+     * @return operation result
+     */
+    virtual int subscribeStorage(string key, std::function<void(const string &)> callback) = 0;
+
+    /**
+     *  Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.
+     *
+     * @param key - storage key to stop receiving updates for
+     * @return operation result
+     */
+    virtual int unsubscribeStorage(string key) = 0;
+
+    /**
      *  Subscribe to most recent balance for a given address. Only one subscription at a time per address is allowed. If
      * a subscription already exists for the same address, old subscription will be discarded and replaced with the new
      * one. Until unsubscribeBalance method is called with the same address, the API will be receiving updates and
