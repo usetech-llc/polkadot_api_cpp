@@ -60,6 +60,11 @@ Balance example will establish WebSocket connection and read and output address 
 bin/clip balance <your polkadot address>
 ```
 
+### Transfer DOTs Example
+
+```
+trasnfer <from address> <to address> <amount> <private key file>
+```
 
 ## Running Unit Tests
 

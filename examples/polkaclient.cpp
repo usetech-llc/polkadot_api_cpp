@@ -1,6 +1,9 @@
+#include <fstream>
 #include <iostream>
 #include <stdio.h>
+#include <streambuf>
 #include <string.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -8,16 +11,8 @@ using namespace std;
 
 std::string helpText = " Available commands:\n"
                        " connect                  - Connect to a node and display basic information\n"
-                       " get [command]:\n"
-                       "   blockhash [BlockHash]  - Get the block hash for a specific block\n"
-                       "   runtimeversion         - Get run-time version\n"
-                       "   metadata [BlockHash]   - Returns the runtime metadata\n"
-                       "   properties             - Get a custom set of properties\n"
-                       "   chainid                - Retrivies the chain\n"
-                       "   chainname              - Retrivies the node name\n"
-                       "   chainversion           - Retrivies the version of the node\n"
-                       " balance\n"
-                       " subscribe\n";
+                       " balance <address>\n"
+                       " trasnfer <from address> <to address> <amount> <private key file>\n";
 
 shared_ptr<polkadot::api> papi;
 IApplication *app;
@@ -39,6 +34,8 @@ void displayInfo() {
 
 void disconnect() { app->disconnect(); }
 
+uint128 atoi128(const char *s);
+
 int main(int argc, char *argv[]) {
     if (argc == 1)
         cout << helpText;
@@ -56,50 +53,74 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
-        if (strcmp(argv[1], "get") == 0) {
-            if (strcmp(argv[2], "blockhash") == 0) {
-                cout << "blockhash called with parameter " << argv[3] << "\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "runtimeversion") == 0) {
-                cout << "runtimeversion called\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "metadata") == 0) {
-                cout << "metadata called with parameter " << argv[3] << "\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "properties") == 0) {
-                cout << "properties called with parameter\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "chainid") == 0) {
-                cout << "chainid called with parameter\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "chainname") == 0) {
-                cout << "chainname called with parameter\n";
-                return 0;
-            }
-
-            if (strcmp(argv[2], "chainversion") == 0) {
-                cout << "chainversion called with parameter\n";
-                return 0;
-            }
-        }
-
         if (strcmp(argv[1], "balance") == 0) {
-            cout << "balance called\n";
+            if (argc < 3) {
+                cout << helpText;
+                return 0;
+            }
+            string address = argv[2];
+
+            connect();
+
+            // Load balance from Polkadot API
+            bool done = false;
+            app->subscribeBalance(address, [&](uint128 balance) {
+                balance /= 1000000;
+                long balLong = (long)balance;
+
+                char balanceStr[1024];
+                double balanceD = (double)balLong / 1000000000.;
+                if (balanceD >= 1.)
+                    sprintf(balanceStr, "%f DOT", balanceD);
+                else
+                    sprintf(balanceStr, "%f mDOT", balanceD * 1000);
+                cout << endl << "Balance: " << balanceStr << endl << endl;
+                done = true;
+            });
+            while (!done)
+                usleep(100000);
+            app->unsubscribeBalance(address);
+            disconnect();
+
             return 0;
         }
 
-        if (strcmp(argv[1], "subscribe") == 0) {
-            cout << "subscribe called\n";
+        if (strcmp(argv[1], "transfer") == 0) {
+            if (argc < 6) {
+                cout << helpText;
+                return 0;
+            }
+            string addressFrom = argv[2];
+            string addressTo = argv[3];
+            uint128 amount = atoi128(argv[4]);
+            string privateFile = argv[5];
+
+            std::ifstream t(privateFile);
+            std::string senderPrivateKeyStr((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+
+            connect();
+
+            // Transfer and wait for updates
+            bool done = false;
+            app->signAndSendTransfer(addressFrom, senderPrivateKeyStr, addressTo, amount, [&](string result) {
+                if (result == "ready")
+                    cout << endl
+                         << endl
+                         << "   ---=== Transaction was registered in network ===--- " << endl
+                         << endl
+                         << endl;
+                if (result == "finalized") {
+                    cout << endl << endl << "   ---=== Transaction was mined! ===--- " << endl << endl << endl;
+                    done = true;
+                }
+            });
+
+            // Wait until transaction is mined
+            while (!done)
+                usleep(10000);
+
+            disconnect();
+
             return 0;
         }
 
