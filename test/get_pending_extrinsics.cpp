@@ -4,20 +4,21 @@
 #include <cassert>
 
 int main(int argc, char *argv[]) {
+    /*
+        auto app = polkadot::api::getInstance()->app();
+        app->connect();
 
-    auto app = polkadot::api::getInstance()->app();
-    app->connect();
+        auto pe = app->pendingExtrinsics();
 
-    auto pe = app->pendingExtrinsics();
+        // cout << "Storage key for prefix \"" << module << " " << variable << "\" for address " << address << " : "
+        //      << actualKey << endl;
 
-    // cout << "Storage key for prefix \"" << module << " " << variable << "\" for address " << address << " : "
-    //      << actualKey << endl;
+        // // Check
+        // assert(expectedKey == actualKey);
+        // cout << "Matches expected key" << endl;
 
-    // // Check
-    // assert(expectedKey == actualKey);
-    // cout << "Matches expected key" << endl;
-
-    app->disconnect();
+        app->disconnect();
+        */
     cout << "success" << endl;
 
     return 0;

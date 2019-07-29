@@ -959,7 +959,6 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     return PAPI_OK;
 }
 
-<<<<<<< HEAD
 int CPolkaApi::subscribeFinalizedBlock(std::function<void(const BlockHeader &)> callback) {
     _finalizedBlockSubscriber = callback;
 
@@ -1022,7 +1021,8 @@ int CPolkaApi::unsubscribeStorage(string key) {
         _storageSubscriptionIds.erase(key);
     }
     return PAPI_OK;
-=======
+}
+
 void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
                                            string module, string method, string sender, string privateKey,
                                            std::function<void(Json)> callback) {
@@ -1233,7 +1233,6 @@ Json CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encode
     Json response = _jsonRpc->request(query);
 
     return response;
->>>>>>> feature/dot-58
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
