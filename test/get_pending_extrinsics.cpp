@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
-    cout << endl << endl << "============================ Get Keys ============================" << endl;
     auto pe = app->pendingExtrinsics();
 
     // cout << "Storage key for prefix \"" << module << " " << variable << "\" for address " << address << " : "

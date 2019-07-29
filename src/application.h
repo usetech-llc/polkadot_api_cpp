@@ -10,6 +10,7 @@
 #define CURRENT_INDEX_SUBSCRIPTION "0xb8f48a8c01f629d6dc877f64892bed49"
 
 #define MAX_METHOD_BYTES_SZ 2048
+#define DEFAULT_FIXED_EXSTRINSIC_SIZE 103
 
 typedef struct ProtocolParameters {
     Hasher FreeBalanceHasher;
@@ -104,13 +105,12 @@ public:
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
 
-<<<<<<< Updated upstream
-=======
-    virtual void submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, string sender, string privateKey, std::function<void(Json)> callback);
+    virtual void submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned int encodedMethodBytesSize, 
+                    string module, string method, string sender, string privateKey, std::function<void(Json)> callback);
+
     // virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender,
     //              string privateKey, string recipient, std::function<void(Json)> callback);                     
 
->>>>>>> Stashed changes
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(uint128)> callback);
