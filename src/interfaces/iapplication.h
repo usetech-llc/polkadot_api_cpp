@@ -231,11 +231,34 @@ public:
     virtual Extrinsic *pendingExtrinsics() = 0;
 
     /**
-     * Submit a fully formatted extrinsic for block inclusion
+     * Submit and subscribe a fully formatted extrinsic for block inclusion
+     *
+     * @param encodedMethodBytes - encoded extrintic parametrs
+     * @param encodedMethodBytesSize - parametrs size in bytes
+     * @param module - invokable module name
+     * @param method - invokable module name
+     * @param sender - sender address
+     * @param privateKey - sender private key
+     * @param callback - functor or lambda expression that will receive operation updates
      */
     virtual void submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
                                             string module, string method, string sender, string privateKey,
                                             std::function<void(Json)> callback) = 0;
+
+    /**
+    * Submit a fully formatted extrinsic for block inclusion
+    *
+    *
+    * @param encodedMethodBytesSize - parametrs size in bytes
+    * @param module - invokable module name
+    * @param method - invokable module name
+    * @param sender - sender address
+    * @param privateKey - sender private key
+    *
+    * Returns node responce
+    */
+    virtual Json submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                 string method, string sender, string privateKey) = 0;
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already

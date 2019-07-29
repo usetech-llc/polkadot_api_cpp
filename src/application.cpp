@@ -971,6 +971,112 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned
     _subcribeExtrinsicSubscriberId = _jsonRpc->subscribeWs(query, this);
 }
 
+Json CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                string method, string sender, string privateKey) {
+
+    _logger->info("=== Starting a Invoke Extrinsic ===");
+
+    // Get account Nonce
+    unsigned long nonce = getAccountNonce(sender);
+    auto compactNonce = scale::encodeCompactInteger(nonce);
+    _logger->info(string("sender nonce: ") + to_string(nonce));
+
+    uint8_t mmBuf[3];
+    // Module + Method
+    auto absoluteIndex = getModuleIndex(_protocolPrm.metadata, module, false);
+    mmBuf[0] = getModuleIndex(_protocolPrm.metadata, module, true);
+    mmBuf[1] = getCallMethodIndex(_protocolPrm.metadata, absoluteIndex, string(method));
+
+    // Address separator
+    mmBuf[2] = ADDRESS_SEPARATOR;
+
+    Extrinsic ce;
+    memset(&ce, 0, sizeof(ce));
+
+    uint8_t completeMessage[MAX_METHOD_BYTES_SZ];
+    memcpy(completeMessage, mmBuf, 3);
+    memcpy(completeMessage + 3, encodedMethodBytes, encodedMethodBytesSize);
+
+    ce.signature.version = SIGNATURE_VERSION;
+    auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
+    memcpy(ce.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
+    ce.signature.nonce = nonce;
+    ce.signature.era = IMMORTAL_ERA;
+
+    // Format signature payload
+    SignaturePayload sp;
+    sp.nonce = nonce;
+
+    sp.methodBytesLength = encodedMethodBytesSize + 3;
+    sp.methodBytes = completeMessage;
+    sp.era = IMMORTAL_ERA;
+    memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
+
+    // Serialize and Sign payload
+    uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
+    long payloadLength = sp.serializeBinary(signaturePayloadBytes);
+
+    vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
+    uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
+    sr25519_sign(sig, ce.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Copy signature bytes to transaction
+    memcpy(ce.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
+
+    auto length = DEFAULT_FIXED_EXSTRINSIC_SIZE + encodedMethodBytesSize;
+
+    auto compactLength = scale::encodeCompactInteger(length);
+
+    /////////////////////////////////////////
+    // Serialize message signature and write to buffer
+
+    int writtenLength = 0;
+    u_int8_t buf[2048];
+
+    // Length
+    writtenLength += scale::writeCompactToBuf(compactLength, buf + writtenLength);
+
+    // Signature version
+    buf[writtenLength++] = ce.signature.version;
+
+    // Address separator
+    buf[writtenLength++] = ADDRESS_SEPARATOR;
+
+    // Signer public key
+    memcpy(buf + writtenLength, ce.signature.signerPublicKey, SR25519_PUBLIC_SIZE);
+    writtenLength += SR25519_PUBLIC_SIZE;
+
+    // SR25519 Signature
+    memcpy(buf + writtenLength, ce.signature.sr25519Signature, SR25519_SIGNATURE_SIZE);
+    writtenLength += SR25519_SIGNATURE_SIZE;
+
+    // Nonce
+    writtenLength += scale::writeCompactToBuf(compactNonce, buf + writtenLength);
+
+    // Extrinsic Era
+    buf[writtenLength++] = ce.signature.era;
+
+    // Serialize and send transaction
+    uint8_t teBytes[MAX_METHOD_BYTES_SZ];
+    memcpy(teBytes, buf, writtenLength);
+    memcpy(teBytes + writtenLength, completeMessage, 3 + encodedMethodBytesSize);
+
+    long teByteLength = writtenLength + encodedMethodBytesSize + 3;
+    string teStr("0x");
+    for (int i = 0; i < teByteLength; ++i) {
+        char b[3] = {0};
+        sprintf(b, "%02X", teBytes[i]);
+        teStr += b;
+    }
+
+    Json query = Json::object{{"method", "author_submitExtrinsic"}, {"params", Json::array{teStr}}};
+
+    // Send == Subscribe callback to completion
+    Json response = _jsonRpc->request(query);
+
+    return response;
+}
+
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                     std::function<void(string)> callback) {
 

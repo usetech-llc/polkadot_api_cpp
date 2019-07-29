@@ -109,8 +109,8 @@ public:
                                             string module, string method, string sender, string privateKey,
                                             std::function<void(Json)> callback);
 
-    // virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender,
-    //              string privateKey, string recipient, std::function<void(Json)> callback);
+    virtual Json submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                 string method, string sender, string privateKey);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

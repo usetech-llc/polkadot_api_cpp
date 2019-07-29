@@ -52,16 +52,28 @@ int main(int argc, char *argv[]) {
     mmWrittenLength += SR25519_PUBLIC_SIZE;
 
     // Compact-encode amount
-    auto compactAmount = scale::encodeCompactInteger(stoll(amountStr));
+    auto compactAmount = scale::encodeCompactInteger(stoi(amountStr));
 
     // Amount
     mmWrittenLength += scale::writeCompactToBuf(compactAmount, buf2 + mmWrittenLength);
 
-    app.submitExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr);
+    app.submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr,
+    [&](Json response){
+        cout << endl << endl << "Response json:  " << response.dump() << endl;
+        done = true;
+    });
 
     // example
-    // app.submitExtrinsic(buf2, mmWrittenLength, "balances", "transfer", "5GuuxfuxbvaiwteUrV9U7Mj2Fz7TWK84WhLaZdMMJRvSuzr4", 
-    // "0xa81056d713af1ff17b599e60d287952e89301b5208324a0529b62dc7369c745defc9c8dd67b7c59b201bc164163a8978d40010c22743db142a47f2e064480d4b");
+    // app.submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", "5GuuxfuxbvaiwteUrV9U7Mj2Fz7TWK84WhLaZdMMJRvSuzr4", 
+    // "0xa81056d713af1ff17b599e60d287952e89301b5208324a0529b62dc7369c745defc9c8dd67b7c59b201bc164163a8978d40010c22743db142a47f2e064480d4b",
+    // [&](Json response){
+    //     cout << endl << endl << "Response json:  " << response.dump() << endl;
+    //     done = true;
+    // });
+
+    // Wait until transaction is mined
+    while (!done)
+        usleep(10000);
 
     // Unsubscribe and close connection
     app.disconnect();
