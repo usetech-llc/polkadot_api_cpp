@@ -10,6 +10,7 @@
 #define CURRENT_INDEX_SUBSCRIPTION "0xb8f48a8c01f629d6dc877f64892bed49"
 
 #define MAX_METHOD_BYTES_SZ 2048
+#define DEFAULT_FIXED_EXSTRINSIC_SIZE 103
 
 typedef struct ProtocolParameters {
     Hasher FreeBalanceHasher;
@@ -72,6 +73,7 @@ private:
     std::function<void(const BlockHeader &)> _finalizedBlockSubscriber;
     std::function<void(const RuntimeVersion &)> _runtimeVersionSubscriber;
     map<string, std::function<void(const string &)>> _storageSubscribers;
+    std::function<void(Json)> _subcribeExtrinsicSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
@@ -82,6 +84,7 @@ private:
     int _finalizedBlockSubscriptionId;
     int _runtimeVersionSubscriptionId;
     map<string, int> _storageSubscriptionIds;
+    int _subcribeExtrinsicSubscriberId;
 
 public:
     CPolkaApi() = delete;
@@ -114,6 +117,13 @@ public:
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
+
+    virtual void submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
+                                            string module, string method, string sender, string privateKey,
+                                            std::function<void(Json)> callback);
+
+    virtual Json submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                 string method, string sender, string privateKey);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

@@ -20,6 +20,8 @@ typedef absl::uint128 uint128;
 #include "structs/common.h"
 #include "structs/signedblock.h"
 #include "structs/storageItem.h"
+#include "structs/signaturepayload.h"
+#include "structs/extrinsic.h"
 
 // Include application layer interface
 #include "interfaces/iapplication.h"

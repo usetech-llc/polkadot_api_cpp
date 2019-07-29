@@ -21,7 +21,6 @@ extern "C" {
 
 #include "structs/publickey.h"
 #include "structs/hasher.h"
-#include "structs/signaturepayload.h"
 
 #include "interfaces/ilogger.h"
 #include "interfaces/imessageobserver.h"
