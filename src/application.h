@@ -73,7 +73,7 @@ private:
     std::function<void(const BlockHeader &)> _finalizedBlockSubscriber;
     std::function<void(const RuntimeVersion &)> _runtimeVersionSubscriber;
     map<string, std::function<void(const string &)>> _storageSubscribers;
-    std::function<void(Json)> _subcribeExtrinsicSubscriber;
+    std::function<void(string)> _subcribeExtrinsicSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
@@ -120,10 +120,10 @@ public:
 
     virtual void submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
                                             string module, string method, string sender, string privateKey,
-                                            std::function<void(Json)> callback);
+                                            std::function<void(string)> callback);
 
-    virtual Json submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
-                                 string method, string sender, string privateKey);
+    virtual string submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                   string method, string sender, string privateKey);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

@@ -126,6 +126,7 @@ file( GLOB_RECURSE STRUCT_FILES ${PROJECT_SOURCE_DIR}/src/structs/*)
 install(FILES ${STRUCT_FILES} DESTINATION /usr/include/polkacpp/structs)
 
 install(FILES ${PROJECT_SOURCE_DIR}/src/polkacpp.h DESTINATION /usr/include/polkacpp)
+install(FILES ${PROJECT_SOURCE_DIR}/src/scale.h DESTINATION /usr/include/polkacpp)
 
 file( GLOB_RECURSE INT128_FILES ${PROJECT_SOURCE_DIR}/src/libs/int128/*.h)
 install(FILES ${INT128_FILES} DESTINATION /usr/include/polkacpp/libs/int128)

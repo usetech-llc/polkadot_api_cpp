@@ -297,7 +297,7 @@ public:
      */
     virtual void submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
                                             string module, string method, string sender, string privateKey,
-                                            std::function<void(Json)> callback) = 0;
+                                            std::function<void(string)> callback) = 0;
 
     /**
      * Submit a fully formatted extrinsic for block inclusion
@@ -309,10 +309,10 @@ public:
      * @param sender - sender address
      * @param privateKey - sender private key
      *
-     * Returns node responce
+     * @return Node responce
      */
-    virtual Json submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
-                                 string method, string sender, string privateKey) = 0;
+    virtual string submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                   string method, string sender, string privateKey) = 0;
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already

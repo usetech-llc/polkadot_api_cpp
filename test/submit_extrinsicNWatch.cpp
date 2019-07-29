@@ -54,9 +54,10 @@ int main(int argc, char *argv[]) {
     mmWrittenLength += scale::writeCompactToBuf(compactAmount, buf2 + mmWrittenLength);
 
     app.submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr,
-                                   [&](Json response) {
-                                       cout << endl << endl << "Response json:  " << response.dump() << endl;
-                                       done = true;
+                                   [&](string response) {
+                                       cout << endl << endl << "Response json:  " << response << endl;
+                                       if (response.find("finalized") != string::npos)
+                                           done = true;
                                    });
 
     // example

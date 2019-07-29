@@ -16,7 +16,6 @@ typedef absl::uint128 uint128;
 
 #include "libs/easyloggingpp/easylogging++.h"
 #include "libs/json11/json11.hpp"
-#include "scale.h"
 using namespace json11;
 
 using namespace std;
@@ -24,7 +23,6 @@ using namespace std;
 extern "C" {
     #include "utils/sr25519.h"
 }
-
 
 #include "polkacpp.h"
 

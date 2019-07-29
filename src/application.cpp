@@ -773,18 +773,8 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
         // Handle transaction completion subscriptions
         if (_subcribeExtrinsicSubscriberId == subscriptionId) {
-
-            _subcribeExtrinsicSubscriber(message);
-            // if (message.dump().find("ready") != std::string::npos)
-            //     _transactionCompletionSubscriber(string("ready"));
-            // else if (message.dump().find("finalized") != std::string::npos) {
-            //     _transactionCompletionSubscriber(string("finalized"));
-
-            // There is no need to unsubscribe, just reset variabled
-            //     _transactionCompletionSubscriber = nullptr;
-            //     _transactionCompletionSubscriptionId = 0;
-            // }
-            // return;
+            _subcribeExtrinsicSubscriber(message.dump());
+            return;
         }
 
         // Handle transaction completion subscriptions
@@ -822,6 +812,7 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             session.sessionProgress = sessionProgress;
 
             _eraAndSessionSubscriber(era, session);
+            return;
         }
 
         // Handle finalized head subscription
@@ -1025,7 +1016,7 @@ int CPolkaApi::unsubscribeStorage(string key) {
 
 void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
                                            string module, string method, string sender, string privateKey,
-                                           std::function<void(Json)> callback) {
+                                           std::function<void(string)> callback) {
 
     _logger->info("=== Starting a Invoke Extrinsic ===");
 
@@ -1129,8 +1120,8 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned
     _subcribeExtrinsicSubscriberId = _jsonRpc->subscribeWs(query, this);
 }
 
-Json CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
-                                string method, string sender, string privateKey) {
+string CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                  string method, string sender, string privateKey) {
 
     _logger->info("=== Starting a Invoke Extrinsic ===");
 
@@ -1232,7 +1223,7 @@ Json CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encode
     // Send == Subscribe callback to completion
     Json response = _jsonRpc->request(query);
 
-    return response;
+    return response.dump();
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
