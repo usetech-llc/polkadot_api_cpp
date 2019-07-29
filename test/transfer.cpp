@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     CPolkaApi app(&logger, &jsonRpc);
     app.connect();
 
-    // Subscribe to account nonce updates
+    // Transfer and wait for updates
     bool done = false;
     app.signAndSendTransfer(senderAddr, senderPrivateKeyStr, recipientAddr, 1000000000000, [&](string result) {
         if (result == "ready")

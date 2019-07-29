@@ -32,7 +32,7 @@ int CPolkaApi::connect(string node_url) {
     _protocolPrm.metadata = getMetadata(nullptr);
     _protocolPrm.FreeBalanceHasher = getFuncHasher(_protocolPrm.metadata, string("Balances"), string("FreeBalance"));
     _protocolPrm.FreeBalancePrefix = "Balances FreeBalance";
-    _protocolPrm.BalanceModuleIndex = 3; // getModuleIndex(_protocolPrm.metadata, string("Balances"), true);
+    _protocolPrm.BalanceModuleIndex = getModuleIndex(_protocolPrm.metadata, string("Balances"), true);
     _protocolPrm.TransferMethodIndex = getCallMethodIndex(
         _protocolPrm.metadata, getModuleIndex(_protocolPrm.metadata, string("Balances"), false), string("transfer"));
 
@@ -181,19 +181,15 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
 }
 
 bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
-    for (int i = 0; i < COLLECTION_SIZE; ++i) {
-
-        // Check call methods
-        if (meta->metadataV0 && meta->metadataV0->module[i]) {
-            if (strlen(meta->metadataV0->module[moduleIndex]->module.call.fn1[i].name))
-                return true;
-        } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
-            return (meta->metadataV4->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
-            return (meta->metadataV5->module[moduleIndex]->call[i] != nullptr);
-        } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
-            return (meta->metadataV6->module[moduleIndex]->call[i] != nullptr);
-        }
+    // Check call methods
+    if (meta->metadataV0 && meta->metadataV0->module[moduleIndex]) {
+        return (strlen(meta->metadataV0->module[moduleIndex]->storage.function[0].name) > 0);
+    } else if (meta->metadataV4 && meta->metadataV4->module[moduleIndex]) {
+        return (meta->metadataV4->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV5 && meta->metadataV5->module[moduleIndex]) {
+        return (meta->metadataV5->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
+        return (meta->metadataV6->module[moduleIndex]->call[0] != nullptr);
     }
 
     return false;
@@ -294,33 +290,33 @@ unique_ptr<RuntimeVersion> CPolkaApi::createRuntimeVersion(Json jsonObject) {
     return rv;
 }
 
-unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
-
-    SignedBlock *result = new SignedBlock();
-    memset(result, 0, sizeof(SignedBlock));
-    unique_ptr<SignedBlock> sb(result);
-
-    strcpy(sb->block.header.parentHash, jsonObject["block"]["header"]["parentHash"].string_value().c_str());
-    sb->block.header.number =
-        (unsigned long long)atoi128(jsonObject["block"]["header"]["parentHash"].string_value().substr(2).c_str());
-    strcpy(sb->block.header.stateRoot, jsonObject["block"]["header"]["stateRoot"].string_value().c_str());
-    strcpy(sb->block.header.extrinsicsRoot, jsonObject["block"]["header"]["extrinsicsRoot"].string_value().c_str());
+void CPolkaApi::decodeBlockHeader(BlockHeader *b, Json jsonObject) {
+    strcpy(b->parentHash, jsonObject["parentHash"].string_value().c_str());
+    b->number = fromHex<long long>(jsonObject["number"].string_value());
+    strcpy(b->stateRoot, jsonObject["stateRoot"].string_value().c_str());
+    strcpy(b->extrinsicsRoot, jsonObject["extrinsicsRoot"].string_value().c_str());
 
     int i = 0;
-    for (Json item : jsonObject["block"]["header"]["digest"]["logs"].array_items()) {
-        strcpy(sb->block.header.digest[i].value, item.string_value().c_str());
+    for (Json item : jsonObject["digest"]["logs"].array_items()) {
+        strcpy(b->digest[i].value, item.string_value().c_str());
+        i++;
+    }
+}
+
+unique_ptr<SignedBlock> CPolkaApi::createBlock(Json jsonObject) {
+    SignedBlock *result = new SignedBlock();
+    memset(result, 0, sizeof(SignedBlock));
+    decodeBlockHeader(&result->block.header, jsonObject["block"]["header"]);
+
+    int i = 0;
+    for (Json item : jsonObject["extrinsics"].array_items()) {
+        strcpy(result->block.extrinsic[i], item.string_value().c_str());
         i++;
     }
 
-    i = 0;
-    for (Json item : jsonObject["block"]["extrinsics"].array_items()) {
-        strcpy(sb->block.extrinsic[i], item.string_value().c_str());
-        i++;
-    }
+    strcpy(result->justification, jsonObject["justification"].string_value().c_str());
 
-    memcpy(sb->justification, &jsonObject["justification"], sizeof(jsonObject["justification"]));
-
-    return sb;
+    return unique_ptr<SignedBlock>(result);
 }
 
 unique_ptr<BlockHeader> CPolkaApi::createBlockHeader(Json jsonObject) {
@@ -665,12 +661,89 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     return atoi(retval.c_str());
 }
 
-int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) {
+int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) { return 0; }
 
-    Json query = Json::object{{"method", "author_pendingExtrinsics"}, {"params", Json::array{}}};
+string CPolkaApi::getChildKeys(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildKeys"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    return 0;
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+string CPolkaApi::getChildStorage(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorage"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+string CPolkaApi::getChildStorageHash(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorageHash"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return retval;
+}
+
+int CPolkaApi::getChildStorageSize(const string &childStorageKey, const string &storageKey) {
+    // Get most recent block hash
+    auto headHash = getBlockHash(nullptr);
+
+    Json query = Json::object{{"method", "state_getChildStorageSize"},
+                              {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
+    Json response = _jsonRpc->request(query);
+
+    // Strip quotes
+    string retval = response.dump();
+    if (retval[0] == '\"')
+        retval = retval.substr(1, retval.length() - 2);
+    return atoi(retval.c_str());
+}
+
+string CPolkaApi::stateCall(const string &name, const string &data, const string &hash) {
+    Json query = Json::object{{"method", "state_call"}, {"params", Json::array{name, data, hash}}};
+    Json response = _jsonRpc->request(query);
+
+    return response.dump();
+}
+
+int CPolkaApi::queryStorage(const string &key, const string &startHash, const string &stopHash, StorageItem *itemBuf,
+                            int itemBufSize) {
+    Json query =
+        Json::object{{"method", "state_queryStorage"}, {"params", Json::array{Json::array{key}, startHash, stopHash}}};
+    Json response = _jsonRpc->request(query, 30);
+    int i = 0;
+    while ((i < itemBufSize) && (response[i].dump() != "null")) {
+        strcpy(itemBuf[i].blockHash, response[i]["block"].string_value().c_str());
+        strcpy(itemBuf[i].key, response[i]["changes"][0][0].string_value().c_str());
+        strcpy(itemBuf[i].value, response[i]["changes"][0][1].string_value().c_str());
+        i++;
+    }
+
+    return i;
 }
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
@@ -701,6 +774,12 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
         }
 
         // Handle transaction completion subscriptions
+        if (_subcribeExtrinsicSubscriberId == subscriptionId) {
+            _subcribeExtrinsicSubscriber(message.dump());
+            return;
+        }
+
+        // Handle transaction completion subscriptions
         if (_transactionCompletionSubscriptionId == subscriptionId) {
             if (message.dump().find("ready") != std::string::npos)
                 _transactionCompletionSubscriber(string("ready"));
@@ -714,6 +793,7 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             return;
         }
 
+        // Handle Era and Session subscription
         if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
             auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
             auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
@@ -734,6 +814,32 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
             session.sessionProgress = sessionProgress;
 
             _eraAndSessionSubscriber(era, session);
+            return;
+        }
+
+        // Handle finalized head subscription
+        if (_finalizedBlockSubscriptionId == subscriptionId) {
+            BlockHeader blockHeader;
+            decodeBlockHeader(&blockHeader, message);
+            _finalizedBlockSubscriber(blockHeader);
+            return;
+        }
+
+        // Handle runtime version subscription
+        if (_runtimeVersionSubscriptionId == subscriptionId) {
+            auto rtvPtr = createRuntimeVersion(message);
+            RuntimeVersion *rtv = rtvPtr.release();
+            _runtimeVersionSubscriber(*rtv);
+            delete rtv;
+            return;
+        }
+
+        // Handle storage subscriptions
+        for (auto const &sid : _storageSubscriptionIds) {
+            if (sid.second == subscriptionId) {
+                _storageSubscribers[sid.first](message["changes"][0][1].string_value());
+                return;
+            }
         }
 
         usleep(100000);
@@ -774,7 +880,7 @@ int CPolkaApi::subscribeEraAndSession(std::function<void(Era, Session)> callback
 
 int CPolkaApi::unsubscribeEraAndSession() {
     if (_eraAndSessionSubscriptionId) {
-        _jsonRpc->unsubscribeWs(_eraAndSessionSubscriptionId);
+        _jsonRpc->unsubscribeWs(_eraAndSessionSubscriptionId, "state_unsubscribeStorage");
         _eraAndSessionSubscriber = nullptr;
         _eraAndSessionSubscriptionId = 0;
     }
@@ -784,7 +890,7 @@ int CPolkaApi::unsubscribeEraAndSession() {
 
 int CPolkaApi::unsubscribeBlockNumber() {
     if (_blockNumberSubscriptionId) {
-        _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId);
+        _jsonRpc->unsubscribeWs(_blockNumberSubscriptionId, "chain_unsubscribeNewHead");
         _blockNumberSubscriber = nullptr;
         _blockNumberSubscriptionId = 0;
     }
@@ -809,9 +915,9 @@ int CPolkaApi::subscribeBalance(string address, std::function<void(uint128)> cal
 }
 
 int CPolkaApi::unsubscribeBalance(string address) {
-    if (_balanceSubscriptionIds.count(address) == 0) {
-        _jsonRpc->unsubscribeWs(_balanceSubscriptionIds[address]);
-        _balanceSubscribers[address] = nullptr;
+    if (_balanceSubscriptionIds.count(address) != 0) {
+        _jsonRpc->unsubscribeWs(_balanceSubscriptionIds[address], "state_unsubscribeStorage");
+        _balanceSubscribers.erase(address);
         _balanceSubscriptionIds.erase(address);
     }
     return PAPI_OK;
@@ -838,12 +944,288 @@ int CPolkaApi::subscribeAccountNonce(string address, std::function<void(unsigned
 }
 
 int CPolkaApi::unsubscribeAccountNonce(string address) {
-    if (_nonceSubscriptionIds.count(address) == 0) {
-        _jsonRpc->unsubscribeWs(_nonceSubscriptionIds[address]);
-        _nonceSubscribers[address] = nullptr;
+    if (_nonceSubscriptionIds.count(address) != 0) {
+        _jsonRpc->unsubscribeWs(_nonceSubscriptionIds[address], "state_unsubscribeStorage");
+        _nonceSubscribers.erase(address);
         _nonceSubscriptionIds.erase(address);
     }
     return PAPI_OK;
+}
+
+int CPolkaApi::subscribeFinalizedBlock(std::function<void(const BlockHeader &)> callback) {
+    _finalizedBlockSubscriber = callback;
+
+    // Subscribe to websocket
+    if (!_finalizedBlockSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "chain_subscribeFinalizedHeads"}, {"params", Json::array{}}};
+        _finalizedBlockSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeFinalizedBlock() {
+    if (_finalizedBlockSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_finalizedBlockSubscriptionId, "chain_unsubscribeFinalizedHeads");
+        _finalizedBlockSubscriber = nullptr;
+        _finalizedBlockSubscriptionId = 0;
+    }
+    return PAPI_OK;
+}
+
+int CPolkaApi::subscribeRuntimeVersion(std::function<void(const RuntimeVersion &)> callback) {
+    _runtimeVersionSubscriber = callback;
+
+    // Subscribe to websocket
+    if (!_runtimeVersionSubscriptionId) {
+        Json subscribeQuery = Json::object{{"method", "state_subscribeRuntimeVersion"}, {"params", Json::array{}}};
+        _runtimeVersionSubscriptionId = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeRuntimeVersion() {
+    if (_runtimeVersionSubscriptionId) {
+        _jsonRpc->unsubscribeWs(_runtimeVersionSubscriptionId, "state_unsubscribeRuntimeVersion");
+        _runtimeVersionSubscriber = nullptr;
+        _runtimeVersionSubscriptionId = 0;
+    }
+    return PAPI_OK;
+}
+
+int CPolkaApi::subscribeStorage(string key, std::function<void(const string &)> callback) {
+    _storageSubscribers[key] = callback;
+
+    // Subscribe to websocket
+    if (_storageSubscriptionIds.count(key) == 0) {
+        Json subscribeQuery =
+            Json::object{{"method", "state_subscribeStorage"}, {"params", Json::array{Json::array{key}}}};
+        _storageSubscriptionIds[key] = _jsonRpc->subscribeWs(subscribeQuery, this);
+    }
+
+    return PAPI_OK;
+}
+
+int CPolkaApi::unsubscribeStorage(string key) {
+    if (_storageSubscriptionIds.count(key) != 0) {
+        _jsonRpc->unsubscribeWs(_storageSubscriptionIds[key], "state_unsubscribeStorage");
+        _storageSubscribers.erase(key);
+        _storageSubscriptionIds.erase(key);
+    }
+    return PAPI_OK;
+}
+
+void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
+                                           string module, string method, string sender, string privateKey,
+                                           std::function<void(string)> callback) {
+
+    _logger->info("=== Starting a Invoke Extrinsic ===");
+
+    // Get account Nonce
+    unsigned long nonce = getAccountNonce(sender);
+    auto compactNonce = scale::encodeCompactInteger(nonce);
+    _logger->info(string("sender nonce: ") + to_string(nonce));
+
+    uint8_t mmBuf[3];
+    // Module + Method
+    auto absoluteIndex = getModuleIndex(_protocolPrm.metadata, module, false);
+    mmBuf[0] = getModuleIndex(_protocolPrm.metadata, module, true);
+    mmBuf[1] = getCallMethodIndex(_protocolPrm.metadata, absoluteIndex, string(method));
+
+    // Address separator
+    mmBuf[2] = ADDRESS_SEPARATOR;
+
+    Extrinsic ce;
+    memset(&ce, 0, sizeof(ce));
+
+    uint8_t completeMessage[MAX_METHOD_BYTES_SZ];
+    memcpy(completeMessage, mmBuf, 3);
+    memcpy(completeMessage + 3, encodedMethodBytes, encodedMethodBytesSize);
+
+    ce.signature.version = SIGNATURE_VERSION;
+    auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
+    memcpy(ce.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
+    ce.signature.nonce = nonce;
+    ce.signature.era = IMMORTAL_ERA;
+
+    // Format signature payload
+    SignaturePayload sp;
+    sp.nonce = nonce;
+
+    sp.methodBytesLength = encodedMethodBytesSize + 3;
+    sp.methodBytes = completeMessage;
+    sp.era = IMMORTAL_ERA;
+    memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
+
+    // Serialize and Sign payload
+    uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
+    long payloadLength = sp.serializeBinary(signaturePayloadBytes);
+
+    vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
+    uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
+    sr25519_sign(sig, ce.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Copy signature bytes to transaction
+    memcpy(ce.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
+
+    auto length = DEFAULT_FIXED_EXSTRINSIC_SIZE + encodedMethodBytesSize;
+
+    auto compactLength = scale::encodeCompactInteger(length);
+
+    /////////////////////////////////////////
+    // Serialize message signature and write to buffer
+
+    int writtenLength = 0;
+    u_int8_t buf[2048];
+
+    // Length
+    writtenLength += scale::writeCompactToBuf(compactLength, buf + writtenLength);
+
+    // Signature version
+    buf[writtenLength++] = ce.signature.version;
+
+    // Address separator
+    buf[writtenLength++] = ADDRESS_SEPARATOR;
+
+    // Signer public key
+    memcpy(buf + writtenLength, ce.signature.signerPublicKey, SR25519_PUBLIC_SIZE);
+    writtenLength += SR25519_PUBLIC_SIZE;
+
+    // SR25519 Signature
+    memcpy(buf + writtenLength, ce.signature.sr25519Signature, SR25519_SIGNATURE_SIZE);
+    writtenLength += SR25519_SIGNATURE_SIZE;
+
+    // Nonce
+    writtenLength += scale::writeCompactToBuf(compactNonce, buf + writtenLength);
+
+    // Extrinsic Era
+    buf[writtenLength++] = ce.signature.era;
+
+    // Serialize and send transaction
+    uint8_t teBytes[MAX_METHOD_BYTES_SZ];
+    memcpy(teBytes, buf, writtenLength);
+    memcpy(teBytes + writtenLength, completeMessage, 3 + encodedMethodBytesSize);
+
+    long teByteLength = writtenLength + encodedMethodBytesSize + 3;
+    string teStr("0x");
+    for (int i = 0; i < teByteLength; ++i) {
+        char b[3] = {0};
+        sprintf(b, "%02X", teBytes[i]);
+        teStr += b;
+    }
+
+    Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
+
+    // // Send == Subscribe callback to completion
+    _subcribeExtrinsicSubscriber = callback;
+    _subcribeExtrinsicSubscriberId = _jsonRpc->subscribeWs(query, this);
+}
+
+string CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
+                                  string method, string sender, string privateKey) {
+
+    _logger->info("=== Starting a Invoke Extrinsic ===");
+
+    // Get account Nonce
+    unsigned long nonce = getAccountNonce(sender);
+    auto compactNonce = scale::encodeCompactInteger(nonce);
+    _logger->info(string("sender nonce: ") + to_string(nonce));
+
+    uint8_t mmBuf[3];
+    // Module + Method
+    auto absoluteIndex = getModuleIndex(_protocolPrm.metadata, module, false);
+    mmBuf[0] = getModuleIndex(_protocolPrm.metadata, module, true);
+    mmBuf[1] = getCallMethodIndex(_protocolPrm.metadata, absoluteIndex, string(method));
+
+    // Address separator
+    mmBuf[2] = ADDRESS_SEPARATOR;
+
+    Extrinsic ce;
+    memset(&ce, 0, sizeof(ce));
+
+    uint8_t completeMessage[MAX_METHOD_BYTES_SZ];
+    memcpy(completeMessage, mmBuf, 3);
+    memcpy(completeMessage + 3, encodedMethodBytes, encodedMethodBytesSize);
+
+    ce.signature.version = SIGNATURE_VERSION;
+    auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
+    memcpy(ce.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
+    ce.signature.nonce = nonce;
+    ce.signature.era = IMMORTAL_ERA;
+
+    // Format signature payload
+    SignaturePayload sp;
+    sp.nonce = nonce;
+
+    sp.methodBytesLength = encodedMethodBytesSize + 3;
+    sp.methodBytes = completeMessage;
+    sp.era = IMMORTAL_ERA;
+    memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
+
+    // Serialize and Sign payload
+    uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
+    long payloadLength = sp.serializeBinary(signaturePayloadBytes);
+
+    vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
+    uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
+    sr25519_sign(sig, ce.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Copy signature bytes to transaction
+    memcpy(ce.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
+
+    auto length = DEFAULT_FIXED_EXSTRINSIC_SIZE + encodedMethodBytesSize;
+
+    auto compactLength = scale::encodeCompactInteger(length);
+
+    /////////////////////////////////////////
+    // Serialize message signature and write to buffer
+
+    int writtenLength = 0;
+    u_int8_t buf[2048];
+
+    // Length
+    writtenLength += scale::writeCompactToBuf(compactLength, buf + writtenLength);
+
+    // Signature version
+    buf[writtenLength++] = ce.signature.version;
+
+    // Address separator
+    buf[writtenLength++] = ADDRESS_SEPARATOR;
+
+    // Signer public key
+    memcpy(buf + writtenLength, ce.signature.signerPublicKey, SR25519_PUBLIC_SIZE);
+    writtenLength += SR25519_PUBLIC_SIZE;
+
+    // SR25519 Signature
+    memcpy(buf + writtenLength, ce.signature.sr25519Signature, SR25519_SIGNATURE_SIZE);
+    writtenLength += SR25519_SIGNATURE_SIZE;
+
+    // Nonce
+    writtenLength += scale::writeCompactToBuf(compactNonce, buf + writtenLength);
+
+    // Extrinsic Era
+    buf[writtenLength++] = ce.signature.era;
+
+    // Serialize and send transaction
+    uint8_t teBytes[MAX_METHOD_BYTES_SZ];
+    memcpy(teBytes, buf, writtenLength);
+    memcpy(teBytes + writtenLength, completeMessage, 3 + encodedMethodBytesSize);
+
+    long teByteLength = writtenLength + encodedMethodBytesSize + 3;
+    string teStr("0x");
+    for (int i = 0; i < teByteLength; ++i) {
+        char b[3] = {0};
+        sprintf(b, "%02X", teBytes[i]);
+        teStr += b;
+    }
+
+    Json query = Json::object{{"method", "author_submitExtrinsic"}, {"params", Json::array{teStr}}};
+
+    // Send == Subscribe callback to completion
+    Json response = _jsonRpc->request(query);
+
+    return response.dump();
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
@@ -900,6 +1282,7 @@ void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string rec
     }
 
     Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
+    cout << query.dump();
 
     // Send == Subscribe callback to completion
     _transactionCompletionSubscriber = callback;

@@ -1,5 +1,3 @@
-#define RESPONSE_TIMEOUT_S 10
-
 struct JsonRpcParams {
     string jsonrpcVersion;
 };
@@ -40,8 +38,8 @@ public:
     virtual ~CJsonRpc() override {}
     virtual int connect(string node_url = "");
     virtual void disconnect();
-    virtual Json request(Json jsonMap);
+    virtual Json request(Json jsonMap, long timeout_s = RESPONSE_TIMEOUT_S);
     virtual void handleMessage(const string &payload);
     virtual int subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer);
-    virtual int unsubscribeWs(int subscriptionId);
+    virtual int unsubscribeWs(int subscriptionId, string method);
 };

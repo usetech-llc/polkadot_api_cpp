@@ -274,19 +274,16 @@ int CWebSocketClient::connect(string node_url) {
         // this will cause a single connection to be made to the server. c.run()
         std::unique_lock<std::mutex> connectionWaitLock(_connectionMtx);
         _connectedThread = new thread(&CWebSocketClient::runWsMessages, this);
-        _healthThread = new thread(&CWebSocketClient::health, this);
 
         // Wait for connection
         _connectionCV.wait_for(connectionWaitLock, ConnectionTimeout);
         if (_connected) {
+            _healthThread = new thread(&CWebSocketClient::health, this);
             _logger->info("Connection established");
         } else {
             _connectedThread->join();
-            _healthThread->join();
             delete _connectedThread;
-            delete _healthThread;
             _connectedThread = nullptr;
-            _healthThread = nullptr;
             _logger->error("Connection failed");
             return PAPI_CANT_CONNECT;
         }
@@ -306,8 +303,9 @@ void CWebSocketClient::disconnect() {
          : _c_no_tls.close(_connection_no_tls, websocketpp::close::status::going_away, "");
     _connected = false;
     _connectedThread->join();
-    _connectedThread = nullptr;
-    _healthThread->join();
+    if (_healthThread) {
+        _healthThread->join();
+    }
 }
 
 int CWebSocketClient::send(const string &msg) {
@@ -327,7 +325,10 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+        {"id", INT_MAX},
+        {"jsonrpc", "2.0"},
+        {"method", "system_health"},
+        {"params", Json::array()},
     };
 
     long period_counter = 0;

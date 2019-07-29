@@ -1,0 +1,8 @@
+<map id="NetworkState" name="NetworkState">
+<area shape="rect" id="node2" href="$structNotConnectedPeer.html" title="NotConnectedPeer" alt="" coords="24,184,157,211"/>
+<area shape="rect" id="node3" href="$structNotConnectedPeerInfo.html" title="NotConnectedPeerInfo" alt="" coords="5,95,160,121"/>
+<area shape="rect" id="node4" href="$structConnectedPeer.html" title="ConnectedPeer" alt="" coords="192,184,304,211"/>
+<area shape="rect" id="node5" href="$structConnectedPeerInfo.html" title="ConnectedPeerInfo" alt="" coords="185,95,319,121"/>
+<area shape="rect" id="node6" href="$structEndpoint.html" title="Endpoint" alt="" coords="149,5,222,32"/>
+<area shape="rect" id="node7" href="$structConnectedPeerTime.html" title="ConnectedPeerTime" alt="" coords="247,5,388,32"/>
+</map>

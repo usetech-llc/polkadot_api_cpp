@@ -93,12 +93,7 @@ Collaboration diagram for ModuleV6:</div>
 <div class="dyncontent">
 <div class="center"><img src="structModuleV6__coll__graph.png" border="0" usemap="#ModuleV6_coll__map" alt="Collaboration graph"/></div>
 <map name="ModuleV6_coll__map" id="ModuleV6_coll__map">
-<area shape="rect" id="node2" href="structStorageV5.html" title="StorageV5" alt="" coords="12,95,95,121"/>
-<area shape="rect" id="node3" href="structFuncTypeV5.html" title="FuncTypeV5" alt="" coords="5,5,101,32"/>
-<area shape="rect" id="node4" href="structConstV6.html" title="ConstV6" alt="" coords="119,95,193,121"/>
-<area shape="rect" id="node5" href="structEventArgV5.html" title="EventArgV5" alt="" coords="217,95,309,121"/>
-<area shape="rect" id="node6" href="structCallV5.html" title="CallV5" alt="" coords="333,95,395,121"/>
-<area shape="rect" id="node7" href="structFunctionCallArgV5.html" title="FunctionCallArgV5" alt="" coords="299,5,429,32"/>
+<area shape="rect" id="node2" href="structConstV6.html" title="ConstV6" alt="" coords="9,5,82,32"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -110,22 +105,22 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>name</b> [STRING_SIZE
 <tr class="memitem:a51832e7f9e923016fc9a89edb5822a46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a51832e7f9e923016fc9a89edb5822a46"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><b>prefix</b> [STRING_SIZE]</td></tr>
 <tr class="separator:a51832e7f9e923016fc9a89edb5822a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5524b2f0287bf6d90ba1fb8172763f31"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5524b2f0287bf6d90ba1fb8172763f31"></a>
-<a class="el" href="structStorageV5.html">StorageV5</a>&#160;</td><td class="memItemRight" valign="bottom"><b>storage</b> [COLLECTION_SIZE]</td></tr>
-<tr class="separator:a5524b2f0287bf6d90ba1fb8172763f31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00568629c5349588c055cb6d12982961"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00568629c5349588c055cb6d12982961"></a>
-<a class="el" href="structCallV5.html">CallV5</a>&#160;</td><td class="memItemRight" valign="bottom"><b>call</b> [COLLECTION_SIZE]</td></tr>
-<tr class="separator:a00568629c5349588c055cb6d12982961"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4667c24337d0e57fe92af6e32293d0a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4667c24337d0e57fe92af6e32293d0a2"></a>
-<a class="el" href="structEventArgV5.html">EventArgV5</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ev</b> [COLLECTION_SIZE]</td></tr>
-<tr class="separator:a4667c24337d0e57fe92af6e32293d0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a948da736fcaeb42d57b48a5267f60093"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a948da736fcaeb42d57b48a5267f60093"></a>
+unique_ptr&lt; <a class="el" href="structStorageV6.html">StorageV6</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>storage</b> [COLLECTION_SIZE]</td></tr>
+<tr class="separator:a948da736fcaeb42d57b48a5267f60093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ac691098748d8ded884ffc3b7e4825e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ac691098748d8ded884ffc3b7e4825e"></a>
+unique_ptr&lt; <a class="el" href="structCallV6.html">CallV6</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>call</b> [COLLECTION_SIZE]</td></tr>
+<tr class="separator:a4ac691098748d8ded884ffc3b7e4825e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0a067532aa539b32ed68899f9dd4d3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0a067532aa539b32ed68899f9dd4d3e"></a>
+unique_ptr&lt; <a class="el" href="structEventArgV6.html">EventArgV6</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ev</b> [COLLECTION_SIZE]</td></tr>
+<tr class="separator:ae0a067532aa539b32ed68899f9dd4d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6896e940b87596a32d23aeeb6506be23"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6896e940b87596a32d23aeeb6506be23"></a>
 <a class="el" href="structConstV6.html">ConstV6</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cons</b> [COLLECTION_SIZE]</td></tr>
 <tr class="separator:a6896e940b87596a32d23aeeb6506be23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="metadataV6_8h_source.html#l00009">9</a> of file <a class="el" href="metadataV6_8h_source.html">metadataV6.h</a>.</p>
+<p>Definition at line <a class="el" href="metadataV6_8h_source.html#l00047">47</a> of file <a class="el" href="metadataV6_8h_source.html">metadataV6.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/structs/<a class="el" href="metadataV6_8h_source.html">metadataV6.h</a></li>
 </ul>

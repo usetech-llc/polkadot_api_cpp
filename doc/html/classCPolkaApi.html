@@ -124,16 +124,48 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac06a58924477a3e6bd6edd20622eab8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e53d6d81c312dadbc03c10b122fd9c3"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a8e53d6d81c312dadbc03c10b122fd9c3">getRuntimeVersion</a> (unique_ptr&lt; <a class="el" href="structGetRuntimeVersionParams.html">GetRuntimeVersionParams</a> &gt; params)</td></tr>
 <tr class="separator:a8e53d6d81c312dadbc03c10b122fd9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7d1cd31d047ee0fc153a49010696e04"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structSignedBlock.html">SignedBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#af7d1cd31d047ee0fc153a49010696e04">getBlock</a> (unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt; params)</td></tr>
+<tr class="separator:af7d1cd31d047ee0fc153a49010696e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc9715c2e9fefe4962be9f398d11a1f0"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structBlockHeader.html">BlockHeader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#afc9715c2e9fefe4962be9f398d11a1f0">getBlockHeader</a> (unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt; params)</td></tr>
+<tr class="separator:afc9715c2e9fefe4962be9f398d11a1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a00310657c4cf0f09d4692f2bfb9c9"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structFinalHead.html">FinalHead</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a59a00310657c4cf0f09d4692f2bfb9c9">getFinalizedHead</a> ()</td></tr>
+<tr class="separator:a59a00310657c4cf0f09d4692f2bfb9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15396075e47ad46d7084d0c984841eb1"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structSystemHealth.html">SystemHealth</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a15396075e47ad46d7084d0c984841eb1">getSystemHealth</a> ()</td></tr>
+<tr class="separator:a15396075e47ad46d7084d0c984841eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5b379d52f022f05731aa22688c5bdb2"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structPeersInfo.html">PeersInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#aa5b379d52f022f05731aa22688c5bdb2">getSystemPeers</a> ()</td></tr>
+<tr class="separator:aa5b379d52f022f05731aa22688c5bdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b38e304102ac980d032f9f1f1955fa9"><td class="memItemLeft" align="right" valign="top">virtual unique_ptr&lt; <a class="el" href="structNetworkState.html">NetworkState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a3b38e304102ac980d032f9f1f1955fa9">getNetworkState</a> ()</td></tr>
+<tr class="separator:a3b38e304102ac980d032f9f1f1955fa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1faea32c853279c15cb723723dc9c3b"><td class="memItemLeft" align="right" valign="top">virtual unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ae1faea32c853279c15cb723723dc9c3b">getAccountNonce</a> (string address)</td></tr>
 <tr class="separator:ae1faea32c853279c15cb723723dc9c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae45eba6a20e32034f436e26ed5b0b9bd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ae45eba6a20e32034f436e26ed5b0b9bd">signAndSendTransfer</a> (string sender, string privateKey, string recipient, unsigned __int128 amount, std::function&lt; void(string)&gt; callback)</td></tr>
-<tr class="separator:ae45eba6a20e32034f436e26ed5b0b9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b260a1019ec65084faa54a5766f0971"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a5b260a1019ec65084faa54a5766f0971">getKeys</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)</td></tr>
+<tr class="separator:a5b260a1019ec65084faa54a5766f0971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d9f1cab6dde3712b404fa46a31d52b0"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a0d9f1cab6dde3712b404fa46a31d52b0">getStorage</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)</td></tr>
+<tr class="separator:a0d9f1cab6dde3712b404fa46a31d52b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a81976762f64712c485819fa2c7920e"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a8a81976762f64712c485819fa2c7920e">getStorageHash</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)</td></tr>
+<tr class="separator:a8a81976762f64712c485819fa2c7920e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec33eeebe8772a96123313558c9a2df7"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#aec33eeebe8772a96123313558c9a2df7">getStorageSize</a> (const string &amp;jsonPrm, const string &amp;module, const string &amp;variable)</td></tr>
+<tr class="separator:aec33eeebe8772a96123313558c9a2df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac50dd82b918e52a61e0a98871cf6ff5b"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ac50dd82b918e52a61e0a98871cf6ff5b">getChildKeys</a> (const string &amp;childStorageKey, const string &amp;storageKey)</td></tr>
+<tr class="separator:ac50dd82b918e52a61e0a98871cf6ff5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca90f90d940fae497dc86b77def3e9de"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#aca90f90d940fae497dc86b77def3e9de">getChildStorage</a> (const string &amp;childStorageKey, const string &amp;storageKey)</td></tr>
+<tr class="separator:aca90f90d940fae497dc86b77def3e9de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d2f7fb7d0b43f28523eb23e64f7d2d7"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a1d2f7fb7d0b43f28523eb23e64f7d2d7">getChildStorageHash</a> (const string &amp;childStorageKey, const string &amp;storageKey)</td></tr>
+<tr class="separator:a1d2f7fb7d0b43f28523eb23e64f7d2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76534a8467551a104be74934be280b27"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a76534a8467551a104be74934be280b27">getChildStorageSize</a> (const string &amp;childStorageKey, const string &amp;storageKey)</td></tr>
+<tr class="separator:a76534a8467551a104be74934be280b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae682d626f8d59f211318327cbc767acb"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ae682d626f8d59f211318327cbc767acb">stateCall</a> (const string &amp;name, const string &amp;data, const string &amp;hash)</td></tr>
+<tr class="separator:ae682d626f8d59f211318327cbc767acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5182c1b2b2413ad4a66e11cfa2b9c2f9"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a5182c1b2b2413ad4a66e11cfa2b9c2f9">queryStorage</a> (const string &amp;key, const string &amp;startHash, const string &amp;stopHash, <a class="el" href="structStorageItem.html">StorageItem</a> *itemBuf, int itemBufSize)</td></tr>
+<tr class="separator:a5182c1b2b2413ad4a66e11cfa2b9c2f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c484c6e69dfea9549640e4f226868fd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a6c484c6e69dfea9549640e4f226868fd">signAndSendTransfer</a> (string sender, string privateKey, string recipient, uint128 amount, std::function&lt; void(string)&gt; callback)</td></tr>
+<tr class="separator:a6c484c6e69dfea9549640e4f226868fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af82b72a2595ad868f73be2609e88d4d3"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#af82b72a2595ad868f73be2609e88d4d3">subscribeBlockNumber</a> (std::function&lt; void(long long)&gt; callback)</td></tr>
 <tr class="separator:af82b72a2595ad868f73be2609e88d4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9cc0cd7a71ec2eb65a77fab35e3de96"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ab9cc0cd7a71ec2eb65a77fab35e3de96">unsubscribeBlockNumber</a> ()</td></tr>
 <tr class="separator:ab9cc0cd7a71ec2eb65a77fab35e3de96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bb4dede1fc991fef1eb31a21547c859"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a9bb4dede1fc991fef1eb31a21547c859">subscribeBalance</a> (string address, std::function&lt; void(unsigned __int128)&gt; callback)</td></tr>
-<tr class="separator:a9bb4dede1fc991fef1eb31a21547c859"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace1845dfd005b1d9deecf0f4b4784384"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ace1845dfd005b1d9deecf0f4b4784384">subscribeBalance</a> (string address, std::function&lt; void(uint128)&gt; callback)</td></tr>
+<tr class="separator:ace1845dfd005b1d9deecf0f4b4784384"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c1fe8a822a04d7a9f0182667e802304"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a2c1fe8a822a04d7a9f0182667e802304">unsubscribeBalance</a> (string address)</td></tr>
 <tr class="separator:a2c1fe8a822a04d7a9f0182667e802304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73f0b668c14afb4f50eef56efb68a998"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a73f0b668c14afb4f50eef56efb68a998">subscribeEraAndSession</a> (std::function&lt; void(<a class="el" href="structEra.html">Era</a>, <a class="el" href="structSession.html">Session</a>)&gt; callback)</td></tr>
@@ -144,10 +176,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac1245151fda85294255234e0a3abf523"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a327505a0deff03c01a1023521f4ef18d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a327505a0deff03c01a1023521f4ef18d">unsubscribeAccountNonce</a> (string address)</td></tr>
 <tr class="separator:a327505a0deff03c01a1023521f4ef18d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ef78b36b2138586242305543accf22"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a36ef78b36b2138586242305543accf22">subscribeFinalizedBlock</a> (std::function&lt; void(const <a class="el" href="structBlockHeader.html">BlockHeader</a> &amp;)&gt; callback)</td></tr>
+<tr class="separator:a36ef78b36b2138586242305543accf22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bf5e5445c1f5f416efb0a8e7557d21b"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a6bf5e5445c1f5f416efb0a8e7557d21b">unsubscribeFinalizedBlock</a> ()</td></tr>
+<tr class="separator:a6bf5e5445c1f5f416efb0a8e7557d21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade0e7d71ed3224adb94976c10b93ca8b"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ade0e7d71ed3224adb94976c10b93ca8b">subscribeRuntimeVersion</a> (std::function&lt; void(const <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &amp;)&gt; callback)</td></tr>
+<tr class="separator:ade0e7d71ed3224adb94976c10b93ca8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac770b5a7e97df9ecc7a2698c3a5979ca"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ac770b5a7e97df9ecc7a2698c3a5979ca">unsubscribeRuntimeVersion</a> ()</td></tr>
+<tr class="separator:ac770b5a7e97df9ecc7a2698c3a5979ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92fefb0d05fe32526bfb33074e019e26"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a92fefb0d05fe32526bfb33074e019e26">subscribeStorage</a> (string key, std::function&lt; void(const string &amp;)&gt; callback)</td></tr>
+<tr class="separator:a92fefb0d05fe32526bfb33074e019e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bc18feaade5f8b16c0d0d0f87cb4173"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a1bc18feaade5f8b16c0d0d0f87cb4173">unsubscribeStorage</a> (string key)</td></tr>
+<tr class="separator:a1bc18feaade5f8b16c0d0d0f87cb4173"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="application_8h_source.html#l00035">35</a> of file <a class="el" href="application_8h_source.html">application.h</a>.</p>
+<p>Definition at line <a class="el" href="application_8h_source.html#l00036">36</a> of file <a class="el" href="application_8h_source.html">application.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a9f769c53e8b457ae1e19c4782148559b"></a>
 <div class="memitem">
@@ -182,6 +226,8 @@ Public Member Functions</h2></td></tr>
 </li>
 </ol>
 <p><a href="https://github.com/usetech-llc/polkadot_api_cpp">https://github.com/usetech-llc/polkadot_api_cpp</a></p>
+<p>Dealing with Substrate Runtime updates</p>
+<p>Client application should subscribe to runtimeVersion and, as soon as it receives an update that indicates that runtime version changed, it should disconnect and connect again to recalculate hashers and method and modlue indexes that are required for correct working of other methods.</p>
 <p>$param node_url - Node URL to connect to. If set to default value of "", default node URL will be used </p><dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
 <p>Implements <a class="el" href="classIApplication.html#a4695f2ee940edb1fff42e4403de6ffaf">IApplication</a>.</p>
@@ -214,7 +260,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a5f05ea92d87b60d0f8637ddf3668655b">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00191">191</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00212">212</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -250,7 +296,43 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ae7dbe556c940f7040eba40beba1b22ae">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00324">324</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00581">581</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af7d1cd31d047ee0fc153a49010696e04"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structSignedBlock.html">SignedBlock</a> &gt; CPolkaApi::getBlock </td>
+          <td>(</td>
+          <td class="paramtype">unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt;&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get header and body of a relay chain block</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">struct</td><td>with blockHash 64 diget number in hex format </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSignedBlock.html">SignedBlock</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a5d489ec30c93c7f0a8904241e470a0e8">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00521">521</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -286,7 +368,315 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a874c5af80d7342db07d7581d6f6f80fb">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00288">288</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00485">485</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afc9715c2e9fefe4962be9f398d11a1f0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structBlockHeader.html">BlockHeader</a> &gt; CPolkaApi::getBlockHeader </td>
+          <td>(</td>
+          <td class="paramtype">unique_ptr&lt; <a class="el" href="structGetBlockParams.html">GetBlockParams</a> &gt;&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Retrieves the header for a specific block</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">struct</td><td>with blockHash 64 diget number in hex format </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structBlockHeader.html">BlockHeader</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a032059682a287393103d3d655ae7da77">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00533">533</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac50dd82b918e52a61e0a98871cf6ff5b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getChildKeys </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildKeys RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a93f238f867d7249507716e824755a0b9">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00664">664</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca90f90d940fae497dc86b77def3e9de"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getChildStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorage RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a111068b55be523ef4b391c7efe77400a">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00679">679</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1d2f7fb7d0b43f28523eb23e64f7d2d7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getChildStorageHash </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorageHash RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string response from RPC method </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#ab6bf7b09a77a7abcab0017a1ba7a06be">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00694">694</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a76534a8467551a104be74934be280b27"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::getChildStorageSize </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>childStorageKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>storageKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls storage_getChildStorageSize RPC method with given child storage key and storage key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">childStorageKey</td><td>- string with 0x prefixed child storage key hex value </td></tr>
+    <tr><td class="paramname">storageKey</td><td>- string with 0x prefixed storage key hex value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int response from RPC method </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a89211a617600becc8547925057c5103d">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00709">709</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a59a00310657c4cf0f09d4692f2bfb9c9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structFinalHead.html">FinalHead</a> &gt; CPolkaApi::getFinalizedHead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get hash of the last finalized block in the chain</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structFinalHead.html">FinalHead</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#ac0910cbd82cdb26c44ccb21d6c7807ec">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00554">554</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5b260a1019ec65084faa54a5766f0971"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getKeys </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates storage key for a certain Module and State variable defined by parameter and prefix. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a528795695111ed8602a237af9eb4ab93">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00599">599</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -322,7 +712,36 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a0c578b10204f79d0da8cb6479cf0af45">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00300">300</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00497">497</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b38e304102ac980d032f9f1f1955fa9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structNetworkState.html">NetworkState</a> &gt; CPolkaApi::getNetworkState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns current state of the network</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structNetworkState.html">NetworkState</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a0379a5cd2b4c5b2ab68cc6a35e424df8">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00572">572</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -358,7 +777,201 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#abdf60c651290fb77835f90ec826e2257">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00312">312</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00509">509</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0d9f1cab6dde3712b404fa46a31d52b0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Reads storage for a certain Module and State variable defined by parameter and prefix. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a6ebe2542237d023c6ccb43c235cf6eed">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00618">618</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a81976762f64712c485819fa2c7920e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::getStorageHash </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns storage hash of given State Variable for a given Module defined by parameter. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classIApplication.html#ab3db5a43716118e0265db8c52d9088b9">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00634">634</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec33eeebe8772a96123313558c9a2df7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::getStorageSize </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns storage size for a given State Variable for a given Module defined by parameter. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<p>Information about Modules and State variables (with parameters and their types) is returned by getMetadata method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">module</td><td>- module (as in metadata) </td></tr>
+    <tr><td class="paramname">variable</td><td>- state variable (as in metadata for given module) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classIApplication.html#aeb517cbf28bd8fdea2092b8e56912789">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00649">649</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15396075e47ad46d7084d0c984841eb1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structSystemHealth.html">SystemHealth</a> &gt; CPolkaApi::getSystemHealth </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return health status of the node</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structSystemHealth.html">SystemHealth</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a60bd46792a397ccef4152d0e18afb7e6">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00545">545</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -386,11 +999,108 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#acb0100dfc23034f7ce58ddc0eed4820d">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00215">215</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00235">235</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae45eba6a20e32034f436e26ed5b0b9bd"></a>
+<a class="anchor" id="aa5b379d52f022f05731aa22688c5bdb2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unique_ptr&lt; <a class="el" href="structPeersInfo.html">PeersInfo</a> &gt; CPolkaApi::getSystemPeers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the currently connected peers</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structPeersInfo.html">PeersInfo</a> struct with result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a244abecf803f46caea395b7924da23e7">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00563">563</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5182c1b2b2413ad4a66e11cfa2b9c2f9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::queryStorage </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>startHash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>stopHash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structStorageItem.html">StorageItem</a> *&#160;</td>
+          <td class="paramname"><em>itemBuf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>itemBufSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls state_queryStorage RPC method to get historical information about storage at a key</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to query </td></tr>
+    <tr><td class="paramname">startHash</td><td>- hash of block to start with </td></tr>
+    <tr><td class="paramname">stopHsah</td><td>- hash of block to stop at </td></tr>
+    <tr><td class="paramname">itemBuf</td><td>- preallocated array of <a class="el" href="structStorageItem.html">StorageItem</a> elements </td></tr>
+    <tr><td class="paramname">itemBufSize</td><td>- size of preallocated array of <a class="el" href="structStorageItem.html">StorageItem</a> elements </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of retrieved items </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a4db994d5b804b1a9c614968ae31b7343">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00731">731</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6c484c6e69dfea9549640e4f226868fd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -418,7 +1128,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned __int128&#160;</td>
+          <td class="paramtype">uint128&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
         </tr>
         <tr>
@@ -451,9 +1161,63 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classIApplication.html#aa56d2498932ac9c31f5f2a92a8ac6f77">IApplication</a>.</p>
+<p>Implements <a class="el" href="classIApplication.html#ad07e2a5b696fa391f6e9c5fb51721dd4">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00516">516</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01010">1010</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae682d626f8d59f211318327cbc767acb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::stateCall </td>
+          <td>(</td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>hash</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calls state_call RPC method</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>- name of call </td></tr>
+    <tr><td class="paramname">data</td><td>- hex encoded data with 0x prefix </td></tr>
+    <tr><td class="paramname">hash</td><td>- hex encoded block hash with 0x prefix </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string raw RPC call return </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a6ee7f495cfdb2e78d59a7b0389ccc257">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00724">724</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -500,11 +1264,11 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad005e633533abd96b0b829c8c6abe16f">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00487">487</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00917">917</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a9bb4dede1fc991fef1eb31a21547c859"></a>
+<a class="anchor" id="ace1845dfd005b1d9deecf0f4b4784384"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -520,7 +1284,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(unsigned __int128)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; void(uint128)&gt;&#160;</td>
           <td class="paramname"><em>callback</em>&#160;</td>
         </tr>
         <tr>
@@ -545,9 +1309,9 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
 
-<p>Implements <a class="el" href="classIApplication.html#a6d22f7dda3d53e6f9877a609e3679cdc">IApplication</a>.</p>
+<p>Implements <a class="el" href="classIApplication.html#a1e124c122a6d96ac42ac4cbae1f77bce">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00461">461</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00891">891</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -583,7 +1347,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00411">411</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00841">841</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -619,7 +1383,127 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af73bb90d3220bcedf18a288fd00654bc">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00423">423</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00853">853</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a36ef78b36b2138586242305543accf22"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::subscribeFinalizedBlock </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const <a class="el" href="structBlockHeader.html">BlockHeader</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent finalized block. Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until unsubscribeFinalizedBlock method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeFinalizedBlock will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a670a5bca569810701e32167fdb05f858">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00946">946</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade0e7d71ed3224adb94976c10b93ca8b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::subscribeRuntimeVersion </td>
+          <td>(</td>
+          <td class="paramtype">std::function&lt; void(const <a class="el" href="structRuntimeVersion.html">RuntimeVersion</a> &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent runtime version. This subscription is necessary for applications that keep connection for a long time. If update about runtime version arrives, it will be necessary to disconnect and reconnect since module and method indexes might have changed.</p>
+<p>Only one subscription at a time is allowed. If a subscription already exists, old subscription will be discarded and replaced with the new one. Until unsubscribeRuntimeVersion method is called, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeRuntimeVersion will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#abe114766f62c22f6f7a21eaf3f494283">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00967">967</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a92fefb0d05fe32526bfb33074e019e26"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::subscribeStorage </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(const string &amp;)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Subscribe to most recent value updates for a given storage key. Only one subscription at a time per address is allowed. If a subscription already exists for the same storage key, old subscription will be discarded and replaced with the new one. Until unsubscribeStorage method is called with the same storage key, the API will be receiving updates and forwarding them to subscribed object/function. Only unsubscribeStorage will physically unsubscribe from WebSocket endpoint updates.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to receive updates for (e.g. "0x66F795B8D457430EDDA717C3CBA459B9") </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive balance updates </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#aad12da13245536999799f508d44aab8a">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00988">988</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -655,7 +1539,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af0d19365711fdd418038e8463f6a1701">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00507">507</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00937">937</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -691,7 +1575,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a6422c696fa18a0896456bb8a2b5eae7c">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00478">478</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00908">908</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -720,7 +1604,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00452">452</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00882">882</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -749,7 +1633,101 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ada6a4f45cecca200c40a3045514cea22">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00442">442</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00872">872</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6bf5e5445c1f5f416efb0a8e7557d21b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::unsubscribeFinalizedBlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with most recent finalized block.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a978da4e26e10c2c8eba6c4a2bf0d1a16">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00958">958</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac770b5a7e97df9ecc7a2698c3a5979ca"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::unsubscribeRuntimeVersion </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates with most recent Runtime Version.</p>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a770f959f96907e1417d6225b01b36103">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00979">979</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1bc18feaade5f8b16c0d0d0f87cb4173"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::unsubscribeStorage </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>key</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Unsubscribe from WebSocket endpoint and stop receiving updates for address balance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">key</td><td>- storage key to stop receiving updates for </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#af5cda3426c157d49772b28f458f9a474">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01001">1001</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>

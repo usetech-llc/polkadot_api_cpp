@@ -56,7 +56,7 @@ struct Block {
 
 struct SignedBlock {
     Block block;
-    unsigned short int justification[STRING_SIZE];
+    char justification[STRING_SIZE];
 };
 
 struct GetBlockParams {

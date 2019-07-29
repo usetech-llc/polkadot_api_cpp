@@ -1,0 +1,4 @@
+<map id="ConnectedPeerInfo" name="ConnectedPeerInfo">
+<area shape="rect" id="node2" href="$structEndpoint.html" title="Endpoint" alt="" coords="5,5,79,32"/>
+<area shape="rect" id="node3" href="$structConnectedPeerTime.html" title="ConnectedPeerTime" alt="" coords="103,5,245,32"/>
+</map>

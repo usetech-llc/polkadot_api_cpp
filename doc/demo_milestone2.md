@@ -57,9 +57,17 @@ state_getChildKeys
 state_getChildStorage
 state_getChildStorageHash
 state_getChildStorageSize
-state_queryStorage
+
+Currently these methods are not available. The node returns error: {"code":-32601,"message":"Method not found"}. We implemented them with hex-string child storage key and storage key parameters and they will return string response as is from the RPC call, but there are no concrete examples in unit tests since none of them would work anyway.
 ```
-TBD
+bin/get_child_storage
+```
+
+state_queryStorage
+
+This E2E test queries timestamp from last 10 blocks. All timestamps must be different and there should be at least 10 of them.
+```
+bin/query_storage
 ```
 
 system_health
@@ -75,6 +83,18 @@ bin/get_systempeers_ok
 system_networkState
 ```
 bin/get_system_networkstate_ok
+```
+
+### Support following WebSocket subscriptions:
+
+chain_newHead
+```
+bin/wssubscribeApp
+```
+
+chain_finalizedHead, state_runtimeVersion, state_storage
+```
+bin/wssubscribe_all
 ```
 
 ## Deliverable 4 - Expanded Support of Transactions

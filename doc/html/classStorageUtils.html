@@ -91,17 +91,82 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a138f1b5e0430ee07d87fc29af6093737"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a138f1b5e0430ee07d87fc29af6093737"></a>
+static string&#160;</td><td class="memItemRight" valign="bottom"><b>getStorageKey</b> (const Hasher hasher, const unsigned char *data, int length)</td></tr>
+<tr class="separator:a138f1b5e0430ee07d87fc29af6093737"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab62b774a9dce66dd8aae9ef0f07eb09c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab62b774a9dce66dd8aae9ef0f07eb09c"></a>
 static string&#160;</td><td class="memItemRight" valign="bottom"><b>getAddressStorageKey</b> (const Hasher hasher, const <a class="el" href="structAddress.html">Address</a> &amp;address, const string &amp;prefix)</td></tr>
 <tr class="separator:ab62b774a9dce66dd8aae9ef0f07eb09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf11f52e509f062a24f19d8b3df716c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdf11f52e509f062a24f19d8b3df716c"></a>
 static string&#160;</td><td class="memItemRight" valign="bottom"><b>getAddressStorageKey</b> (const Hasher hasher, const <a class="el" href="structAddress.html">Address</a> &amp;address, const char *prefix)</td></tr>
 <tr class="separator:abdf11f52e509f062a24f19d8b3df716c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab39fc8a3ec6f3ad27aef3a6e870799e0"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStorageUtils.html#ab39fc8a3ec6f3ad27aef3a6e870799e0">getMappedStorageKey</a> (const Hasher hasher, const string &amp;jsonPrm, const string &amp;prefix)</td></tr>
+<tr class="separator:ab39fc8a3ec6f3ad27aef3a6e870799e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d23fa7b94c39baa03d6aa65f87b3fc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d23fa7b94c39baa03d6aa65f87b3fc5"></a>
+static string&#160;</td><td class="memItemRight" valign="bottom"><b>getMappedStorageKey</b> (const Hasher hasher, const char *jsonPrm, const char *prefix)</td></tr>
+<tr class="separator:a1d23fa7b94c39baa03d6aa65f87b3fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad87def465759675db7dc17db0fec87da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad87def465759675db7dc17db0fec87da"></a>
+static string&#160;</td><td class="memItemRight" valign="bottom"><b>getPlainStorageKey</b> (const Hasher hasher, const string &amp;prefix)</td></tr>
+<tr class="separator:ad87def465759675db7dc17db0fec87da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67bce42148d4433a20b636b753a08cb7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a67bce42148d4433a20b636b753a08cb7"></a>
+static string&#160;</td><td class="memItemRight" valign="bottom"><b>getPlainStorageKey</b> (const Hasher hasher, const char *prefix)</td></tr>
+<tr class="separator:a67bce42148d4433a20b636b753a08cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="storage_8h_source.html#l00003">3</a> of file <a class="el" href="storage_8h_source.html">storage.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<p>Definition at line <a class="el" href="storage_8h_source.html#l00013">13</a> of file <a class="el" href="storage_8h_source.html">storage.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ab39fc8a3ec6f3ad27aef3a6e870799e0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static string StorageUtils::getMappedStorageKey </td>
+          <td>(</td>
+          <td class="paramtype">const Hasher&#160;</td>
+          <td class="paramname"><em>hasher</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>jsonPrm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const string &amp;&#160;</td>
+          <td class="paramname"><em>prefix</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates storage key for a parameter with prefix. Parameter is a JSON string representing a value of certain type, which has two fields: type and value. Type should be one of type strings defined above. Value should correspond to the type. Example:</p>
+<p>{"type" : "AccountId", "value" : "5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr"}</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hasher</td><td>- hash function to use </td></tr>
+    <tr><td class="paramname">jsonPrm</td><td>- JSON string that contains parameter and its type </td></tr>
+    <tr><td class="paramname">prefix</td><td>- prefix including module and state variable separated by space (example: "Balances FreeBalance") </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/utils/<a class="el" href="storage_8h_source.html">storage.h</a></li>
 <li>src/utils/<a class="el" href="storage_8cpp_source.html">storage.cpp</a></li>
 </ul>

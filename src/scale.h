@@ -1,3 +1,5 @@
+#ifndef SCALE_H
+#define SCALE_H
 
 #include <fstream>
 #include <iostream>
@@ -21,3 +23,5 @@ CompactInteger decodeCompactInteger(string &stream);
 CompactIntegerLEBytes encodeCompactInteger(uint128 n);
 long writeCompactToBuf(CompactIntegerLEBytes ci, uint8_t *buf);
 } // namespace scale
+
+#endif // SCALE_H
