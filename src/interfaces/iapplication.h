@@ -225,10 +225,15 @@ public:
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback) = 0;
 
+<<<<<<< Updated upstream
     /**
      * Returns all pending extrinsics, potentially grouped by sender
      */
     virtual Extrinsic* pendingExtrinsics() = 0;                              
+=======
+
+    virtual void submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, string sender, string privateKey, std::function<void(Json)> callback) = 0;                                                      
+>>>>>>> Stashed changes
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already

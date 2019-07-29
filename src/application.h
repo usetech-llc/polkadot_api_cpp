@@ -68,6 +68,7 @@ private:
     map<string, std::function<void(unsigned long)>> _nonceSubscribers;
     std::function<void(Era, Session)> _eraAndSessionSubscriber;
     std::function<void(string)> _transactionCompletionSubscriber;
+    std::function<void(Json)> _subcribeExtrinsicSubscriber;
 
     // Subscription IDs
     int _blockNumberSubscriptionId;
@@ -75,6 +76,7 @@ private:
     map<string, int> _nonceSubscriptionIds;
     int _eraAndSessionSubscriptionId;
     int _transactionCompletionSubscriptionId;
+    int _subcribeExtrinsicSubscriberId;
 
 public:
     CPolkaApi() = delete;
@@ -102,6 +104,13 @@ public:
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
 
+<<<<<<< Updated upstream
+=======
+    virtual void submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, string sender, string privateKey, std::function<void(Json)> callback);
+    // virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender,
+    //              string privateKey, string recipient, std::function<void(Json)> callback);                     
+
+>>>>>>> Stashed changes
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(uint128)> callback);

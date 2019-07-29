@@ -39,7 +39,8 @@ int main(int argc, char *argv[]) {
     app.connect(getNodeUrlParam(argc, argv));
 
     // Subscribe to balance updates
-    string addr("5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht");
+    //string addr("5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht");
+    string addr("5HQdHxuPgQ1BpJasmm5ZzfSk5RDvYiH6YHfDJVE8jXmp4eig");
     bool done = false;
     uint128 balanceResult = (uint128)-1;
     app.subscribeBalance(addr, [&](uint128 balance) {

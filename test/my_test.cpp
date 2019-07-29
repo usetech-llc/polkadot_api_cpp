@@ -38,12 +38,50 @@ int main(int argc, char *argv[]) {
 
     auto app = polkadot::api::getInstance()->app();
     app->connect();
+    bool done = false;
 
-Json js;
+    uint8_t method[256];
+    auto receiverPublicKey = AddressUtils::getPublicKeyFromAddr("5HQdHxuPgQ1BpJasmm5ZzfSk5RDvYiH6YHfDJVE8jXmp4eig");
 
-    app->submitAndSubcribeExtrinsic(NULL, js, NULL, NULL, NULL, [&](Json result) {
-        cout << endl << " Account Nonce: " << result.dump() << endl << endl;
+    uint8_t receiverBytes[SR25519_PUBLIC_SIZE];
+    memcpy(receiverBytes,receiverPublicKey.bytes, SR25519_PUBLIC_SIZE);
+
+    int writtenLength = 0;
+     // Module + Method
+        method[writtenLength++] = 3;// method.moduleIndex;
+        method[writtenLength++] = 0;// method.methodIndex;
+
+        // Address separator
+        method[writtenLength++] = ADDRESS_SEPARATOR;
+
+        // Receiving address public key
+        memcpy(method + writtenLength, receiverBytes, SR25519_PUBLIC_SIZE);
+        writtenLength += SR25519_PUBLIC_SIZE;
+
+        // Compact-encode amount
+        auto compactAmount = scale::encodeCompactInteger(123);
+
+        // Amount
+        writtenLength += scale::writeCompactToBuf(compactAmount, method + writtenLength);
+        uint8_t* m = new uint8_t[writtenLength];
+        memcpy(method, m, writtenLength);
+
+        cout << writtenLength;
+
+
+    app->submitAndSubcribeExtrinsic(m, "5GuuxfuxbvaiwteUrV9U7Mj2Fz7TWK84WhLaZdMMJRvSuzr4", 
+        "0xa81056d713af1ff17b599e60d287952e89301b5208324a0529b62dc7369c745defc9c8dd67b7c59b201bc164163a8978d40010c22743db142a47f2e064480d4b", 
+        [&](Json result) {
+
+        cout << endl << " Result: " << result.dump() << endl << endl;
+        done = true;
     });
+
+    delete m;
+
+    // Wait until block number update arrives
+    while (!done)
+        usleep(10000);
 
     app->disconnect();
 

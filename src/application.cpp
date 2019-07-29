@@ -704,6 +704,23 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
         }
 
         // Handle transaction completion subscriptions
+        if (_subcribeExtrinsicSubscriberId == subscriptionId) {
+
+
+            _subcribeExtrinsicSubscriber(message);
+            // if (message.dump().find("ready") != std::string::npos)
+            //     _transactionCompletionSubscriber(string("ready"));
+            // else if (message.dump().find("finalized") != std::string::npos) {
+            //     _transactionCompletionSubscriber(string("finalized"));
+
+                // There is no need to unsubscribe, just reset variabled
+            //     _transactionCompletionSubscriber = nullptr;
+            //     _transactionCompletionSubscriptionId = 0;
+            // }
+            // return;
+        }
+
+        // Handle transaction completion subscriptions
         if (_transactionCompletionSubscriptionId == subscriptionId) {
             if (message.dump().find("ready") != std::string::npos)
                 _transactionCompletionSubscriber(string("ready"));
@@ -849,6 +866,151 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     return PAPI_OK;
 }
 
+<<<<<<< Updated upstream
+=======
+
+void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, string sender, string privateKey, std::function<void(Json)> callback) {
+
+// 0x350281FFD678B3E00C4238888BBF08DBBE1D7DE77C3F1CA1FC71A5A283770F06F7CD1205
+// D0F703DD7683E148EF5C731168B3B886FB92181CAADFB9C2E8B33753483ED3526916EE8D30
+// BE4EF11744FA2CD3FD21D95694565DAECC2023A7F07387BD958C0404000300FFEC5EB646CF
+// 2BC12C5416B71B50AE8E4DE496CB696EB8F2167A2B933620EB6505070010A5D4E8
+
+
+    _logger->info("=== Starting a Invoke Extrinsic ===");
+
+    // Get account Nonce
+    unsigned long nonce = getAccountNonce(sender);
+    auto compactNonce = scale::encodeCompactInteger(nonce);
+    _logger->info(string("sender nonce: ") + to_string(nonce));
+
+    // Format transaction
+    //TransferExtrinsic te;
+    Extrinsic ce;
+    memset(&ce, 0, sizeof(ce));
+
+
+        auto receiverPublicKey = AddressUtils::getPublicKeyFromAddr("5HQdHxuPgQ1BpJasmm5ZzfSk5RDvYiH6YHfDJVE8jXmp4eig");
+
+        uint8_t receiverBytes[SR25519_PUBLIC_SIZE];
+        memcpy(receiverBytes,receiverPublicKey.bytes, SR25519_PUBLIC_SIZE);
+
+        int mmWrittenLength = 0;
+        u_int8_t buf2[2048];
+
+        // Module + Method
+        buf2[mmWrittenLength++] = 3;//method.moduleIndex;
+        buf2[mmWrittenLength++] = 0;//method.methodIndex;
+
+        // Address separator
+        buf2[mmWrittenLength++] = ADDRESS_SEPARATOR;
+
+        // Receiving address public key
+        //memcpy(buf + mmWrittenLength, method.receiverPublicKey, SR25519_PUBLIC_SIZE);
+        memcpy(buf2 + mmWrittenLength, receiverBytes, SR25519_PUBLIC_SIZE);
+        mmWrittenLength += SR25519_PUBLIC_SIZE;
+
+        // Compact-encode amount
+        auto compactAmount = scale::encodeCompactInteger(123);
+
+        // Amount
+        mmWrittenLength += scale::writeCompactToBuf(compactAmount, buf2 + mmWrittenLength);
+        u_int8_t* mb = new uint8_t[mmWrittenLength];
+        memcpy(mb, buf2, mmWrittenLength);
+
+
+    ce.signature.version = SIGNATURE_VERSION;
+    auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
+    memcpy(ce.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
+    ce.signature.nonce = nonce;
+    ce.signature.era = IMMORTAL_ERA;
+
+    // Format signature payload
+    SignaturePayload sp;
+    sp.nonce = nonce;
+    
+    sp.methodBytesLength = mmWrittenLength;
+    sp.methodBytes = mb; 
+    sp.era = IMMORTAL_ERA;
+    memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
+
+    // Serialize and Sign payload
+    uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
+    long payloadLength = sp.serializeBinary(signaturePayloadBytes);
+
+    vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
+    uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
+    sr25519_sign(sig, ce.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Copy signature bytes to transaction
+    memcpy(ce.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
+
+
+
+    //auto length = 134 + compactAmount.length + compactNonce.length;
+    auto length = 134 + 4 + 3;//sizeof(encodedMethodBytes) - 4;// + compactAmount.length + compactNonce.length;
+
+    auto compactLength = scale::encodeCompactInteger(length);
+
+
+
+    /////////////////////////////////////////
+    // Serialize and write to buffer
+
+   int writtenLength = 0;
+    u_int8_t buf[2048];
+
+    // Length
+    writtenLength += scale::writeCompactToBuf(compactLength, buf + writtenLength);
+
+    // Signature version
+    buf[writtenLength++] = ce.signature.version;
+
+    // Address separator
+    buf[writtenLength++] = ADDRESS_SEPARATOR;
+
+    // Signer public key
+    memcpy(buf + writtenLength, ce.signature.signerPublicKey, SR25519_PUBLIC_SIZE);
+    writtenLength += SR25519_PUBLIC_SIZE;
+
+    // SR25519 Signature
+    memcpy(buf + writtenLength, ce.signature.sr25519Signature, SR25519_SIGNATURE_SIZE);
+    writtenLength += SR25519_SIGNATURE_SIZE;
+
+    // Nonce
+    writtenLength += scale::writeCompactToBuf(compactNonce, buf + writtenLength);
+
+    // Extrinsic Era
+    buf[writtenLength++] = ce.signature.era;
+
+    // Method
+   // writtenLength += serializeMethodBinary(buf + writtenLength);
+
+
+    // Serialize and send transaction
+    uint8_t teBytes[MAX_METHOD_BYTES_SZ];
+    memcpy(teBytes, buf, writtenLength);
+    memcpy(teBytes + writtenLength, buf2, mmWrittenLength);
+    
+    long teByteLength = writtenLength; 
+        //ce.serializeBinary(teBytes);  // ---- into params generator 
+    string teStr("0x");
+    for (int i = 0; i < teByteLength; ++i) {
+        char b[3] = {0};
+        sprintf(b, "%02X", teBytes[i]);
+        teStr += b;
+    }
+
+    cout << endl << endl << endl << teStr << endl << endl << endl;
+
+    // Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
+
+    // // Send == Subscribe callback to completion
+    // _subcribeExtrinsicSubscriber = callback;
+    // _subcribeExtrinsicSubscriberId = _jsonRpc->subscribeWs(query, this);
+}
+
+>>>>>>> Stashed changes
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                     std::function<void(string)> callback) {
 
@@ -903,6 +1065,7 @@ void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string rec
     }
 
     Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
+    cout << query.dump();
 
     // Send == Subscribe callback to completion
     _transactionCompletionSubscriber = callback;
