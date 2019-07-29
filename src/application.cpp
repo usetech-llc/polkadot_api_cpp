@@ -665,14 +665,14 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     return atoi(retval.c_str());
 }
 
-Extrinsic* CPolkaApi::pendingExtrinsics() {
+Extrinsic *CPolkaApi::pendingExtrinsics() {
 
     Json query = Json::object{{"method", "author_pendingExtrinsics"}, {"params", Json::array{}}};
     Json response = _jsonRpc->request(query);
 
     cout << endl << endl << response.dump() << endl << endl;
 
-    Extrinsic* e;
+    Extrinsic *e;
     return e;
 }
 
@@ -706,14 +706,13 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
         // Handle transaction completion subscriptions
         if (_subcribeExtrinsicSubscriberId == subscriptionId) {
 
-
             _subcribeExtrinsicSubscriber(message);
             // if (message.dump().find("ready") != std::string::npos)
             //     _transactionCompletionSubscriber(string("ready"));
             // else if (message.dump().find("finalized") != std::string::npos) {
             //     _transactionCompletionSubscriber(string("finalized"));
 
-                // There is no need to unsubscribe, just reset variabled
+            // There is no need to unsubscribe, just reset variabled
             //     _transactionCompletionSubscriber = nullptr;
             //     _transactionCompletionSubscriptionId = 0;
             // }
@@ -866,9 +865,9 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
     return PAPI_OK;
 }
 
-
-void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned int encodedMethodBytesSize, 
-                                string module, string method, string sender, string privateKey, std::function<void(Json)> callback) {
+void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
+                                           string module, string method, string sender, string privateKey,
+                                           std::function<void(Json)> callback) {
 
     _logger->info("=== Starting a Invoke Extrinsic ===");
 
@@ -888,7 +887,7 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned
 
     Extrinsic ce;
     memset(&ce, 0, sizeof(ce));
- 
+
     uint8_t completeMessage[MAX_METHOD_BYTES_SZ];
     memcpy(completeMessage, mmBuf, 3);
     memcpy(completeMessage + 3, encodedMethodBytes, encodedMethodBytesSize);
@@ -902,9 +901,9 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned
     // Format signature payload
     SignaturePayload sp;
     sp.nonce = nonce;
-    
+
     sp.methodBytesLength = encodedMethodBytesSize + 3;
-    sp.methodBytes = completeMessage; 
+    sp.methodBytes = completeMessage;
     sp.era = IMMORTAL_ERA;
     memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
 
@@ -926,7 +925,7 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned
     /////////////////////////////////////////
     // Serialize message signature and write to buffer
 
-   int writtenLength = 0;
+    int writtenLength = 0;
     u_int8_t buf[2048];
 
     // Length
@@ -956,8 +955,8 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned
     uint8_t teBytes[MAX_METHOD_BYTES_SZ];
     memcpy(teBytes, buf, writtenLength);
     memcpy(teBytes + writtenLength, completeMessage, 3 + encodedMethodBytesSize);
-    
-    long teByteLength = writtenLength + encodedMethodBytesSize + 3; 
+
+    long teByteLength = writtenLength + encodedMethodBytesSize + 3;
     string teStr("0x");
     for (int i = 0; i < teByteLength; ++i) {
         char b[3] = {0};

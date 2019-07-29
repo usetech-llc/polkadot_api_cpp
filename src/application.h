@@ -100,16 +100,17 @@ public:
     virtual string getStorage(const string &jsonPrm, const string &module, const string &variable);
     virtual string getStorageHash(const string &jsonPrm, const string &module, const string &variable);
     virtual int getStorageSize(const string &jsonPrm, const string &module, const string &variable);
-    virtual Extrinsic* pendingExtrinsics();                  
+    virtual Extrinsic *pendingExtrinsics();
 
     virtual void signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
                                      std::function<void(string)> callback);
 
-    virtual void submitAndSubcribeExtrinsic(uint8_t* encodedMethodBytes, unsigned int encodedMethodBytesSize, 
-                    string module, string method, string sender, string privateKey, std::function<void(Json)> callback);
+    virtual void submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize,
+                                            string module, string method, string sender, string privateKey,
+                                            std::function<void(Json)> callback);
 
     // virtual void submitAndSubcribeExtrinsic(string method, Json methodParams, string sender,
-    //              string privateKey, string recipient, std::function<void(Json)> callback);                     
+    //              string privateKey, string recipient, std::function<void(Json)> callback);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

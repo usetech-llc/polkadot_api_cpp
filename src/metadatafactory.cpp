@@ -549,7 +549,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
         auto storageIsset = nextByte(str);
         if (storageIsset != 0) {
             int storageLen = decodeCompactInteger(str);
-            if (storageLen == 0){
+            if (storageLen == 0) {
                 unique_ptr<StorageV5> storage(new StorageV5);
                 md->module[moduleIndex]->storage[0] = move(storage);
             }
@@ -568,7 +568,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
         auto callsIsset = nextByte(str);
         if (callsIsset != 0) {
             int callsCount = decodeCompactInteger(str);
-            if (callsCount == 0){
+            if (callsCount == 0) {
                 unique_ptr<CallV5> call(new CallV5);
                 md->module[moduleIndex]->call[0] = move(call);
             }
@@ -586,7 +586,7 @@ unique_ptr<MDV5> fillV5Metadata(std::string str) {
         auto eventsIsset = nextByte(str);
         if (eventsIsset != 0) {
             int eventsCount = decodeCompactInteger(str);
-            if (eventsCount == 0){
+            if (eventsCount == 0) {
                 unique_ptr<EventArgV5> ev(new EventArgV5);
                 md->module[moduleIndex]->ev[0] = move(ev);
             }
@@ -631,7 +631,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         auto storageIsset = nextByte(str);
         if (storageIsset != 0) {
             int storageLen = decodeCompactInteger(str);
-            if (storageLen == 0){
+            if (storageLen == 0) {
                 unique_ptr<StorageV6> storage(new StorageV6);
                 md->module[moduleIndex]->storage[0] = move(storage);
             }
@@ -649,7 +649,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         auto callsIsset = nextByte(str);
         if (callsIsset != 0) {
             int callsCount = decodeCompactInteger(str);
-            if (callsCount == 0){
+            if (callsCount == 0) {
                 unique_ptr<CallV6> call(new CallV6);
                 md->module[moduleIndex]->call[0] = move(call);
             }
@@ -668,7 +668,7 @@ unique_ptr<MDV6> fillV6Metadata(std::string str) {
         auto eventsIsset = nextByte(str);
         if (eventsIsset != 0) {
             int eventsCount = decodeCompactInteger(str);
-            if (eventsCount == 0){
+            if (eventsCount == 0) {
                 unique_ptr<EventArgV6> ev(new EventArgV6);
                 md->module[moduleIndex]->ev[0] = move(ev);
             }
@@ -760,7 +760,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
         auto storageIsset = nextByte(str);
         if (storageIsset != 0) {
             int storageLen = decodeCompactInteger(str);
-            if (storageLen == 0){
+            if (storageLen == 0) {
                 unique_ptr<StorageV4> storage(new StorageV4);
                 md->module[moduleIndex]->storage[0] = move(storage);
             }
@@ -779,7 +779,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
         auto callsIsset = nextByte(str);
         if (callsIsset != 0) {
             int callsCount = decodeCompactInteger(str);
-            if (callsCount == 0){
+            if (callsCount == 0) {
                 unique_ptr<CallV4> call(new CallV4);
                 md->module[moduleIndex]->call[0] = move(call);
             }
@@ -798,7 +798,7 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
         auto eventsIsset = nextByte(str);
         if (eventsIsset != 0) {
             int eventsCount = decodeCompactInteger(str);
-            if (eventsCount == 0){
+            if (eventsCount == 0) {
                 unique_ptr<EventArgV4> ev(new EventArgV4);
                 md->module[moduleIndex]->ev[0] = move(ev);
             }
