@@ -665,15 +665,12 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     return atoi(retval.c_str());
 }
 
-Extrinsic* CPolkaApi::pendingExtrinsics() {
+int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) {
 
     Json query = Json::object{{"method", "author_pendingExtrinsics"}, {"params", Json::array{}}};
     Json response = _jsonRpc->request(query);
 
-    cout << endl << endl << response.dump() << endl << endl;
-
-    Extrinsic* e;
-    return e;
+    return 0;
 }
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {

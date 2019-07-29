@@ -7,3 +7,11 @@ struct Extrinsic {
     uint128 length;
     Signature signature;
 };
+
+struct GenericMethod : public Method {
+    string methodBytes;
+};
+
+struct GenericExtrinsic : public Extrinsic {
+    GenericMethod method;
+};

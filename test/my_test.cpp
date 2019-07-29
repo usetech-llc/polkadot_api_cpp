@@ -8,6 +8,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     // SR25519 keys
+    /*
     vector<uint8_t> publicKey =
         fromHex<vector<uint8_t>>("5e8135dc17f025ca044780631ef89e21310b590b429e238786dd88dfec7b0f1d");
     vector<uint8_t> secretKey =
@@ -46,7 +47,7 @@ Json js;
     });
 
     app->disconnect();
-
+*/
 
     cout << "success" << endl;
 }

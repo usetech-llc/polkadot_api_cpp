@@ -226,9 +226,14 @@ public:
                                      std::function<void(string)> callback) = 0;
 
     /**
-     * Returns all pending extrinsics, potentially grouped by sender
+     * Returns all pending extrinsics
+     *
+     * @param buf - Preallocated array of GenericExtrinsic that will be filled
+     * @param bufferSize - size of preallocated array
+     * @return Number of extrinsics received from the node (may be greater than buffer size, in which case items with
+     * indexes greater than bufferSize are not returned)
      */
-    virtual Extrinsic* pendingExtrinsics() = 0;                              
+    virtual int pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) = 0;
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already
