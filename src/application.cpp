@@ -665,6 +665,17 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     return atoi(retval.c_str());
 }
 
+Extrinsic* CPolkaApi::pendingExtrinsics() {
+
+    Json query = Json::object{{"method", "author_pendingExtrinsics"}, {"params", Json::array{}}};
+    Json response = _jsonRpc->request(query);
+
+    cout << endl << endl << response.dump() << endl << endl;
+
+    Extrinsic* e;
+    return e;
+}
+
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
     // TODO: DOT-55, fix with proper producer-consumer
@@ -836,69 +847,6 @@ int CPolkaApi::unsubscribeAccountNonce(string address) {
         _nonceSubscriptionIds.erase(address);
     }
     return PAPI_OK;
-}
-
-
-void CPolkaApi::submitAndSubcribeExtrinsic(string method, Json methodParams, string sender, string privateKey, string recipient, std::function<void(Json)> callback) {
-
-    // _logger->info("=== Starting a Transfer Extrinsic ===");
-
-    // // Get account Nonce
-    // unsigned long nonce = getAccountNonce(sender);
-    // _logger->info(string("sender nonce: ") + to_string(nonce));
-
-    // // Format transaction
-    // TransferExtrinsic te;
-    // memset(&te, 0, sizeof(te));
-    // te.method.moduleIndex = _protocolPrm.BalanceModuleIndex;
-    // te.method.methodIndex = _protocolPrm.TransferMethodIndex;
-    // auto recipientPK = AddressUtils::getPublicKeyFromAddr(recipient);
-    // memcpy(te.method.receiverPublicKey, recipientPK.bytes, PUBLIC_KEY_LENGTH);
-    // te.method.amount = amount;
-    // te.signature.version = SIGNATURE_VERSION;
-    // auto senderPK = AddressUtils::getPublicKeyFromAddr(sender);
-    // memcpy(te.signature.signerPublicKey, senderPK.bytes, PUBLIC_KEY_LENGTH);
-    // te.signature.nonce = nonce;
-    // te.signature.era = IMMORTAL_ERA;
-
-    // // Format signature payload
-    // SignaturePayload sp;
-    // sp.nonce = nonce;
-    // uint8_t methodBytes[MAX_METHOD_BYTES_SZ];
-    // sp.methodBytesLength = te.serializeMethodBinary(methodBytes);
-    // sp.methodBytes = methodBytes;
-    // sp.era = IMMORTAL_ERA;
-    // memcpy(sp.authoringBlockHash, _protocolPrm.GenesisBlockHash, BLOCK_HASH_SIZE);
-
-    // // Serialize and Sign payload
-    // uint8_t signaturePayloadBytes[MAX_METHOD_BYTES_SZ];
-    // long payloadLength = sp.serializeBinary(signaturePayloadBytes);
-
-    // vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
-    // uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
-    // sr25519_sign(sig, te.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
-
-    // // Copy signature bytes to transaction
-    // memcpy(te.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
-
-    // // Serialize and send transaction
-    // uint8_t teBytes[MAX_METHOD_BYTES_SZ];
-    // long teByteLength = te.serializeBinary(teBytes);
-    // string teStr("0x");
-    // for (int i = 0; i < teByteLength; ++i) {
-    //     char b[3] = {0};
-    //     sprintf(b, "%02X", teBytes[i]);
-    //     teStr += b;
-    // }
-
-    Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"},
-    {"params", Json::array{"0x210281ffa673c814faabab0f81f2837d79df6aca044df12ba9b727110febf95bff2d0c01e214f265aee1c661e4ffaa10996573172bd1b57b25020e78a787d7dfed89034ca52d40b2d22ecdc13607a74a675a985a15d490593337ec9a247c7789028d420204000300ff8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a4804"}}};
-
-    // Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
-
-    // Send == Subscribe callback to completion
-    _transactionCompletionSubscriber = callback;
-    _transactionCompletionSubscriptionId = _jsonRpc->subscribeWs(query, this);
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,

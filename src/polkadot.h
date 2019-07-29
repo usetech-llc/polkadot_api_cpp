@@ -31,8 +31,6 @@ extern "C" {
 // Include structs
 #include "structs/publickey.h"
 #include "structs/hasher.h"
-#include "structs/signaturepayload.h"
-#include "structs/extrinsic.h"
 #include "structs/transfer.h"
 
 
