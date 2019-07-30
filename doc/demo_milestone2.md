@@ -131,12 +131,13 @@ bin/get_pending_extrinsics wss://poc3-rpc.polkadot.io/
 ```
 
 author_removeExtrinsic
+So far this method is not yet supported by the node (response is "Method not found"), but when it becomes available, here is the way to test it. Now it can be tested too, and the output will inform if the method is supported or not. Parameters are the same as for transfer E2E test.
 ```
-TBD
+bin/remove_extrinsic <sender address> <recipient address> <amount in fDOTs> <sender private key (hex)>
 ```
 
 ### Support following WebSocket subscriptions
 
 author_extrinsicUpdate
 
-Method submit_extrinsicNWatch subscribes to extrinsicUpdate's. 
+Method submit_extrinsicNWatch subscribes to extrinsicUpdate's.
