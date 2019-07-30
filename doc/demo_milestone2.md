@@ -102,7 +102,34 @@ bin/wssubscribe_all
 ### Support following RPC methods
 
 author_submitExtrinsic
+- All transaction types are supported, but for the demonstration sending DOT transaction is used in this E2E test
+```
+bin/submit_extrinsic <sender address> <recipient address> <amount in fDOTs> <sender private key (hex)>
+
+for example:
+
+bin/submit_extrinsic 5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr 5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht 1000000000000000000 0xABCDEF123.....123
+(private key was corrupted on purpose, both hex formats with or without leading 0x are supported)
+```
+
+Alternate RPC method with waiting - author_submitAndWatchExtrinsic
+```
+bin/submit_extrinsicNWatch <sender address> <recipient address> <amount in fDOTs> <sender private key (hex)>
+
+for example:
+
+bin/submit_extrinsicNWatch 5ECcjykmdAQK71qHBCkEWpWkoMJY6NXvpdKy8UeMx16q5gFr 5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKht 1000000000000000000 0xABCDEF123.....123
+(private key was corrupted on purpose, both hex formats with or without leading 0x are supported)
+```
+
 author_pendingExtrinsics
+
+The method may be examined with the following command with different parameters. Sometimes the default node (wss://alex.unfrastructure.io/public/ws) does not report any pending extrinsics. In order to get a non-empty result, we used alternate node: wss://poc3-rpc.polkadot.io/
+```
+bin/get_pending_extrinsics wss://alex.unfrastructure.io/public/ws
+bin/get_pending_extrinsics wss://poc3-rpc.polkadot.io/
+```
+
 author_removeExtrinsic
 ```
 TBD
@@ -111,6 +138,5 @@ TBD
 ### Support following WebSocket subscriptions
 
 author_extrinsicUpdate
-```
-TBD
-```
+
+Method submit_extrinsicNWatch subscribes to extrinsicUpdate's. 

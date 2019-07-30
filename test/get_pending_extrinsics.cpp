@@ -1,19 +1,22 @@
 #include "../src/polkadot.h"
+#include "helpers/cli.h"
 #include "helpers/mockjsonrpc.h"
 #undef NDEBUG
 #include <cassert>
 
+#define BUFSIZE 100
+
 int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
-    app->connect();
+    app->connect(getNodeUrlParam(argc, argv));
 
     cout << endl << endl << "============================ Get Pending Extrinsics ============================" << endl;
-    GenericExtrinsic peBuf[20];
-    int count = app->pendingExtrinsics(peBuf, 20);
+    GenericExtrinsic peBuf[BUFSIZE];
+    int count = app->pendingExtrinsics(peBuf, BUFSIZE);
 
     cout << endl << count << " pending extrinsics returned" << endl;
     for (int i = 0; i < count; ++i) {
-        if (i < 20) {
+        if (i < BUFSIZE) {
             // Checks
             assert(peBuf[i].signerAddress.length() != 0);
             assert(peBuf[i].length >= 100); // Minimum length == length of signature structure
