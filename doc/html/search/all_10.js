@@ -12,6 +12,8 @@ var searchData=
   ['storagev4',['StorageV4',['../structStorageV4.html',1,'']]],
   ['storagev5',['StorageV5',['../structStorageV5.html',1,'']]],
   ['storagev6',['StorageV6',['../structStorageV6.html',1,'']]],
+  ['submitandsubcribeextrinsic',['submitAndSubcribeExtrinsic',['../classCPolkaApi.html#a5ca5f7c31ab8db3f38bbfc5a45c0a265',1,'CPolkaApi::submitAndSubcribeExtrinsic()'],['../classIApplication.html#a9641c8c6ab816629b52bed72c3429d72',1,'IApplication::submitAndSubcribeExtrinsic()']]],
+  ['submitextrinsic',['submitExtrinsic',['../classCPolkaApi.html#a56a10645281459c3849ad479192e2d94',1,'CPolkaApi::submitExtrinsic()'],['../classIApplication.html#a7c16969c3b4110627cd960ff9320c2cf',1,'IApplication::submitExtrinsic()']]],
   ['subscribeaccountnonce',['subscribeAccountNonce',['../classCPolkaApi.html#ac1245151fda85294255234e0a3abf523',1,'CPolkaApi::subscribeAccountNonce()'],['../classIApplication.html#ad005e633533abd96b0b829c8c6abe16f',1,'IApplication::subscribeAccountNonce()']]],
   ['subscribebalance',['subscribeBalance',['../classCPolkaApi.html#ace1845dfd005b1d9deecf0f4b4784384',1,'CPolkaApi::subscribeBalance()'],['../classIApplication.html#a1e124c122a6d96ac42ac4cbae1f77bce',1,'IApplication::subscribeBalance()']]],
   ['subscribeblocknumber',['subscribeBlockNumber',['../classCPolkaApi.html#af82b72a2595ad868f73be2609e88d4d3',1,'CPolkaApi::subscribeBlockNumber()'],['../classIApplication.html#a1a0a04117025fa7294e540159a102177',1,'IApplication::subscribeBlockNumber()']]],

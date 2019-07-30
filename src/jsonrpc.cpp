@@ -33,10 +33,7 @@ Json CJsonRpc::request(Json jsonMap, long timeout_s) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id},
-        {"jsonrpc", _jsonrpcVersion},
-        {"method", jsonMap["method"]},
-        {"params", jsonMap["params"]},
+        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
     };
 
     // Send the command

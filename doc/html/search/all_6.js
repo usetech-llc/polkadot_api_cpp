@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['genericextrinsic',['GenericExtrinsic',['../structGenericExtrinsic.html',1,'']]],
+  ['genericmethod',['GenericMethod',['../structGenericMethod.html',1,'']]],
   ['getaccountnonce',['getAccountNonce',['../classCPolkaApi.html#ae1faea32c853279c15cb723723dc9c3b',1,'CPolkaApi::getAccountNonce()'],['../classIApplication.html#ae7dbe556c940f7040eba40beba1b22ae',1,'IApplication::getAccountNonce()']]],
   ['getblock',['getBlock',['../classCPolkaApi.html#af7d1cd31d047ee0fc153a49010696e04',1,'CPolkaApi::getBlock()'],['../classIApplication.html#a5d489ec30c93c7f0a8904241e470a0e8',1,'IApplication::getBlock()']]],
   ['getblockhash',['getBlockHash',['../classCPolkaApi.html#a828eab434832ff0a2ee4019aac633972',1,'CPolkaApi::getBlockHash()'],['../classIApplication.html#a874c5af80d7342db07d7581d6f6f80fb',1,'IApplication::getBlockHash()']]],

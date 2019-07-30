@@ -160,6 +160,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5182c1b2b2413ad4a66e11cfa2b9c2f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c484c6e69dfea9549640e4f226868fd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a6c484c6e69dfea9549640e4f226868fd">signAndSendTransfer</a> (string sender, string privateKey, string recipient, uint128 amount, std::function&lt; void(string)&gt; callback)</td></tr>
 <tr class="separator:a6c484c6e69dfea9549640e4f226868fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53670217cc5708635279e7fff965f3a7"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a53670217cc5708635279e7fff965f3a7">pendingExtrinsics</a> (<a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> *buf, int bufferSize)</td></tr>
+<tr class="separator:a53670217cc5708635279e7fff965f3a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ca5f7c31ab8db3f38bbfc5a45c0a265"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a5ca5f7c31ab8db3f38bbfc5a45c0a265">submitAndSubcribeExtrinsic</a> (uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module, string method, string sender, string privateKey, std::function&lt; void(string)&gt; callback)</td></tr>
+<tr class="separator:a5ca5f7c31ab8db3f38bbfc5a45c0a265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56a10645281459c3849ad479192e2d94"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a56a10645281459c3849ad479192e2d94">submitExtrinsic</a> (uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module, string method, string sender, string privateKey)</td></tr>
+<tr class="separator:a56a10645281459c3849ad479192e2d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a3d973f3711319ebed0a6e671ff969d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#a7a3d973f3711319ebed0a6e671ff969d">removeExtrinsic</a> (string extrinsicHash)</td></tr>
+<tr class="separator:a7a3d973f3711319ebed0a6e671ff969d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af82b72a2595ad868f73be2609e88d4d3"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#af82b72a2595ad868f73be2609e88d4d3">subscribeBlockNumber</a> (std::function&lt; void(long long)&gt; callback)</td></tr>
 <tr class="separator:af82b72a2595ad868f73be2609e88d4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9cc0cd7a71ec2eb65a77fab35e3de96"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCPolkaApi.html#ab9cc0cd7a71ec2eb65a77fab35e3de96">unsubscribeBlockNumber</a> ()</td></tr>
@@ -191,7 +199,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="application_8h_source.html#l00036">36</a> of file <a class="el" href="application_8h_source.html">application.h</a>.</p>
+<p>Definition at line <a class="el" href="application_8h_source.html#l00037">37</a> of file <a class="el" href="application_8h_source.html">application.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a9f769c53e8b457ae1e19c4782148559b"></a>
 <div class="memitem">
@@ -451,7 +459,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a93f238f867d7249507716e824755a0b9">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00664">664</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00710">710</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -498,7 +506,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a111068b55be523ef4b391c7efe77400a">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00679">679</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00721">721</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -545,7 +553,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ab6bf7b09a77a7abcab0017a1ba7a06be">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00694">694</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00732">732</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -592,7 +600,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a89211a617600becc8547925057c5103d">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00709">709</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00743">743</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -887,7 +895,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ab3db5a43716118e0265db8c52d9088b9">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00634">634</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00630">630</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -942,7 +950,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#aeb517cbf28bd8fdea2092b8e56912789">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00649">649</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00641">641</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1032,6 +1040,53 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a53670217cc5708635279e7fff965f3a7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int CPolkaApi::pendingExtrinsics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufferSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns all pending extrinsics</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>- Preallocated array of <a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> that will be filled </td></tr>
+    <tr><td class="paramname">bufferSize</td><td>- size of preallocated array </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of extrinsics received from the node (may be greater than buffer size, in which case items with indexes greater than bufferSize are not returned) </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a03a5700c775370bb6c8bdcd2fbc2f261">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00652">652</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a5182c1b2b2413ad4a66e11cfa2b9c2f9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1096,7 +1151,43 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a4db994d5b804b1a9c614968ae31b7343">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00731">731</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00761">761</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7a3d973f3711319ebed0a6e671ff969d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CPolkaApi::removeExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>extrinsicHash</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Remove given extrinsic from the pool and temporarily ban it to prevent reimporting</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extrinsicHash</td><td>- hash of extrinsic as returned by submitExtrisic </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Operation result </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#aa51ad51f99aeba807e7a3cc179dab4bf">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01259">1259</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1163,7 +1254,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad07e2a5b696fa391f6e9c5fb51721dd4">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l01010">1010</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01269">1269</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1217,7 +1308,162 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a6ee7f495cfdb2e78d59a7b0389ccc257">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00724">724</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00754">754</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5ca5f7c31ab8db3f38bbfc5a45c0a265"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CPolkaApi::submitAndSubcribeExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>encodedMethodBytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>encodedMethodBytesSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>privateKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(string)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Submit and subscribe a fully formatted extrinsic for block inclusion</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">encodedMethodBytes</td><td>- encoded extrintic parametrs </td></tr>
+    <tr><td class="paramname">encodedMethodBytesSize</td><td>- parametrs size in bytes </td></tr>
+    <tr><td class="paramname">module</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">method</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">sender</td><td>- sender address </td></tr>
+    <tr><td class="paramname">privateKey</td><td>- sender private key </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive operation updates </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a9641c8c6ab816629b52bed72c3429d72">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01047">1047</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a56a10645281459c3849ad479192e2d94"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string CPolkaApi::submitExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>encodedMethodBytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>encodedMethodBytesSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>privateKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Submit a fully formatted extrinsic for block inclusion</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">encodedMethodBytesSize</td><td>- parametrs size in bytes </td></tr>
+    <tr><td class="paramname">module</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">method</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">sender</td><td>- sender address </td></tr>
+    <tr><td class="paramname">privateKey</td><td>- sender private key </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structExtrinsic.html">Extrinsic</a> hash </dd></dl>
+
+<p>Implements <a class="el" href="classIApplication.html#a7c16969c3b4110627cd960ff9320c2cf">IApplication</a>.</p>
+
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01153">1153</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1264,7 +1510,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad005e633533abd96b0b829c8c6abe16f">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00917">917</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00954">954</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1311,7 +1557,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a1e124c122a6d96ac42ac4cbae1f77bce">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00891">891</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00928">928</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1347,7 +1593,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00841">841</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00878">878</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1383,7 +1629,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af73bb90d3220bcedf18a288fd00654bc">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00853">853</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00890">890</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1419,7 +1665,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a670a5bca569810701e32167fdb05f858">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00946">946</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00983">983</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1456,7 +1702,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#abe114766f62c22f6f7a21eaf3f494283">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00967">967</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01004">1004</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1503,7 +1749,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#aad12da13245536999799f508d44aab8a">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00988">988</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01025">1025</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1539,7 +1785,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af0d19365711fdd418038e8463f6a1701">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00937">937</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00974">974</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1575,7 +1821,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a6422c696fa18a0896456bb8a2b5eae7c">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00908">908</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00945">945</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1604,7 +1850,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00882">882</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00919">919</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1633,7 +1879,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#ada6a4f45cecca200c40a3045514cea22">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00872">872</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00909">909</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1662,7 +1908,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a978da4e26e10c2c8eba6c4a2bf0d1a16">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00958">958</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l00995">995</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1691,7 +1937,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#a770f959f96907e1417d6225b01b36103">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l00979">979</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01016">1016</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>
@@ -1727,7 +1973,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Implements <a class="el" href="classIApplication.html#af5cda3426c157d49772b28f458f9a474">IApplication</a>.</p>
 
-<p>Definition at line <a class="el" href="application_8cpp_source.html#l01001">1001</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
+<p>Definition at line <a class="el" href="application_8cpp_source.html#l01038">1038</a> of file <a class="el" href="application_8cpp_source.html">application.cpp</a>.</p>
 
 </div>
 </div>

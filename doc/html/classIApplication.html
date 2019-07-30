@@ -149,6 +149,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4db994d5b804b1a9c614968ae31b7343"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad07e2a5b696fa391f6e9c5fb51721dd4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad07e2a5b696fa391f6e9c5fb51721dd4">signAndSendTransfer</a> (string sender, string privateKey, string recipient, uint128 amount, std::function&lt; void(string)&gt; callback)=0</td></tr>
 <tr class="separator:ad07e2a5b696fa391f6e9c5fb51721dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03a5700c775370bb6c8bdcd2fbc2f261"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a03a5700c775370bb6c8bdcd2fbc2f261">pendingExtrinsics</a> (<a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> *buf, int bufferSize)=0</td></tr>
+<tr class="separator:a03a5700c775370bb6c8bdcd2fbc2f261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9641c8c6ab816629b52bed72c3429d72"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a9641c8c6ab816629b52bed72c3429d72">submitAndSubcribeExtrinsic</a> (uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module, string method, string sender, string privateKey, std::function&lt; void(string)&gt; callback)=0</td></tr>
+<tr class="separator:a9641c8c6ab816629b52bed72c3429d72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c16969c3b4110627cd960ff9320c2cf"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a7c16969c3b4110627cd960ff9320c2cf">submitExtrinsic</a> (uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module, string method, string sender, string privateKey)=0</td></tr>
+<tr class="separator:a7c16969c3b4110627cd960ff9320c2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa51ad51f99aeba807e7a3cc179dab4bf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#aa51ad51f99aeba807e7a3cc179dab4bf">removeExtrinsic</a> (string extrinsicHash)=0</td></tr>
+<tr class="separator:aa51ad51f99aeba807e7a3cc179dab4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a0a04117025fa7294e540159a102177"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#a1a0a04117025fa7294e540159a102177">subscribeBlockNumber</a> (std::function&lt; void(long long)&gt; callback)=0</td></tr>
 <tr class="separator:a1a0a04117025fa7294e540159a102177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad743ca6e723a8e98fc6a6fced686341d"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIApplication.html#ad743ca6e723a8e98fc6a6fced686341d">unsubscribeBlockNumber</a> ()=0</td></tr>
@@ -983,6 +991,51 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a03a5700c775370bb6c8bdcd2fbc2f261"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int IApplication::pendingExtrinsics </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> *&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bufferSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns all pending extrinsics</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>- Preallocated array of <a class="el" href="structGenericExtrinsic.html">GenericExtrinsic</a> that will be filled </td></tr>
+    <tr><td class="paramname">bufferSize</td><td>- size of preallocated array </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of extrinsics received from the node (may be greater than buffer size, in which case items with indexes greater than bufferSize are not returned) </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a53670217cc5708635279e7fff965f3a7">CPolkaApi</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a4db994d5b804b1a9c614968ae31b7343"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1046,6 +1099,40 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>number of retrieved items </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#a5182c1b2b2413ad4a66e11cfa2b9c2f9">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa51ad51f99aeba807e7a3cc179dab4bf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool IApplication::removeExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>extrinsicHash</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Remove given extrinsic from the pool and temporarily ban it to prevent reimporting</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extrinsicHash</td><td>- hash of extrinsic as returned by submitExtrisic </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Operation result </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a7a3d973f3711319ebed0a6e671ff969d">CPolkaApi</a>.</p>
 
 </div>
 </div>
@@ -1163,6 +1250,157 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>string raw RPC call return </dd></dl>
 
 <p>Implemented in <a class="el" href="classCPolkaApi.html#ae682d626f8d59f211318327cbc767acb">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9641c8c6ab816629b52bed72c3429d72"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void IApplication::submitAndSubcribeExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>encodedMethodBytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>encodedMethodBytesSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>privateKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; void(string)&gt;&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Submit and subscribe a fully formatted extrinsic for block inclusion</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">encodedMethodBytes</td><td>- encoded extrintic parametrs </td></tr>
+    <tr><td class="paramname">encodedMethodBytesSize</td><td>- parametrs size in bytes </td></tr>
+    <tr><td class="paramname">module</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">method</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">sender</td><td>- sender address </td></tr>
+    <tr><td class="paramname">privateKey</td><td>- sender private key </td></tr>
+    <tr><td class="paramname">callback</td><td>- functor or lambda expression that will receive operation updates </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a5ca5f7c31ab8db3f38bbfc5a45c0a265">CPolkaApi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7c16969c3b4110627cd960ff9320c2cf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string IApplication::submitExtrinsic </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>encodedMethodBytes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>encodedMethodBytesSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sender</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>privateKey</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Submit a fully formatted extrinsic for block inclusion</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">encodedMethodBytesSize</td><td>- parametrs size in bytes </td></tr>
+    <tr><td class="paramname">module</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">method</td><td>- invokable module name </td></tr>
+    <tr><td class="paramname">sender</td><td>- sender address </td></tr>
+    <tr><td class="paramname">privateKey</td><td>- sender private key </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structExtrinsic.html">Extrinsic</a> hash </dd></dl>
+
+<p>Implemented in <a class="el" href="classCPolkaApi.html#a56a10645281459c3849ad479192e2d94">CPolkaApi</a>.</p>
 
 </div>
 </div>

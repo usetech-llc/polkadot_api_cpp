@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['querystorage',['queryStorage',['../classCPolkaApi.html#a5182c1b2b2413ad4a66e11cfa2b9c2f9',1,'CPolkaApi::queryStorage()'],['../classIApplication.html#a4db994d5b804b1a9c614968ae31b7343',1,'IApplication::queryStorage()']]]
+  ['pendingextrinsics',['pendingExtrinsics',['../classCPolkaApi.html#a53670217cc5708635279e7fff965f3a7',1,'CPolkaApi::pendingExtrinsics()'],['../classIApplication.html#a03a5700c775370bb6c8bdcd2fbc2f261',1,'IApplication::pendingExtrinsics()']]]
 ];
