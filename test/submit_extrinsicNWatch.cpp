@@ -48,19 +48,19 @@ int main(int argc, char *argv[]) {
     // Amount
     mmWrittenLength += scale::writeCompactToBuf(compactAmount, buf2 + mmWrittenLength);
 
-    app.submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr,
-                                   [&](string response) {
-                                       cout << endl << endl << "Response json:  " << response << endl;
-                                       if (response.find("finalized") != string::npos)
-                                           done = true;
-                                   });
+    app->submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr,
+                                    [&](string response) {
+                                        cout << endl << endl << "Response json:  " << response << endl;
+                                        if (response.find("finalized") != string::npos)
+                                            done = true;
+                                    });
 
     // Wait until transaction is mined
     while (!done)
         usleep(10000);
 
     // Unsubscribe and close connection
-    app.disconnect();
+    app->disconnect();
 
     cout << "success" << endl;
 
