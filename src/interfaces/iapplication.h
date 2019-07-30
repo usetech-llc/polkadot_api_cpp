@@ -312,17 +312,23 @@ public:
     /**
      * Submit a fully formatted extrinsic for block inclusion
      *
-     *
      * @param encodedMethodBytesSize - parametrs size in bytes
      * @param module - invokable module name
      * @param method - invokable module name
      * @param sender - sender address
      * @param privateKey - sender private key
-     *
-     * @return Node responce
+     * @return Extrinsic hash
      */
     virtual string submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
                                    string method, string sender, string privateKey) = 0;
+
+    /**
+     * Remove given extrinsic from the pool and temporarily ban it to prevent reimporting
+     *
+     * @param extrinsicHash - hash of extrinsic as returned by submitExtrisic
+     * @return Operation result
+     */
+    virtual bool removeExtrinsic(string extrinsicHash) = 0;
 
     /**
      *  Subscribe to most recent block number. Only one subscription at a time is allowed. If a subscription already

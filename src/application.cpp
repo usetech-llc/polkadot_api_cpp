@@ -624,11 +624,7 @@ string CPolkaApi::getStorage(const string &jsonPrm, const string &module, const 
     Json query = Json::object{{"method", "state_getStorage"}, {"params", Json::array{key, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return retval;
+    return response.string_value();
 }
 
 string CPolkaApi::getStorageHash(const string &jsonPrm, const string &module, const string &variable) {
@@ -639,11 +635,7 @@ string CPolkaApi::getStorageHash(const string &jsonPrm, const string &module, co
     Json query = Json::object{{"method", "state_getStorageHash"}, {"params", Json::array{key, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return retval;
+    return response.string_value();
 }
 
 int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const string &variable) {
@@ -654,11 +646,7 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     Json query = Json::object{{"method", "state_getStorageSize"}, {"params", Json::array{key, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return atoi(retval.c_str());
+    return response.int_value();
 }
 
 int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) {
@@ -727,11 +715,7 @@ string CPolkaApi::getChildKeys(const string &childStorageKey, const string &stor
                               {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return retval;
+    return response.string_value();
 }
 
 string CPolkaApi::getChildStorage(const string &childStorageKey, const string &storageKey) {
@@ -742,11 +726,7 @@ string CPolkaApi::getChildStorage(const string &childStorageKey, const string &s
                               {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return retval;
+    return response.string_value();
 }
 
 string CPolkaApi::getChildStorageHash(const string &childStorageKey, const string &storageKey) {
@@ -757,11 +737,7 @@ string CPolkaApi::getChildStorageHash(const string &childStorageKey, const strin
                               {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return retval;
+    return response.string_value();
 }
 
 int CPolkaApi::getChildStorageSize(const string &childStorageKey, const string &storageKey) {
@@ -772,11 +748,7 @@ int CPolkaApi::getChildStorageSize(const string &childStorageKey, const string &
                               {"params", Json::array{childStorageKey, storageKey, headHash->hash}}};
     Json response = _jsonRpc->request(query);
 
-    // Strip quotes
-    string retval = response.dump();
-    if (retval[0] == '\"')
-        retval = retval.substr(1, retval.length() - 2);
-    return atoi(retval.c_str());
+    return response.int_value();
 }
 
 string CPolkaApi::stateCall(const string &name, const string &data, const string &hash) {
@@ -1076,7 +1048,7 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned
                                            string module, string method, string sender, string privateKey,
                                            std::function<void(string)> callback) {
 
-    _logger->info("=== Starting a Invoke Extrinsic ===");
+    _logger->info("=== Started Invoking Extrinsic ===");
 
     // Get account Nonce
     unsigned long nonce = getAccountNonce(sender);
@@ -1181,7 +1153,7 @@ void CPolkaApi::submitAndSubcribeExtrinsic(uint8_t *encodedMethodBytes, unsigned
 string CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
                                   string method, string sender, string privateKey) {
 
-    _logger->info("=== Starting a Invoke Extrinsic ===");
+    _logger->info("=== Started Invoking Extrinsic ===");
 
     // Get account Nonce
     unsigned long nonce = getAccountNonce(sender);
@@ -1281,7 +1253,17 @@ string CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int enco
     // Send == Subscribe callback to completion
     Json response = _jsonRpc->request(query);
 
-    return response.dump();
+    return response.string_value();
+}
+
+bool CPolkaApi::removeExtrinsic(string extrinsicHash) {
+    Json query = Json::object{{"method", "author_removeExtrinsic"}, {"params", Json::array{extrinsicHash}}};
+    Json response = _jsonRpc->request(query);
+
+    if (response.is_null())
+        throw ApplicationException("Not supported");
+
+    return false;
 }
 
 void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string recipient, uint128 amount,
@@ -1338,7 +1320,6 @@ void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string rec
     }
 
     Json query = Json::object{{"method", "author_submitAndWatchExtrinsic"}, {"params", Json::array{teStr}}};
-    cout << query.dump();
 
     // Send == Subscribe callback to completion
     _transactionCompletionSubscriber = callback;

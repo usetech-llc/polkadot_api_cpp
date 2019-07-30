@@ -125,6 +125,7 @@ public:
 
     virtual string submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int encodedMethodBytesSize, string module,
                                    string method, string sender, string privateKey);
+    virtual bool removeExtrinsic(string extrinsicHash);
 
     virtual int subscribeBlockNumber(std::function<void(long long)> callback);
     virtual int unsubscribeBlockNumber();

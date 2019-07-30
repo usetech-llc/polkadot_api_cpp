@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    // Extract parameters
+    // Extract cli parameters
     string senderAddr(argv[1]);
     string recipientAddr(argv[2]);
     string amountStr(argv[3]);
@@ -26,12 +26,8 @@ int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
-    // Submit extrinsic and watch
-    bool done = false;
-
+    // Send extrinsic without subscribing to updates
     auto receiverPublicKey = AddressUtils::getPublicKeyFromAddr(recipientAddr);
-    // auto receiverPublicKey = AddressUtils::getPublicKeyFromAddr("5HQdHxuPgQ1BpJasmm5ZzfSk5RDvYiH6YHfDJVE8jXmp4eig");
-
     uint8_t receiverBytes[SR25519_PUBLIC_SIZE];
     memcpy(receiverBytes, receiverPublicKey.bytes, SR25519_PUBLIC_SIZE);
 
@@ -48,19 +44,20 @@ int main(int argc, char *argv[]) {
     // Amount
     mmWrittenLength += scale::writeCompactToBuf(compactAmount, buf2 + mmWrittenLength);
 
-    app.submitAndSubcribeExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr,
-                                   [&](string response) {
-                                       cout << endl << endl << "Response json:  " << response << endl;
-                                       if (response.find("finalized") != string::npos)
-                                           done = true;
-                                   });
+    string exHash =
+        app->submitExtrinsic(buf2, mmWrittenLength, "balances", "transfer", senderAddr, senderPrivateKeyStr);
 
-    // Wait until transaction is mined
-    while (!done)
-        usleep(10000);
+    cout << endl << "Sent extrinsic with hash: " << exHash << endl;
+    cout << "Now let's try to cancel it... " << endl << endl;
+
+    try {
+        app->removeExtrinsic(exHash);
+    } catch (ApplicationException) {
+        cout << endl << "Yeah, looks like canceling is not yet supported" << endl << endl;
+    }
 
     // Unsubscribe and close connection
-    app.disconnect();
+    app->disconnect();
 
     cout << "success" << endl;
 
