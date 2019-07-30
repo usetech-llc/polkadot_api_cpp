@@ -26,5 +26,5 @@ RUN bash -c 'source $HOME/.cargo/env; cd sr25519 && mkdir build && cd build && c
 
 # Build Polkadot C++ API
 RUN git clone https://github.com/usetech-llc/polkadot_api_cpp.git
-RUN cd polkadot_api_cpp && git checkout release/milestone1
+RUN cd polkadot_api_cpp && git fetch --all && git checkout release/milestone2
 RUN cd polkadot_api_cpp && cmake . && make && make test
