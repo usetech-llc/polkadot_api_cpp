@@ -661,7 +661,63 @@ int CPolkaApi::getStorageSize(const string &jsonPrm, const string &module, const
     return atoi(retval.c_str());
 }
 
-int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) { return 0; }
+int CPolkaApi::pendingExtrinsics(GenericExtrinsic *buf, int bufferSize) {
+    Json query = Json::object{{"method", "author_pendingExtrinsics"}, {"params", Json::array{}}};
+    Json response = _jsonRpc->request(query);
+
+    int count = 0;
+    for (auto e : response.array_items()) {
+        if (count < bufferSize) {
+            string estr = e.string_value().substr(2);
+            buf[count].length = scale::decodeCompactInteger(estr);
+
+            // Signature version
+            buf[count].signature.version = (uint8_t)fromHex<uint128>(estr.substr(0, 2));
+            estr = estr.substr(2);
+
+            // Signer public key
+            auto pk = fromHex<vector<uint8_t>>(estr.substr(2, SR25519_PUBLIC_SIZE * 2));
+            memcpy(buf[count].signature.signerPublicKey, pk.data(), SR25519_PUBLIC_SIZE);
+            estr = estr.substr(SR25519_PUBLIC_SIZE * 2 + 2);
+
+            // Signature
+            auto sig = fromHex<vector<uint8_t>>(estr.substr(0, SR25519_SIGNATURE_SIZE * 2));
+            memcpy(buf[count].signature.sr25519Signature, sig.data(), SR25519_SIGNATURE_SIZE);
+            estr = estr.substr(SR25519_SIGNATURE_SIZE * 2);
+
+            // nonce
+            buf[count].signature.nonce = scale::decodeCompactInteger(estr);
+
+            // Era
+            uint8_t eraInt = (uint8_t)fromHex<uint128>(estr.substr(0, 2));
+            if (eraInt != 0)
+                buf[count].signature.era = MORTAL_ERA;
+            else
+                buf[count].signature.era = IMMORTAL_ERA;
+            estr = estr.substr(2);
+
+            // Method - module index
+            buf[count].method.moduleIndex = (uint8_t)fromHex<uint128>(estr.substr(0, 2));
+            estr = estr.substr(2);
+
+            // Method - call index
+            buf[count].method.methodIndex = (uint8_t)fromHex<uint128>(estr.substr(0, 2));
+            estr = estr.substr(2);
+
+            // Method - bytes
+            buf[count].method.methodBytes = estr;
+
+            // Encode signer address to base58
+            PublicKey pubk;
+            memcpy(pubk.bytes, buf[count].signature.signerPublicKey, SR25519_PUBLIC_SIZE);
+            buf[count].signerAddress = AddressUtils::getAddrFromPublicKey(pubk);
+        }
+
+        count++;
+    }
+
+    return count;
+}
 
 string CPolkaApi::getChildKeys(const string &childStorageKey, const string &storageKey) {
     // Get most recent block hash

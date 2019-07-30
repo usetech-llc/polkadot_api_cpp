@@ -9,4 +9,6 @@ public:
     static PublicKey getPublicKeyFromAddr(const Address &addr);
     static PublicKey getPublicKeyFromAddr(const string &addrStr);
     static PublicKey getPublicKeyFromAddr(const char *addrStr);
+
+    static string getAddrFromPublicKey(PublicKey &pubKey);
 };

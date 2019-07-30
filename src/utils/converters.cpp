@@ -91,7 +91,7 @@ template <> vector<uint8_t> fromHex<vector<uint8_t>>(string hexStr, bool bigEndi
     if (bigEndianBytes)
         offset = start;
     else
-        offset = hexStr.length() - 1;
+        offset = hexStr.length() - 2;
 
     vector<uint8_t> result;
     while (true) {

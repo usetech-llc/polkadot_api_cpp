@@ -14,4 +14,5 @@ struct GenericMethod : public Method {
 
 struct GenericExtrinsic : public Extrinsic {
     GenericMethod method;
+    string signerAddress;
 };

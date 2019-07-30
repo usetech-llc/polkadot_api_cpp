@@ -1,5 +1,7 @@
 #include "../../src/polkadot.h"
 
+#include "../libs/blake/blake2.h"
+
 const char *const AddressUtils::ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const int AddressUtils::ALPHABET_MAP[128] = {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -10,7 +12,8 @@ const int AddressUtils::ALPHABET_MAP[128] = {
 
 // result must be declared: char result[len * 137 / 100];
 int AddressUtils::EncodeBase58(const unsigned char *bytes, int len, unsigned char result[]) {
-    unsigned char digits[len * 137 / 100];
+    unsigned char *digits = new unsigned char[len * 137 / 100];
+    memset(digits, 0, len * 137 / 100);
     int digitslen = 1;
     for (int i = 0; i < len; i++) {
         unsigned int carry = (unsigned int)bytes[i];
@@ -32,6 +35,7 @@ int AddressUtils::EncodeBase58(const unsigned char *bytes, int len, unsigned cha
     for (int i = 0; i < digitslen; i++)
         result[resultlen + i] = ALPHABET[digits[digitslen - 1 - i]];
     result[digitslen + resultlen] = 0;
+    delete[] digits;
     return digitslen + resultlen;
 }
 
@@ -98,3 +102,25 @@ PublicKey AddressUtils::getPublicKeyFromAddr(const char *addrStr) {
 }
 
 PublicKey AddressUtils::getPublicKeyFromAddr(const string &addrStr) { return getPublicKeyFromAddr(addrStr.c_str()); }
+
+string AddressUtils::getAddrFromPublicKey(PublicKey &pubKey) {
+
+    unsigned char addrCh[1024] = {0};
+    unsigned char plainAddr[1024] = {0x2A};
+    memcpy(plainAddr + 1, pubKey.bytes, SR25519_PUBLIC_SIZE);
+
+    // Add control sum
+    // Add SS58RPE prefix
+    uint8_t ssPrefixed[SR25519_PUBLIC_SIZE + 8] = {0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45};
+    memcpy(ssPrefixed + 7, plainAddr, SR25519_PUBLIC_SIZE + 1);
+
+    unsigned char blake2bHashed[64] = {0};
+    blake2(blake2bHashed, 64, ssPrefixed, SR25519_PUBLIC_SIZE + 8, NULL, 0);
+    plainAddr[1 + PUBLIC_KEY_LENGTH] = blake2bHashed[0];
+    plainAddr[2 + PUBLIC_KEY_LENGTH] = blake2bHashed[1];
+
+    EncodeBase58(plainAddr, SR25519_PUBLIC_SIZE + 3, addrCh);
+
+    string result((char *)addrCh);
+    return result;
+}
