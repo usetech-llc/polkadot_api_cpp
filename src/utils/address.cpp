@@ -74,23 +74,20 @@ PublicKey AddressUtils::getPublicKeyFromAddr(const Address &addr) {
     unsigned char bs58decoded[ADDRESS_LENGTH];
     int len = DecodeBase58(addr.symbols, ADDRESS_LENGTH, bs58decoded);
     if (len == 35) {
+        // Check the address checksum
+        // Add SS58RPE prefix, remove checksum (2 bytes)
+        uint8_t ssPrefixed[PUBLIC_KEY_LENGTH + 8] = {0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45};
+        memcpy(ssPrefixed + 7, bs58decoded, PUBLIC_KEY_LENGTH + 1);
+
+        unsigned char blake2bHashed[64] = {0};
+        blake2(blake2bHashed, 64, ssPrefixed, PUBLIC_KEY_LENGTH + 8, NULL, 0);
+        if (bs58decoded[1 + PUBLIC_KEY_LENGTH] != blake2bHashed[0] || 
+            bs58decoded[2 + PUBLIC_KEY_LENGTH] != blake2bHashed[1] ) {
+            throw ApplicationException(string("Address checksum is wrong."));
+        }
+
         memcpy(pubk.bytes, bs58decoded + 1, PUBLIC_KEY_LENGTH);
     }
-
-    // TODO: Check the address checksum
-    // Add SS58RPE prefix, remove checksum (2 bytes)
-    // unsigned char SS58RPE[] = {0x53, 0x53, 0x35, 0x38, 0x50, 0x52, 0x45};
-    // unsigned char ssPrefixed[100];
-    // memcpy(ssPrefixed, SS58RPE, 7);
-    //// memcpy(ssPrefixed + 7, pubk.bytes, PUBLIC_KEY_LENGTH);
-    // memcpy(ssPrefixed + 7, bs58decoded + 1, 34);
-
-    // unsigned char blake2bHashed[ADDRESS_LENGTH];
-    // blake2b(blake2bHashed, 16, ssPrefixed, 512 / 8, NULL, 0);
-    //// blake2b(blake2bHashed, 64, (const void *)"abc", 3, NULL, 0);
-    // printf("%02X%02X%02X\n", blake2bHashed[0], blake2bHashed[1], blake2bHashed[2]);
-    // blake2b(blake2bHashed, 64, ssPrefixed, 512 / 8, NULL, 0);
-    // printf("%02X%02X%02X\n", blake2bHashed[0], blake2bHashed[1], blake2bHashed[2]);
 
     return move(pubk);
 }

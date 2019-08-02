@@ -13,6 +13,15 @@ int main(int argc, char *argv[]) {
     }
     string actualPublicKeyStr(actualPublicKeyCh);
     assert(expectedPublicKeyStr == actualPublicKeyStr);
+
+    cout << endl << endl << "================== Decode Public Key 2: Invalid checksum ==================" << endl;
+    try {
+        AddressUtils::getPublicKeyFromAddr("5FpxCaAovn3t2sTsbBeT5pWTj2rg392E8QoduwAyENcPrKhu");
+        throw std::exception();
+    } catch (ApplicationException) {
+        cout << endl << "Caught expected ApplicationException" << endl << endl;
+    }
+
     cout << "success" << endl;
 
     return 0;
