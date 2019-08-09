@@ -20,7 +20,7 @@ public:
 class CJsonRpc : public IMessageObserver, public IJsonRpc {
 private:
     std::string _jsonrpcVersion;
-    uint _lastId;
+    unsigned int _lastId;
     ILogger *_logger;
     IWebSocketClient *_wsc;
 

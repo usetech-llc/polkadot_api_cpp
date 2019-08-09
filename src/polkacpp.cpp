@@ -75,7 +75,7 @@ public:
 };
 
 shared_ptr<polkadot::api> polkadot::api::_instance;
-polkadot::api::api() : pImpl{make_unique<impl>()} {}
+polkadot::api::api() : pImpl{std::make_unique<impl>()} {}
 polkadot::api::~api() = default;
 shared_ptr<polkadot::api> polkadot::api::getInstance() {
     if (!_instance)

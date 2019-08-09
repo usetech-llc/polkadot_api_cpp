@@ -3,11 +3,14 @@
 #include <stdio.h>
 #include <streambuf>
 #include <string.h>
+
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 using namespace std;
 
-#include <polkacpp/polkacpp.h>
+#include "polkacpp/polkacpp.h"
 
 std::string helpText = " Available commands:\n"
                        " connect                  - Connect to a node and display basic information\n"

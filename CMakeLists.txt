@@ -10,10 +10,21 @@ set(CMAKE_BUILD_TYPE Debug)
 if (CMAKE_VERSION VERSION_LESS "3.1")
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
-        endif ()
+	endif ()
 else ()
     set (CMAKE_CXX_STANDARD 11)
 endif ()
+
+
+if(WIN32)
+    set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /GL /Gy /GF /Ox /Ob2 /Ot /Oi /MP /arch:SSE2 /fp:fast")
+	set (CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG /INCREMENTAL:NO /OPT:REF /OPT:ICF")
+	add_definitions (/W3 /wd4996 /wd4995 /wd4355)
+	add_definitions (-DUNICODE -D_UNICODE)
+	add_definitions (-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+	add_definitions (-DNOMINMAX)  
+endif()
+
 
 # Take care of libpthread
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -27,15 +38,34 @@ find_package(Threads REQUIRED)
 #
 
 set (WEBSOCKETPP_BOOST_LIBS system thread)
-set (WEBSOCKETPP_INCLUDE_DIR "/usr/local/include")
+
+if (WIN32)
+	set (WEBSOCKETPP_INCLUDE_DIR "c:/websocketpp")
+	find_package(cUrl)
+	add_definitions( -DBOOST_ALL_NO_LIB )
+	add_definitions( -DBOOST_ALL_DYN_LINK )
+	
+else ()
+	set (WEBSOCKETPP_INCLUDE_DIR "/usr/local/include")
+	
+endif()
+
 set (Boost_FIND_REQUIRED TRUE)
 set (Boost_FIND_QUIETLY TRUE)
-set (Boost_DEBUG FALSE)
+set (Boost_DEBUG TRUE)
 set (Boost_USE_MULTITHREADED TRUE)
-set (Boost_ADDITIONAL_VERSIONS "1.39.0" "1.40.0" "1.41.0" "1.42.0" "1.43.0" "1.44.0" "1.46.1") # todo: someone who knows better specify these!
+
+set (Boost_ADDITIONAL_VERSIONS "1.39.0" "1.40.0" "1.41.0" "1.42.0" "1.43.0" "1.44.0" "1.46.1" "1.65") # todo: someone who knows better specify these!
 
 find_package(OpenSSL)
-find_package (Boost 1.39.0 COMPONENTS "${WEBSOCKETPP_BOOST_LIBS}")
+
+if (WIN32)
+	find_package (Boost 1.65.0 COMPONENTS "${WEBSOCKETPP_BOOST_LIBS}" random regex)
+	include_directories (${CURL_INCLUDE_DIRS})
+else ()
+	find_package (Boost 1.39.0 COMPONENTS "${WEBSOCKETPP_BOOST_LIBS}")
+endif()
+
 
 if (NOT Boost_FOUND)
     message (FATAL_ERROR "Failed to find required dependency: boost")
@@ -44,11 +74,17 @@ if (NOT OpenSSL_FOUND)
     message (FATAL_ERROR "Failed to find required dependency: OpenSSL")
 endif ()
 
-set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust dl)
+if (WIN32)
+	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust Boost::dynamic_linking Userenv)
+else ()	
+	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust dl)
+endif()
+
 
 include_directories (${Boost_INCLUDE_DIR})
 include_directories (${OPENSSL_INCLUDE_DIR})
 include_directories (${WEBSOCKETPP_INCLUDE_DIR})
+
 
 # End of Dependencies
 #########################################################

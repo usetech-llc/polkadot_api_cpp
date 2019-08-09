@@ -32,7 +32,8 @@ uint128 atoi128(const char *s) {
     size_t digits = 0;
     while (s[digits] >= '0' && s[digits] <= '9')
         ++digits;
-    char scratch[digits];
+    //char scratch[digits];
+    char scratch[255];
     for (size_t i = 0; i < digits; ++i)
         scratch[i] = s[i] - '0';
     size_t scanstart = 0;

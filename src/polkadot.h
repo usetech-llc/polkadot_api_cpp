@@ -1,10 +1,16 @@
+#ifdef _WIN32
+#include <io.h>
+#include "polkawin.h"
+#else
+#include <unistd.h>
+#include <thread>
+#endif
+
 // clang-format off
 #include <curl/curl.h>
 #include <functional>
 #include <iostream>
 #include <string>
-#include <thread>
-#include <unistd.h>
 
 // Websockets
 #include <websocketpp/client.hpp>
