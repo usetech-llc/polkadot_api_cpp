@@ -39,7 +39,7 @@ extern "C" {
 using namespace std;
 
 // Implementation of make_unique
-template <typename T, typename... Args> std::unique_ptr<T> make_unique(Args &&... args) {
+template <typename T, typename... Args> unique_ptr<T> make_unique_ptr(Args &&... args) {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
@@ -75,7 +75,7 @@ public:
 };
 
 shared_ptr<polkadot::api> polkadot::api::_instance;
-polkadot::api::api() : pImpl{std::make_unique<impl>()} {}
+polkadot::api::api() : pImpl{make_unique_ptr<impl>()} {}
 polkadot::api::~api() = default;
 shared_ptr<polkadot::api> polkadot::api::getInstance() {
     if (!_instance)
