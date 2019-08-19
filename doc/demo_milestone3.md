@@ -36,11 +36,20 @@ Discussed with Edward that binary repository does not make much sense if source 
 
 ### Create downloadable distribution installable with package manager
 
-TBD
+See release files attached to this release on Github
+
+Also, here are instructions how to create the deb package:
+```
+cmake .
+make
+sudo make install
+sudo chmod 777 install_manifest.txt
+make package
+```
 
 ### Create manually installable distribution (archive)
 
-TBD
+See release files attached to this release on Github
 
 ## Deliverable 7 - Port to Other Platforms
 
