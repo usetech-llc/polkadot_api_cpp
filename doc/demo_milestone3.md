@@ -56,11 +56,6 @@ See release files attached to this release on Github
 Below you can find links to building guides on other platforms
 
 [Windows 10](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone3/doc/ports/windows.md)
-
-Manjaro
-Arch Linux
-OpenSuse
-Debian
-Mac OS
-
-Bonus goal: Raspberry Pi
+[Manjaro, Arch Linux, OpenSuse, Debian](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone3/doc/ports/linuses.md)
+[Mac OS](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone3/doc/ports/macos.md)
+[Bonus goal: Raspberry Pi](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone3/doc/ports/raspberrypi.md)
