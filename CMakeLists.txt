@@ -210,3 +210,29 @@ add_custom_target(
                 cmake .. -DCMAKE_BUILD_TYPE=Release &&
                 sudo -E env "PATH=/usr/bin:$ENV{HOME}/.cargo/bin:$ENV{PATH}" make install
 )
+
+###############################################################################
+# Make package
+
+SET(CPACK_GENERATOR "DEB")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "DEB1")
+INCLUDE(CPack)
+
+function (add_package TARGET_NAME TARGET_PATH DESCR)
+    install(TARGETS "${TARGET_NAME}"
+            DESTINATION "${TARGET_PATH}"
+            COMPONENT "${TARGET_NAME}")
+
+    cpack_add_component_group("${TARGET_NAME}")
+
+    cpack_add_component("${TARGET_NAME}"
+                        DISPLAY_NAME "${TARGET_NAME}"
+                        DESCRIPTION "${DESCR}"
+                        GROUP "${TARGET_NAME}"
+                        INSTALL_TYPES Full)
+endfunction ()
+
+target_link_libraries( ${testname} ${DEPENDENCY_LIBS} )
+add_package(${testname} "polkadot" "Polkadot API")
+
+
