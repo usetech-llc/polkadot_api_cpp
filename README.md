@@ -29,10 +29,18 @@ make deps
 
 ## Installation
 
-This is work in progress, so installation is only possible from the source code.
-Here are instructions how to compile the library and run examples:
+### Installation from deb package
 
-### Checkout and build
+Download PolkadotCppAPI-0.1.1-Linux.deb from release files attached to this release and run
+```
+sudo dpkg -i PolkadotCppAPI-0.1.1-Linux.deb
+```
+
+### Manual installation (linux)
+
+Download polkacpp.tar.gz from release files attached to this release and copy all files to the system root preserving directory structure from the archive.
+
+### Building
 ```
 git clone https://github.com/usetech-llc/polkadot_api_cpp
 cd polkadot_api_cpp
@@ -45,16 +53,6 @@ sudo make install
 ```
 make clip
 ```
-
-### Manual install (linux)
-
-After build:
-copy from /bin/libpolkacpp.a to /usr/lib/polkacpp/libpolkacpp.a
-copy from /src/interfaces/* to /usr/include/polkacpp/interfaces/*
-copy from /src/structs/* to /usr/include/polkacpp/structs/*
-copy from /src/polkacpp.h to /usr/include/polkacpp/polkacpp.h
-copy from /src/scale.h to /usr/include/polkacpp/scale.h
-copy from /src/libs/int128/*.h to /usr/include/polkacpp/libs/int128/*
 
 ### Run connect basic example
 
@@ -96,7 +94,7 @@ string parity_node_url("wss://poc3-rpc.polkadot.io:443/");
 CWebSocketClient ws(parity_node_url);
 ```
 
-### Eastablishing and maintaining connection
+### Establishing and maintaining connection
 This call will establish connection and start message thread:
 ```
 ws.connect();
