@@ -29,10 +29,18 @@ make deps
 
 ## Installation
 
-This is work in progress, so installation is only possible from the source code.
-Here are instructions how to compile the library and run examples:
+### Installation from deb package
 
-### Checkout and build
+Download PolkadotCppAPI-0.1.1-Linux.deb from release files attached to this release and run
+```
+sudo dpkg -i PolkadotCppAPI-0.1.1-Linux.deb
+```
+
+### Manual installation (linux)
+
+Download polkacpp.tar.gz from release files attached to this release and copy all files to the system root preserving directory structure from the archive.
+
+### Building
 ```
 git clone https://github.com/usetech-llc/polkadot_api_cpp
 cd polkadot_api_cpp
@@ -90,7 +98,7 @@ Parity node URL is the only required parameter, though URL must include port. Ex
 auto api = polkadot::api::getInstance()->app();
 ```
 
-### Eastablishing and maintaining connection
+### Establishing and maintaining connection
 This call will establish connection and start message thread. It will also ping the node several times per minute with "health" request to keep the connection alive.
 ```
 api->connect("wss://poc3-rpc.polkadot.io:443/");
