@@ -21,7 +21,7 @@ The API documentation is provided in the repository in doc/html folder. The easi
 
 ### Cleanup project files, ensure all tests pass
 
-The codebase has been kept clean, so there is no single commit to show, but there are a few examples of small cleanup jobs done through development process:
+The codebase has been kept clean, so there isn't a particular commit to show, but there are a few examples of small cleanup jobs done through development process:
 
 278cae6bfa
 7b9c10e756
@@ -32,7 +32,7 @@ The codebase has been kept clean, so there is no single commit to show, but ther
 
 ### Create repository and publish to enable package manager (`apt-get`) installation
 
-TBD
+Discussed with Edward that binary repository does not make much sense if source code and binaries are published on Github.
 
 ### Create downloadable distribution installable with package manager
 
@@ -44,18 +44,14 @@ TBD
 
 ## Deliverable 7 - Port to Other Platforms
 
-### Windows 10
+Below you can find links to building guides on other platforms
 
-### Misc. Linux distros
+[Windows 10](https://github.com/usetech-llc/polkadot_api_cpp/blob/release/milestone3/doc/ports/windows.md)
 
-### Manjaro
+Manjaro
+Arch Linux
+OpenSuse
+Debian
+Mac OS
 
-### Arch Linux
-
-### OpenSuse
-
-### Debian
-
-### Mac OS
-
-### Bonus goal: Raspberry Pi
+Bonus goal: Raspberry Pi
