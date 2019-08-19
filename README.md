@@ -46,6 +46,16 @@ sudo make install
 make clip
 ```
 
+### Manual install (linux)
+
+After build:
+copy from /bin/libpolkacpp.a to /usr/lib/polkacpp/libpolkacpp.a
+copy from /src/interfaces/* to /usr/include/polkacpp/interfaces/*
+copy from /src/structs/* to /usr/include/polkacpp/structs/*
+copy from /src/polkacpp.h to /usr/include/polkacpp/polkacpp.h
+copy from /src/scale.h to /usr/include/polkacpp/scale.h
+copy from /src/libs/int128/*.h to /usr/include/polkacpp/libs/int128/*
+
 ### Run connect basic example
 
 Connect example will establish WebSocket connection to the polkadot node and read and output basic information.
