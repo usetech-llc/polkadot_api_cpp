@@ -1,12 +1,5 @@
 # Building Polkadot C++ API on MacOS
 
-
-
-
-?? add `return true;` in the first line of verify_certificate in wsclient.cpp
-
-
-
 ## Prerequisites
 
 Install x-code command line tools, homebrew tool, and rustc first, then run in terminal:
