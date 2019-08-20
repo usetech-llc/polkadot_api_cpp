@@ -14,6 +14,7 @@ private:
     client _c;
     client_no_tls _c_no_tls;
     bool _tls;
+    string _node_url;
     client::connection_ptr _connection;
     client_no_tls::connection_ptr _connection_no_tls;
     bool _connected;
@@ -29,6 +30,15 @@ private:
     void runWsMessages();
     int connect_tls(string node_url);
     int connect_no_tls(string node_url);
+
+    bool compare_host_name(const char *cert_hostname);
+
+    static void on_message(websocketpp::connection_hdl, client::message_ptr msg);
+    static void on_open(client *c, websocketpp::connection_hdl hdl);
+    static bool verify_subject_alternative_name(const char *hostname, X509 *cert);
+    static bool verify_common_name(const char *hostname, X509 *cert);
+    static bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl::verify_context &ctx);
+    static context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl);
 
     CWebSocketClient(ILogger *logger);
 

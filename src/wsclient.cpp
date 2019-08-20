@@ -22,7 +22,7 @@ using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 
-void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
+void CWebSocketClient::on_message(websocketpp::connection_hdl, client::message_ptr msg) {
     if (msg->get_opcode() == websocketpp::frame::opcode::text) {
         // Notify observers
         CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance(nullptr);
@@ -34,16 +34,46 @@ void on_message(websocketpp::connection_hdl, client::message_ptr msg) {
     }
 }
 
-void on_open(client *c, websocketpp::connection_hdl hdl) {
+void CWebSocketClient::on_open(client *c, websocketpp::connection_hdl hdl) {
     CWebSocketClient *inst = (CWebSocketClient *)CWebSocketClient::getInstance(nullptr);
     inst->_connected = true;
     inst->_connectionCV.notify_all();
 }
 
-/// Verify that one of the subject alternative names matches the given hostname
-bool verify_subject_alternative_name(const char *hostname, X509 *cert) {
-    return true;
+bool CWebSocketClient::compare_host_name(const char *cert_hostname) {
 
+    // Extract connected host name (take part between slashes)
+    char hostname[1024];
+    strcpy(hostname, _node_url.c_str());
+
+    char *hostTrimmed = hostname;
+    char *firstSlash = strstr(hostname, "//");
+    if (firstSlash) {
+        hostTrimmed = firstSlash + 2;
+        char *secondSlash = strchr(hostTrimmed, '/');
+        if (secondSlash)
+            *secondSlash = 0;
+    }
+
+    // Remove wildcard from the certificate host name
+    char certHost[1024];
+    strcpy(certHost, cert_hostname);
+    char *certHostTrimmed = certHost;
+
+    char *asterisk = strstr(certHost, "*.");
+    if (asterisk) {
+        certHostTrimmed = asterisk + 2;
+    }
+
+    // Compare
+    if (strstr(hostTrimmed, certHostTrimmed) != nullptr)
+        return true;
+
+    return false;
+}
+
+/// Verify that one of the subject alternative names matches the given hostname
+bool CWebSocketClient::verify_subject_alternative_name(const char *hostname, X509 *cert) {
     STACK_OF(GENERAL_NAME) *san_names = NULL;
 
     san_names = (STACK_OF(GENERAL_NAME) *)X509_get_ext_d2i(cert, NID_subject_alt_name, NULL, NULL);
@@ -52,8 +82,6 @@ bool verify_subject_alternative_name(const char *hostname, X509 *cert) {
     }
 
     int san_names_count = sk_GENERAL_NAME_num(san_names);
-
-    bool result = false;
 
     for (int i = 0; i < san_names_count; i++) {
         const GENERAL_NAME *current_name = sk_GENERAL_NAME_value(san_names, i);
@@ -69,17 +97,16 @@ bool verify_subject_alternative_name(const char *hostname, X509 *cert) {
             break;
         }
         // Compare expected hostname with the CN
-        result = (strcasecmp(hostname, dns_name) == 0);
+        if (((CWebSocketClient *)CWebSocketClient::getInstance(nullptr))->compare_host_name(dns_name))
+            return true;
     }
     sk_GENERAL_NAME_pop_free(san_names, GENERAL_NAME_free);
 
-    return result;
+    return false;
 }
 
 /// Verify that the certificate common name matches the given hostname
-bool verify_common_name(const char *hostname, X509 *cert) {
-    return true;
-
+bool CWebSocketClient::verify_common_name(const char *hostname, X509 *cert) {
     // Find the position of the CN field in the Subject field of the certificate
     int common_name_loc = X509_NAME_get_index_by_NID(X509_get_subject_name(cert), NID_commonName, -1);
     if (common_name_loc < 0) {
@@ -106,7 +133,7 @@ bool verify_common_name(const char *hostname, X509 *cert) {
     }
 
     // Compare expected hostname with the CN
-    return (strcasecmp(hostname, common_name_str) == 0);
+    return (((CWebSocketClient *)CWebSocketClient::getInstance(nullptr))->compare_host_name(common_name_str));
 }
 
 /**
@@ -115,7 +142,8 @@ bool verify_common_name(const char *hostname, X509 *cert) {
  * and
  * https://github.com/iSECPartners/ssl-conservatory
  */
-bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl::verify_context &ctx) {
+bool CWebSocketClient::verify_certificate(const char *hostname, bool preverified,
+                                          boost::asio::ssl::verify_context &ctx) {
     // The verify callback can be used to check whether the certificate that is
     // being presented is valid for the peer. For example, RFC 2818 describes
     // the steps involved in doing this for HTTPS. Consult the OpenSSL
@@ -152,7 +180,7 @@ bool verify_certificate(const char *hostname, bool preverified, boost::asio::ssl
     return preverified;
 }
 
-context_ptr on_tls_init(const char *hostname, websocketpp::connection_hdl) {
+context_ptr CWebSocketClient::on_tls_init(const char *hostname, websocketpp::connection_hdl) {
     context_ptr ctx = websocketpp::lib::make_shared<boost::asio::ssl::context>(boost::asio::ssl::context::sslv23);
 
     try {
@@ -190,13 +218,13 @@ int CWebSocketClient::connect_tls(string node_url) {
     _c.set_access_channels(websocketpp::log::alevel::none);
     _c.set_error_channels(websocketpp::log::elevel::none);
 
-    _c.set_open_handler(bind(&on_open, &_c, ::_1));
+    _c.set_open_handler(bind(&CWebSocketClient::on_open, &_c, ::_1));
 
     // Initialize ASIO
     _c.init_asio();
 
     // Register our message handler
-    _c.set_message_handler(&on_message);
+    _c.set_message_handler(&CWebSocketClient::on_message);
 
     // Support wss
     _c.set_tls_init_handler(bind(&on_tls_init, node_url.c_str(), ::_1));
@@ -220,13 +248,13 @@ int CWebSocketClient::connect_no_tls(string node_url) {
     _c_no_tls.set_access_channels(websocketpp::log::alevel::none);
     _c_no_tls.set_error_channels(websocketpp::log::elevel::none);
 
-    _c_no_tls.set_open_handler(bind(&on_open, &_c, ::_1));
+    _c_no_tls.set_open_handler(bind(&CWebSocketClient::on_open, &_c, ::_1));
 
     // Initialize ASIO
     _c_no_tls.init_asio();
 
     // Register our message handler
-    _c_no_tls.set_message_handler(&on_message);
+    _c_no_tls.set_message_handler(&CWebSocketClient::on_message);
 
     websocketpp::lib::error_code ec;
     _connection_no_tls = _c_no_tls.get_connection(node_url, ec);
@@ -250,6 +278,7 @@ int CWebSocketClient::connect(string node_url) {
     else
         uri = node_url;
 
+    _node_url = uri;
     try {
         _logger->info(string("Connecting to ") + uri);
         // Support both wss and ws
@@ -325,7 +354,10 @@ void CWebSocketClient::health() {
 
     // hardcoded health message
     Json request = Json::object{
-        {"id", INT_MAX}, {"jsonrpc", "2.0"}, {"method", "system_health"}, {"params", Json::array()},
+        {"id", INT_MAX},
+        {"jsonrpc", "2.0"},
+        {"method", "system_health"},
+        {"params", Json::array()},
     };
 
     long period_counter = 0;

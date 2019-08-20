@@ -23,12 +23,12 @@ The API documentation is provided in the repository in doc/html folder. The easi
 
 The codebase has been kept clean, so there isn't a particular commit to show, but there are a few examples of small cleanup jobs done through development process:
 
-278cae6bfa
-7b9c10e756
-47974d6cf9
-630464530e
-7f80225564
-5e46ae0ad6
+- 278cae6bfa
+- 7b9c10e756
+- 47974d6cf9
+- 630464530e
+- 7f80225564
+- 5e46ae0ad6
 
 ### Create repository and publish to enable package manager (`apt-get`) installation
 
