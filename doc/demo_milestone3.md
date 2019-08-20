@@ -36,7 +36,8 @@ Discussed with Edward that binary repository does not make much sense if source 
 
 ### Create downloadable distribution installable with package manager
 
-See release files attached to this release on Github
+See release files attached to this release on Github:
+https://github.com/usetech-llc/polkadot_api_cpp/releases/download/milestone3/PolkadotCppAPI-0.1.1-Linux.deb
 
 Also, here are instructions how to create the deb package:
 ```
@@ -49,7 +50,8 @@ make package
 
 ### Create manually installable distribution (archive)
 
-See release files attached to this release on Github
+See release files attached to this release on Github:
+https://github.com/usetech-llc/polkadot_api_cpp/releases/download/milestone3/polkacpp_linux.tar.gz
 
 ## Deliverable 7 - Port to Other Platforms
 
