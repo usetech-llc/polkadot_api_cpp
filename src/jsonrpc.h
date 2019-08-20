@@ -31,6 +31,8 @@ private:
     // Map between subscription IDs and subscribers
     map<int, IWebSocketMessageObserver *> _wsSubscribers;
 
+    void delayedUpdateThread(Json message, int subscriptionId);
+
     int getNextId();
 
 public:

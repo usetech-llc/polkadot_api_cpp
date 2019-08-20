@@ -33,7 +33,10 @@ Json CJsonRpc::request(Json jsonMap, long timeout_s) {
 
     // build request
     Json request = Json::object{
-        {"id", query.id}, {"jsonrpc", _jsonrpcVersion}, {"method", jsonMap["method"]}, {"params", jsonMap["params"]},
+        {"id", query.id},
+        {"jsonrpc", _jsonrpcVersion},
+        {"method", jsonMap["method"]},
+        {"params", jsonMap["params"]},
     };
 
     // Send the command
@@ -57,6 +60,13 @@ Json CJsonRpc::request(Json jsonMap, long timeout_s) {
     _queries.erase(query.id);
 
     return move(result);
+}
+
+void CJsonRpc::delayedUpdateThread(Json message, int subscriptionId) {
+    usleep(1000000);
+    if (_wsSubscribers.count(subscriptionId) != 0) {
+        _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, message["params"]["result"]);
+    }
 }
 
 void CJsonRpc::handleMessage(const string &payload) {
@@ -90,13 +100,11 @@ void CJsonRpc::handleMessage(const string &payload) {
         bool observerFound = (_wsSubscribers.count(subscriptionId) != 0);
         _queryMtx.unlock();
         if (!observerFound) {
-            usleep(500000);
-        }
-
-        _queryMtx.lock();
-        if (_wsSubscribers.count(subscriptionId))
+            std::thread t(&CJsonRpc::delayedUpdateThread, this, json, subscriptionId);
+            t.detach();
+        } else {
             _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, json["params"]["result"]);
-        _queryMtx.unlock();
+        }
     } else {
         _logger->error("Unknown type of response: " + payload);
     }
