@@ -22,7 +22,7 @@ if(WIN32)
 	add_definitions (/W3 /wd4996 /wd4995 /wd4355)
 	add_definitions (-DUNICODE -D_UNICODE)
 	add_definitions (-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
-	add_definitions (-DNOMINMAX)  
+	add_definitions (-DNOMINMAX)
 endif()
 
 
@@ -44,10 +44,10 @@ if (WIN32)
 	find_package(cUrl)
 	add_definitions( -DBOOST_ALL_NO_LIB )
 	add_definitions( -DBOOST_ALL_DYN_LINK )
-	
+
 else ()
 	set (WEBSOCKETPP_INCLUDE_DIR "/usr/local/include")
-	
+
 endif()
 
 set (Boost_FIND_REQUIRED TRUE)
@@ -76,7 +76,7 @@ endif ()
 
 if (WIN32)
 	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust Boost::dynamic_linking Userenv)
-else ()	
+else ()
 	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust dl)
 endif()
 
@@ -202,6 +202,7 @@ add_custom_target(
                 #sudo rm -rf sr25519 &&
                 git clone https://github.com/Warchant/sr25519-crust.git sr25519 || true &&
                 cd sr25519 &&
+                git checkout c8df3201a29efa2c4e35751a9866f1a770bb7e1b && 
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
                 rustup install nightly &&
                 rustup default nightly &&
@@ -234,5 +235,3 @@ endfunction ()
 
 target_link_libraries( ${testname} ${DEPENDENCY_LIBS} )
 add_package(${testname} "polkadot" "Polkadot API")
-
-
