@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
     assert(publicKey.size() == PUBLIC_KEY_LENGTH);
 
     // sign message
-    char hw[] = "hello world";
+    char hw[16] = "hello world";
     auto msg = vector<uint8_t>(hw, hw + strlen(hw));
-    vector<uint8_t> sig(SR25519_SIGNATURE_SIZE, 0);
-    sr25519_sign(sig.data(), publicKey.data(), secretKey.data(), msg.data(), (size_t)msg.size());
+    uint8_t sig[SR25519_SIGNATURE_SIZE + 16] = {0};
+    sr25519_sign(sig, publicKey.data(), secretKey.data(), msg.data(), (size_t)msg.size());
 
     cout << "================ signature " << endl;
     for (int i = 0; i < SR25519_SIGNATURE_SIZE; ++i) {
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     cout << endl;
 
     // validate message with public key
-    assert(sr25519_verify(sig.data(), msg.data(), msg.size(), publicKey.data()));
+    assert(sr25519_verify(sig, msg.data(), msg.size(), publicKey.data()));
 
     cout << "success" << endl;
 }
