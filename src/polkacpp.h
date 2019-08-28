@@ -10,8 +10,10 @@ typedef absl::uint128 uint128;
 #define SR25519_PUBLIC_SIZE 32
 #define SR25519_SECRET_SIZE 64
 #define SR25519_SIGNATURE_SIZE 64
+#define RESPONSE_QUEUE_MAX_SIZE 128
 
 #include "scale.h"
+#include "utils/concurrentmapqueue.h"
 
 // Include structs
 #include "structs/responsebase.h"

@@ -38,6 +38,7 @@ class CPolkaApi : public IApplication, IWebSocketMessageObserver {
 private:
     ILogger *_logger;
     IJsonRpc *_jsonRpc;
+    ConcurrentMapQueue<Json, int> *_responseQueue;
 
     unique_ptr<SystemInfo> createSystemInfo(Json jsonObject);
     unique_ptr<BlockHash> createBlockHash(Json jsonObject);

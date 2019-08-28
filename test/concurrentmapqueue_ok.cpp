@@ -1,22 +1,52 @@
 #include "../src/utils/concurrentmapqueue.h"
 #include <cassert>
+#include <unistd.h>
 
 using namespace std;
 
-int main(int argc, char *argv[]) {
-    ConcurrentMapQueue<int, string> mq(10);
+string k1("test1");
+ConcurrentMapQueue<int, string> mq(10);
 
-    string k1("test1");
+int producedValue = 0;
+int consumedValue = -1;
+int previousConsumedValue = -1;
+
+void consumerThread() {
+    usleep(500000);
+
+    for (int i = 0; i < 21; ++i) {
+        bool result = mq.get(k1, &consumedValue);
+        cout << "consume " << consumedValue << endl;
+
+        if (result) {
+            assert(consumedValue == (previousConsumedValue + 1));
+            previousConsumedValue = consumedValue;
+        }
+    }
+}
+
+void unblockThread() {
+    usleep(600000);
+    cout << "cleaning up" << endl;
+    mq.eraseKey(k1);
+}
+
+int main(int argc, char *argv[]) {
 
     int i1 = 1, i2 = 2, i3 = 3;
 
-    mq.put(k1, i1);
-    mq.put(k1, i2);
-    mq.put(k1, i3);
+    std::thread consumer(&consumerThread);
+    std::thread unblocker(&unblockThread);
 
-    assert(mq.get(k1) == i1);
-    assert(mq.get(k1) == i2);
-    assert(mq.get(k1) == i3);
+    // Produce
+    for (int i = 0; i < 20; ++i) {
+        cout << "produce " << producedValue << endl;
+        mq.put(k1, producedValue);
+        producedValue++;
+    }
+
+    consumer.join();
+    unblocker.join();
 
     cout << "success" << endl;
 
