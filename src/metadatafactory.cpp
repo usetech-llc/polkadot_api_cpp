@@ -816,6 +816,76 @@ unique_ptr<MDV4> fillV4Metadata(std::string str) {
     return move(md);
 };
 
+unique_ptr<MDV7> fillV7Metadata(std::string str) {
+    // magic bytes
+    auto magic1 = nextByte(str);
+    auto magic2 = nextByte(str);
+    auto magic3 = nextByte(str);
+    auto magic4 = nextByte(str);
+    auto magic5 = nextByte(str);
+
+    unique_ptr<MDV7> md(new MDV7);
+    int mLen = decodeCompactInteger(str);
+    for (auto moduleIndex = 0; moduleIndex < mLen; moduleIndex++) {
+        // create module instance
+        unique_ptr<ModuleV7> module(new ModuleV7);
+        md->module[moduleIndex] = move(module);
+
+        // get module name
+        int moduleNameLen = decodeCompactInteger(str);
+        strcpy(md->module[moduleIndex]->name, extractString(str, moduleNameLen).c_str());
+
+        // ---------- Storage
+        // storage is not null
+        auto storageIsset = nextByte(str);
+        if (storageIsset != 0) {
+            // create StorageCollectionV7 instance
+            unique_ptr<StorageCollectionV7> storageCollection(new StorageCollectionV7);
+            md->module[moduleIndex]->storage = move(storageCollection);
+
+            // get StorageCollection name
+            int storageNameLen = decodeCompactInteger(str);
+            strcpy(md->module[moduleIndex]->storage->prefix, extractString(str, storageNameLen).c_str());
+
+            // get storage items
+            int storageLen = decodeCompactInteger(str);
+            for (int i = 0; i < storageLen; i++) {
+                md->module[moduleIndex]->storage->items[i] = move(getStorageV7(str));
+            }
+        }
+
+        // ---------- Calls
+        // calls is not null
+        auto callsIsset = nextByte(str);
+        if (callsIsset != 0) {
+            int callsCount = decodeCompactInteger(str);
+            for (int i = 0; i < callsCount; i++) {
+                md->module[moduleIndex]->call[i] = getCallV7(str);
+            }
+        }
+
+        // ---------- Events
+        // events is not null
+        auto eventsIsset = nextByte(str);
+        if (eventsIsset != 0) {
+            int eventsCount = decodeCompactInteger(str);
+            for (int i = 0; i < eventsCount; i++) {
+                md->module[moduleIndex]->ev[i] = getEventV7(str);
+            }
+        }
+
+        // ---------- Consts
+        auto constsCount = decodeCompactInteger(str);
+        if (constsCount != 0) {
+            for (int i = 0; i < constsCount; i++) {
+                md->module[moduleIndex]->cons[i] = getConstsV7(str);
+            }
+        }
+    }
+
+    return move(md);
+};
+
 MetadataFactory::MetadataFactory(ILogger *logger) {
     _logger = logger;
     _version = -1;
@@ -897,6 +967,23 @@ unique_ptr<MDV6> MetadataFactory::getMetadataV6() {
     return result;
 }
 
+unique_ptr<MDV7> MetadataFactory::getMetadataV7() {
+
+    unique_ptr<MDV7> result;
+    try {
+        result = move(fillV7Metadata(_buffer.substr()));
+
+        if (result != nullptr) {
+            _version = 7;
+            _logger->info("Metadata version V7 detected");
+        }
+    } catch (...) {
+        _logger->info("Metadata version is not V7");
+    }
+
+    return result;
+}
+
 int MetadataFactory::getVersion() {
     getMetadataV0();
 
@@ -905,6 +992,9 @@ int MetadataFactory::getVersion() {
 
     if (_version == -1)
         getMetadataV6();
+
+    if (_version == -1)
+        getMetadataV7();
 
     return _version;
 }
