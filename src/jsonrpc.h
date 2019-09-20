@@ -30,14 +30,15 @@ private:
 
     // Map between subscription IDs and subscribers
     map<int, IWebSocketMessageObserver *> _wsSubscribers;
+    ConcurrentMapQueue<Json, int> *_responseQueue;
 
-    void delayedUpdateThread(Json message, int subscriptionId);
+    void updateConsumerThread(int subscriptionId);
 
     int getNextId();
 
 public:
     CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params);
-    virtual ~CJsonRpc() override {}
+    virtual ~CJsonRpc() override { delete _responseQueue; }
     virtual int connect(string node_url = "");
     virtual void disconnect();
     virtual Json request(Json jsonMap, long timeout_s = RESPONSE_TIMEOUT_S);
