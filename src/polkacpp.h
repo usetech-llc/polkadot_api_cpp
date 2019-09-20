@@ -21,6 +21,7 @@ typedef absl::uint128 uint128;
 #include "structs/metadataV5.h"
 #include "structs/metadataV6.h"
 #include "structs/metadataV4.h"
+#include "structs/metadataV7.h"
 #include "structs/metadata.h"
 #include "structs/runtimeversion.h"
 #include "structs/common.h"

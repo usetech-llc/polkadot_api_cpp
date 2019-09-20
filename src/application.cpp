@@ -73,6 +73,8 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
                     hasherStr = meta->metadataV5->module[moduleIndex]->storage[methodIndex]->type.hasher;
                 else if (meta->metadataV6)
                     hasherStr = meta->metadataV6->module[moduleIndex]->storage[methodIndex]->type.hasher;
+                else if (meta->metadataV7)
+                    hasherStr = meta->metadataV7->module[moduleIndex]->storage->items[methodIndex]->type.hasher;
             }
         }
 
@@ -102,6 +104,8 @@ int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleNa
             name = meta->metadataV5->module[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[i]->name;
         }
 
         if (name.length()) {
@@ -138,6 +142,8 @@ int CPolkaApi::getStorageMethodIndex(unique_ptr<Metadata> &meta, const int modul
             name = meta->metadataV5->module[moduleIndex]->storage[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[moduleIndex]->storage[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[moduleIndex]->storage->items[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -167,6 +173,8 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
             name = meta->metadataV5->module[moduleIndex]->call[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[moduleIndex]->call[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[moduleIndex]->call[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -190,6 +198,8 @@ bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
         return (meta->metadataV5->module[moduleIndex]->call[0] != nullptr);
     } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
         return (meta->metadataV6->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV7 && meta->metadataV7->module[moduleIndex]) {
+        return (meta->metadataV7->module[moduleIndex]->call[0] != nullptr);
     }
 
     return false;
@@ -204,6 +214,8 @@ bool CPolkaApi::isStateVariablePlain(unique_ptr<Metadata> &meta, const int modul
         return (meta->metadataV5->module[moduleIndex]->storage[varIndex]->type.type == 0);
     } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
         return (meta->metadataV6->module[moduleIndex]->storage[varIndex]->type.type == 0);
+    } else if (meta->metadataV7 && meta->metadataV7->module[moduleIndex]) {
+        return (meta->metadataV7->module[moduleIndex]->storage->items[varIndex]->type.type == 0);
     }
     throw ApplicationException(string("Module + State variable not found: ") + to_string(moduleIndex) + ":" +
                                to_string(varIndex));
@@ -446,6 +458,7 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
     md->metadataV4 = mdf.getMetadataV4();
     md->metadataV5 = mdf.getMetadataV5();
     md->metadataV6 = mdf.getMetadataV6();
+    md->metadataV7 = mdf.getMetadataV7();
 
     return md;
 }

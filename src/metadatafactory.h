@@ -12,4 +12,5 @@ public:
     unique_ptr<MDV4> getMetadataV4();
     unique_ptr<MDV5> getMetadataV5();
     unique_ptr<MDV6> getMetadataV6();
+    unique_ptr<MDV7> getMetadataV7();
 };

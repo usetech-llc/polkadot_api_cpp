@@ -5,6 +5,7 @@ struct Metadata {
     unique_ptr<MDV4> metadataV4;
     unique_ptr<MDV5> metadataV5;
     unique_ptr<MDV6> metadataV6;
+    unique_ptr<MDV7> metadataV7;
 };
 
 /*
