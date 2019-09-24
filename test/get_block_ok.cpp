@@ -8,14 +8,18 @@ int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
+    unique_ptr<GetBlockHashParams> getBlockHashParams(new GetBlockHashParams);
+    getBlockHashParams->blockNumber = 2;
+    auto respGetBlockHash = app->getBlockHash(move(getBlockHashParams));
+
     cout << endl << endl << "============================ Get Block ============================" << endl;
     unique_ptr<GetBlockParams> par(new GetBlockParams);
-    strcpy(par->blockHash, "0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
+    strcpy(par->blockHash, respGetBlockHash->hash);
     auto resp3 = app->getBlock(move(par));
 
     cout << endl << endl << "============================ Get Block Header ============================" << endl;
     unique_ptr<GetBlockParams> par2(new GetBlockParams);
-    strcpy(par2->blockHash, "0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
+    strcpy(par2->blockHash, respGetBlockHash->hash);
     auto resp4 = app->getBlockHeader(move(par2));
 
     cout << endl << endl << "Parent hash from block  : " << resp3->block.header.parentHash << endl;
