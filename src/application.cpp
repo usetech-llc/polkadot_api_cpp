@@ -73,6 +73,8 @@ Hasher CPolkaApi::getFuncHasher(unique_ptr<Metadata> &meta, const string &module
                     hasherStr = meta->metadataV5->module[moduleIndex]->storage[methodIndex]->type.hasher;
                 else if (meta->metadataV6)
                     hasherStr = meta->metadataV6->module[moduleIndex]->storage[methodIndex]->type.hasher;
+                else if (meta->metadataV7)
+                    hasherStr = meta->metadataV7->module[moduleIndex]->storage->items[methodIndex]->type.hasher;
             }
         }
 
@@ -102,6 +104,8 @@ int CPolkaApi::getModuleIndex(unique_ptr<Metadata> &meta, const string &moduleNa
             name = meta->metadataV5->module[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[i]->name;
         }
 
         if (name.length()) {
@@ -138,6 +142,8 @@ int CPolkaApi::getStorageMethodIndex(unique_ptr<Metadata> &meta, const int modul
             name = meta->metadataV5->module[moduleIndex]->storage[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[moduleIndex]->storage[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[moduleIndex]->storage->items[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -167,6 +173,8 @@ int CPolkaApi::getCallMethodIndex(unique_ptr<Metadata> &meta, const int moduleIn
             name = meta->metadataV5->module[moduleIndex]->call[i]->name;
         } else if (meta->metadataV6 && meta->metadataV6->module[i]) {
             name = meta->metadataV6->module[moduleIndex]->call[i]->name;
+        } else if (meta->metadataV7 && meta->metadataV7->module[i]) {
+            name = meta->metadataV7->module[moduleIndex]->call[i]->name;
         }
 
         std::transform(name.begin(), name.end(), name.begin(), easytolower);
@@ -190,6 +198,8 @@ bool CPolkaApi::hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex) {
         return (meta->metadataV5->module[moduleIndex]->call[0] != nullptr);
     } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
         return (meta->metadataV6->module[moduleIndex]->call[0] != nullptr);
+    } else if (meta->metadataV7 && meta->metadataV7->module[moduleIndex]) {
+        return (meta->metadataV7->module[moduleIndex]->call[0] != nullptr);
     }
 
     return false;
@@ -204,6 +214,8 @@ bool CPolkaApi::isStateVariablePlain(unique_ptr<Metadata> &meta, const int modul
         return (meta->metadataV5->module[moduleIndex]->storage[varIndex]->type.type == 0);
     } else if (meta->metadataV6 && meta->metadataV6->module[moduleIndex]) {
         return (meta->metadataV6->module[moduleIndex]->storage[varIndex]->type.type == 0);
+    } else if (meta->metadataV7 && meta->metadataV7->module[moduleIndex]) {
+        return (meta->metadataV7->module[moduleIndex]->storage->items[varIndex]->type.type == 0);
     }
     throw ApplicationException(string("Module + State variable not found: ") + to_string(moduleIndex) + ":" +
                                to_string(varIndex));
@@ -446,6 +458,7 @@ unique_ptr<Metadata> CPolkaApi::createMetadata(Json jsonObject) {
     md->metadataV4 = mdf.getMetadataV4();
     md->metadataV5 = mdf.getMetadataV5();
     md->metadataV6 = mdf.getMetadataV6();
+    md->metadataV7 = mdf.getMetadataV7();
 
     return md;
 }
@@ -776,102 +789,95 @@ int CPolkaApi::queryStorage(const string &key, const string &startHash, const st
 
 void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
-    // TODO: DOT-55, fix with proper producer-consumer
-    int count = 0;
-    while (count < 10) {
-        // Handle Block subscriptions
-        if (_blockNumberSubscriptionId == subscriptionId) {
-            _blockNumberSubscriber(fromHex<long long>(message["number"].string_value()));
+    // Handle Block subscriptions
+    if (_blockNumberSubscriptionId == subscriptionId) {
+        _blockNumberSubscriber(fromHex<long long>(message["number"].string_value()));
+        return;
+    }
+
+    // Handle Account nonce subscriptions
+    for (auto const &sid : _nonceSubscriptionIds) {
+        if (sid.second == subscriptionId) {
+            _nonceSubscribers[sid.first](fromHex<unsigned long>(message["changes"][0][1].string_value(), false));
             return;
         }
+    }
 
-        // Handle Account nonce subscriptions
-        for (auto const &sid : _nonceSubscriptionIds) {
-            if (sid.second == subscriptionId) {
-                _nonceSubscribers[sid.first](fromHex<unsigned long>(message["changes"][0][1].string_value(), false));
-                return;
-            }
-        }
-
-        // Handle Balance subscriptions
-        for (auto const &sid : _balanceSubscriptionIds) {
-            if (sid.second == subscriptionId) {
-                _balanceSubscribers[sid.first](fromHex<uint128>(message["changes"][0][1].string_value(), false));
-                return;
-            }
-        }
-
-        // Handle transaction completion subscriptions
-        if (_subcribeExtrinsicSubscriberId == subscriptionId) {
-            _subcribeExtrinsicSubscriber(message.dump());
+    // Handle Balance subscriptions
+    for (auto const &sid : _balanceSubscriptionIds) {
+        if (sid.second == subscriptionId) {
+            _balanceSubscribers[sid.first](fromHex<uint128>(message["changes"][0][1].string_value(), false));
             return;
         }
+    }
 
-        // Handle transaction completion subscriptions
-        if (_transactionCompletionSubscriptionId == subscriptionId) {
-            if (message.dump().find("ready") != std::string::npos)
-                _transactionCompletionSubscriber(string("ready"));
-            else if (message.dump().find("finalized") != std::string::npos) {
-                _transactionCompletionSubscriber(string("finalized"));
+    // Handle transaction completion subscriptions
+    if (_subcribeExtrinsicSubscriberId == subscriptionId) {
+        _subcribeExtrinsicSubscriber(message.dump());
+        return;
+    }
 
-                // There is no need to unsubscribe, just reset variabled
-                _transactionCompletionSubscriber = nullptr;
-                _transactionCompletionSubscriptionId = 0;
-            }
+    // Handle transaction completion subscriptions
+    if (_transactionCompletionSubscriptionId == subscriptionId) {
+        if (message.dump().find("ready") != std::string::npos)
+            _transactionCompletionSubscriber(string("ready"));
+        else if (message.dump().find("finalized") != std::string::npos) {
+            _transactionCompletionSubscriber(string("finalized"));
+
+            // There is no need to unsubscribe, just reset variabled
+            _transactionCompletionSubscriber = nullptr;
+            _transactionCompletionSubscriptionId = 0;
+        }
+        return;
+    }
+
+    // Handle Era and Session subscription
+    if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
+        auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
+        auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
+        auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
+        auto sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
+        auto currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
+
+        auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
+        auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
+
+        Era era;
+        era.currentEra = currentEra;
+        era.eraProgress = eraProgress;
+        Session session;
+        session.sessionIndex = currentIndexSubcription;
+        session.lastLengthChange = lastLengthChange;
+        session.sessionLength = sessionLength;
+        session.sessionProgress = sessionProgress;
+
+        _eraAndSessionSubscriber(era, session);
+        return;
+    }
+
+    // Handle finalized head subscription
+    if (_finalizedBlockSubscriptionId == subscriptionId) {
+        BlockHeader blockHeader;
+        decodeBlockHeader(&blockHeader, message);
+        _finalizedBlockSubscriber(blockHeader);
+        return;
+    }
+
+    // Handle runtime version subscription
+    if (_runtimeVersionSubscriptionId == subscriptionId) {
+        auto rtvPtr = createRuntimeVersion(message);
+        RuntimeVersion *rtv = rtvPtr.release();
+        _runtimeVersionSubscriber(*rtv);
+        delete rtv;
+        return;
+    }
+
+    // Handle storage subscriptions
+    for (auto const &sid : _storageSubscriptionIds) {
+        if (sid.second == subscriptionId) {
+            _storageSubscribers[sid.first](message["changes"][0][1].string_value());
             return;
         }
-
-        // Handle Era and Session subscription
-        if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
-            auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
-            auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
-            auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
-            auto sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
-            auto currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
-
-            auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
-            auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
-
-            Era era;
-            era.currentEra = currentEra;
-            era.eraProgress = eraProgress;
-            Session session;
-            session.sessionIndex = currentIndexSubcription;
-            session.lastLengthChange = lastLengthChange;
-            session.sessionLength = sessionLength;
-            session.sessionProgress = sessionProgress;
-
-            _eraAndSessionSubscriber(era, session);
-            return;
-        }
-
-        // Handle finalized head subscription
-        if (_finalizedBlockSubscriptionId == subscriptionId) {
-            BlockHeader blockHeader;
-            decodeBlockHeader(&blockHeader, message);
-            _finalizedBlockSubscriber(blockHeader);
-            return;
-        }
-
-        // Handle runtime version subscription
-        if (_runtimeVersionSubscriptionId == subscriptionId) {
-            auto rtvPtr = createRuntimeVersion(message);
-            RuntimeVersion *rtv = rtvPtr.release();
-            _runtimeVersionSubscriber(*rtv);
-            delete rtv;
-            return;
-        }
-
-        // Handle storage subscriptions
-        for (auto const &sid : _storageSubscriptionIds) {
-            if (sid.second == subscriptionId) {
-                _storageSubscribers[sid.first](message["changes"][0][1].string_value());
-                return;
-            }
-        }
-
-        usleep(100000);
-        count++;
     }
 }
 

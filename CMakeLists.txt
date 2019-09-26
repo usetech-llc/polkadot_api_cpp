@@ -167,6 +167,9 @@ install(FILES ${PROJECT_SOURCE_DIR}/src/scale.h DESTINATION /usr/include/polkacp
 file( GLOB_RECURSE INT128_FILES ${PROJECT_SOURCE_DIR}/src/libs/int128/*.h)
 install(FILES ${INT128_FILES} DESTINATION /usr/include/polkacpp/libs/int128)
 
+file( GLOB_RECURSE UTIL_FILES ${PROJECT_SOURCE_DIR}/src/utils/concurrentmapqueue.h)
+install(FILES ${UTIL_FILES} DESTINATION /usr/include/polkacpp/utils)
+
 ###############################################################################
 # Stand-alone Example
 
@@ -202,7 +205,7 @@ add_custom_target(
                 #sudo rm -rf sr25519 &&
                 git clone https://github.com/Warchant/sr25519-crust.git sr25519 || true &&
                 cd sr25519 &&
-                git checkout c8df3201a29efa2c4e35751a9866f1a770bb7e1b && 
+                git checkout c8df3201a29efa2c4e35751a9866f1a770bb7e1b &&
                 curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly &&
                 rustup install nightly &&
                 rustup default nightly &&

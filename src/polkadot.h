@@ -1,9 +1,9 @@
 #ifdef _WIN32
-#include <io.h>
 #include "polkawin.h"
+#include <io.h>
 #else
-#include <unistd.h>
 #include <thread>
+#include <unistd.h>
 #endif
 
 // clang-format off

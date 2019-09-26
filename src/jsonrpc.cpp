@@ -4,6 +4,7 @@ CJsonRpc::CJsonRpc(IWebSocketClient *wsc, ILogger *logger, JsonRpcParams params)
     : _jsonrpcVersion(params.jsonrpcVersion), _lastId(0), _logger(logger), _wsc(wsc) {
     // subscribe for responses
     _wsc->registerMessageObserver(this);
+    _responseQueue = new ConcurrentMapQueue<Json, int>(RESPONSE_QUEUE_MAX_SIZE);
 }
 
 int CJsonRpc::getNextId() { return ++_lastId; }
@@ -61,10 +62,9 @@ Json CJsonRpc::request(Json jsonMap, long timeout_s) {
 
     return move(result);
 }
-
-void CJsonRpc::delayedUpdateThread(Json message, int subscriptionId) {
-    usleep(1000000);
-    if (_wsSubscribers.count(subscriptionId) != 0) {
+void CJsonRpc::updateConsumerThread(int subscriptionId) {
+    Json message;
+    while (_responseQueue->get(subscriptionId, &message)) {
         _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, message["params"]["result"]);
     }
 }
@@ -94,17 +94,7 @@ void CJsonRpc::handleMessage(const string &payload) {
         completionCV->notify_all();
     } else if (subscriptionId) {
         // Subscription response arrived.
-        // Delay it if there are pending subscriptions to prevent update arriving before subscriber is listening
-        // TODO: DOT-55, fix with proper producer-consumer
-        _queryMtx.lock();
-        bool observerFound = (_wsSubscribers.count(subscriptionId) != 0);
-        _queryMtx.unlock();
-        if (!observerFound) {
-            std::thread t(&CJsonRpc::delayedUpdateThread, this, json, subscriptionId);
-            t.detach();
-        } else {
-            _wsSubscribers[subscriptionId]->handleWsMessage(subscriptionId, json["params"]["result"]);
-        }
+        _responseQueue->put(subscriptionId, json);
     } else {
         _logger->error("Unknown type of response: " + payload);
     }
@@ -117,6 +107,9 @@ int CJsonRpc::subscribeWs(Json jsonMap, IWebSocketMessageObserver *observer) {
     int subscriptionId = response.int_value();
     _wsSubscribers[subscriptionId] = observer;
     _logger->info(string("Subscribed with subscription ID: ") + to_string(subscriptionId));
+
+    std::thread t(&CJsonRpc::updateConsumerThread, this, subscriptionId);
+    t.detach();
 
     return subscriptionId;
 }
@@ -133,6 +126,9 @@ int CJsonRpc::unsubscribeWs(int subscriptionId, string method) {
         _queryMtx.lock();
         _wsSubscribers.erase(subscriptionId);
         _queryMtx.unlock();
+
+        // Stop the update consumer thread
+        _responseQueue->eraseKey(subscriptionId);
     }
     return 0;
 }
