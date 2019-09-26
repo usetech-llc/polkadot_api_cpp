@@ -8,6 +8,12 @@ int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
+    cout << endl << endl << "============================ Get Block Hash ============================" << endl;
+    unique_ptr<GetBlockHashParams> parBH(new GetBlockHashParams);
+    parBH->blockNumber = 1;
+    auto respBHash = app->getBlockHash(move(parBH));
+    cout << respBHash->hash << endl;
+
     cout << endl << endl << "============================ Get Block ============================" << endl;
     unique_ptr<GetBlockParams> par(new GetBlockParams);
     strcpy(par->blockHash, "0x37096ff58d1831c2ee64b026f8b70afab1942119c022d1dcfdbdc1558ebf63fa");
