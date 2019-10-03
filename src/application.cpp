@@ -12,6 +12,11 @@ CPolkaApi::CPolkaApi(ILogger *logger, IJsonRpc *jsonRpc)
       _blockNumberSubscriptionId(0), _eraAndSessionSubscriptionId(0) {
     _logger = logger;
     _jsonRpc = jsonRpc;
+    _lastLengthChange = -1;
+    _sessionLength = -1;
+    _currentEra = -1;
+    _sessionsPerEra = -1;
+    _currentIndexSubcription = -1;
 }
 
 int CPolkaApi::connect(string node_url) {
@@ -43,6 +48,18 @@ int CPolkaApi::connect(string node_url) {
 
     _logger->info(string("Balances module index: ") + to_string(_protocolPrm.BalanceModuleIndex));
     _logger->info(string("Transfer call index: ") + to_string(_protocolPrm.TransferMethodIndex));
+
+    // Calculate storage hashes
+    _storageKeyCurrentEra = StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, "Staking CurrentEra");
+
+    _storageKeySessionsPerEra =
+        StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, "Staking SessionsPerEra");
+
+    //_storageKeyCurrentSessionIndex =
+    //    StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, "Session CurrentIndex");
+
+    _storageKeyCurrentSessionIndex =
+        StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, "Babe EpochDuration");
 
     return result;
 }
@@ -833,25 +850,33 @@ void CPolkaApi::handleWsMessage(const int subscriptionId, const Json &message) {
 
     // Handle Era and Session subscription
     if (_eraAndSessionSubscriptionId == subscriptionId && _bestBlockNum != -1) {
-        auto lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
-        auto sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
-        auto currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
-        auto sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
-        auto currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
+        if (!message["changes"][0][1].is_null())
+            _lastLengthChange = fromHex<long long>(message["changes"][0][1].string_value(), false);
+        if (!message["changes"][1][1].is_null())
+            _sessionLength = fromHex<long long>(message["changes"][1][1].string_value(), false);
+        if (!message["changes"][2][1].is_null())
+            _currentEra = fromHex<long long>(message["changes"][2][1].string_value(), false);
+        if (!message["changes"][3][1].is_null())
+            _sessionsPerEra = fromHex<long long>(message["changes"][3][1].string_value(), false);
+        if (!message["changes"][4][1].is_null())
+            _currentIndexSubcription = fromHex<long long>(message["changes"][4][1].string_value(), false);
 
-        auto sessionProgress = (_bestBlockNum - lastLengthChange + sessionLength) % sessionLength;
-        auto eraProgress = currentIndexSubcription % sessionsPerEra * sessionLength + sessionProgress;
+        if (_lastLengthChange > 0 && _sessionLength > 0 && _currentEra > 0 && _sessionsPerEra > 0 &&
+            _currentIndexSubcription > 0) {
+            auto sessionProgress = (_bestBlockNum - _lastLengthChange + _sessionLength) % _sessionLength;
+            auto eraProgress = _currentIndexSubcription % _sessionsPerEra * _sessionLength + sessionProgress;
 
-        Era era;
-        era.currentEra = currentEra;
-        era.eraProgress = eraProgress;
-        Session session;
-        session.sessionIndex = currentIndexSubcription;
-        session.lastLengthChange = lastLengthChange;
-        session.sessionLength = sessionLength;
-        session.sessionProgress = sessionProgress;
+            Era era;
+            era.currentEra = _currentEra;
+            era.eraProgress = eraProgress;
+            Session session;
+            session.sessionIndex = _currentIndexSubcription;
+            session.lastLengthChange = _lastLengthChange;
+            session.sessionLength = _sessionLength;
+            session.sessionProgress = sessionProgress;
 
-        _eraAndSessionSubscriber(era, session);
+            _eraAndSessionSubscriber(era, session);
+        }
         return;
     }
 
@@ -898,10 +923,16 @@ int CPolkaApi::subscribeEraAndSession(std::function<void(Era, Session)> callback
 
     subscribeBlockNumber([&](long long blockNum) { _bestBlockNum = blockNum; });
 
+    // string storageKey = StorageUtils::getPlainStorageKey(_protocolPrm.FreeBalanceHasher, "Session ");
+
+    // cout << "================" << endl;
+    // cout << storageKey << endl;
+    // cout << "================" << endl;
+
     // era and session subscription
     auto params =
-        Json::array{Json::array{LAST_LENGTH_CHANGE_SUBSCRIPTION, SESSION_LENGTH_SUBSCRIPTION, CURRENT_ERA_SUBSCRIPTION,
-                                SESSIONS_PER_ERA_SUBSCRIPTION, CURRENT_INDEX_SUBSCRIPTION}};
+        Json::array{Json::array{LAST_LENGTH_CHANGE_SUBSCRIPTION, SESSION_LENGTH_SUBSCRIPTION, _storageKeyCurrentEra,
+                                _storageKeySessionsPerEra, _storageKeyCurrentSessionIndex}};
 
     // Subscribe to websocket
     if (!_eraAndSessionSubscriptionId) {

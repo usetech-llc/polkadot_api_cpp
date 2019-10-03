@@ -2,12 +2,6 @@
 #define LAST_LENGTH_CHANGE_SUBSCRIPTION "0xe781aa1e06ea53e01a4e129e0496764e"
 // sessionLenth storage subscription hash
 #define SESSION_LENGTH_SUBSCRIPTION "0xd9c94b41dc87728ebf0a966d2e9ad9c0"
-// currentEra storage subscription hash
-#define CURRENT_ERA_SUBSCRIPTION "0x579ab55d37b1220812be3c3df29d4858"
-// sessionsPerEra storage subscription hash
-#define SESSIONS_PER_ERA_SUBSCRIPTION "0xb7b6ec0f25eb1ed8b91d05f697d7a874"
-// currentIndex storage subscription hash
-#define CURRENT_INDEX_SUBSCRIPTION "0xb8f48a8c01f629d6dc877f64892bed49"
 
 #define MAX_METHOD_BYTES_SZ 2048
 #define DEFAULT_FIXED_EXSTRINSIC_SIZE 103
@@ -86,6 +80,18 @@ private:
     int _runtimeVersionSubscriptionId;
     map<string, int> _storageSubscriptionIds;
     int _subcribeExtrinsicSubscriberId;
+
+    // Subscription storage hashes
+    string _storageKeyCurrentEra;
+    string _storageKeySessionsPerEra;
+    string _storageKeyCurrentSessionIndex;
+
+    // The most recent era and session data
+    long long _lastLengthChange;
+    long long _sessionLength;
+    long long _currentEra;
+    long long _sessionsPerEra;
+    long long _currentIndexSubcription;
 
 public:
     CPolkaApi() = delete;
