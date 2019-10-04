@@ -439,7 +439,7 @@ public:
      * @param callback - functor or lambda expression that will receive updates
      * @return operation result
      */
-    virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback) = 0;
+    virtual int subscribeEraAndSession(std::function<void(Era, SessionOrEpoch)> callback) = 0;
 
     /**
      *  Unsubscribe from WebSocket endpoint and stop receiving updates with era and session.

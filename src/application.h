@@ -52,6 +52,7 @@ private:
     int getStorageMethodIndex(unique_ptr<Metadata> &meta, const int moduleIndex, const string &funcName);
     bool hasMethods(unique_ptr<Metadata> &meta, const int moduleIndex);
     bool isStateVariablePlain(unique_ptr<Metadata> &meta, const int moduleIndex, const int varIndex);
+    long long getMetadataConst(const string &module, const string &constName);
 
     ProtocolParameters _protocolPrm;
     long long _bestBlockNum;
@@ -63,7 +64,7 @@ private:
     std::function<void(long long)> _blockNumberSubscriber;
     map<string, std::function<void(uint128)>> _balanceSubscribers; // Maps callbacks to addresses
     map<string, std::function<void(unsigned long)>> _nonceSubscribers;
-    std::function<void(Era, Session)> _eraAndSessionSubscriber;
+    std::function<void(Era, SessionOrEpoch)> _eraAndSessionSubscriber;
     std::function<void(string)> _transactionCompletionSubscriber;
     std::function<void(const BlockHeader &)> _finalizedBlockSubscriber;
     std::function<void(const RuntimeVersion &)> _runtimeVersionSubscriber;
@@ -81,17 +82,16 @@ private:
     map<string, int> _storageSubscriptionIds;
     int _subcribeExtrinsicSubscriberId;
 
-    // Subscription storage hashes
+    // Era/epoch/session subscription storage hashes and data
     string _storageKeyCurrentEra;
     string _storageKeySessionsPerEra;
     string _storageKeyCurrentSessionIndex;
-
-    // The most recent era and session data
-    long long _lastLengthChange;
-    long long _sessionLength;
-    long long _currentEra;
+    string _storageKeyBabeGenesisSlot;
+    string _storageKeyBabeCurrentSlot;
+    long long _babeEpochDuration;
     long long _sessionsPerEra;
-    long long _currentIndexSubcription;
+    string _storageKeyBabeEpochIndex;
+    bool _isEpoch; // True, if epochs should be used instead of sessions
 
 public:
     CPolkaApi() = delete;
@@ -138,7 +138,7 @@ public:
     virtual int unsubscribeBlockNumber();
     virtual int subscribeBalance(string address, std::function<void(uint128)> callback);
     virtual int unsubscribeBalance(string address);
-    virtual int subscribeEraAndSession(std::function<void(Era, Session)> callback);
+    virtual int subscribeEraAndSession(std::function<void(Era, SessionOrEpoch)> callback);
     virtual int unsubscribeEraAndSession();
     virtual int subscribeAccountNonce(string address, std::function<void(unsigned long)> callback);
     virtual int unsubscribeAccountNonce(string address);
