@@ -1,11 +1,14 @@
 struct Era {
-    long long currentEra;
     long long eraProgress;
+    long long eraLength;
 };
 
-struct Session {
-    long long lastLengthChange;
+struct SessionOrEpoch {
+    bool isEpoch;
+
     long long sessionLength;
     long long sessionProgress;
-    long long sessionIndex;
+
+    long long epochProgress;
+    long long epochLength;
 };

@@ -17,20 +17,32 @@ int main(int argc, char *argv[]) {
 
     // Subscribe to block number updates
     bool done = false;
-    int currentEra = -1;
-    int sessionIndex = -1;
+    bool isEpoch = false;
+    int eraLength = -1;
     int eraProgress = -1;
+    int sessionLength = -1;
     int sessionProgress = -1;
-    app.subscribeEraAndSession([&](Era era, Session session) {
-        cout << endl << "currentEra: " << era.currentEra << endl << endl;
-        cout << endl << "eraProgress: " << era.eraProgress << endl << endl;
-        cout << endl << "sessionIndex: " << session.sessionIndex << endl << endl;
-        cout << endl << "sessionProgress: " << session.sessionProgress << endl << endl;
+    int epochLength = -1;
+    int epochProgress = -1;
+    app.subscribeEraAndSession([&](Era era, SessionOrEpoch session) {
+        if (session.isEpoch) {
+            cout << endl << "Epoch: " << session.epochProgress << " / " << session.epochLength << endl;
+        } else {
+            cout << endl << "Session: " << session.sessionProgress << " / " << session.sessionLength << endl;
+        }
+        cout << "Era: " << era.eraProgress << " / " << era.eraLength << endl << endl;
 
-        currentEra = era.currentEra;
-        sessionIndex = session.sessionIndex;
+        eraLength = era.eraLength;
         eraProgress = era.eraProgress;
-        sessionProgress = session.sessionProgress;
+        isEpoch = session.isEpoch;
+
+        if (session.isEpoch) {
+            epochLength = session.epochLength;
+            epochProgress = session.epochProgress;
+        } else {
+            sessionLength = session.sessionLength;
+            sessionProgress = session.sessionProgress;
+        }
 
         done = true;
     });
@@ -39,10 +51,16 @@ int main(int argc, char *argv[]) {
     while (!done)
         usleep(2000);
 
-    assert(currentEra > 0);
-    assert(sessionIndex > 0);
-    assert(eraProgress > 0);
-    assert(sessionProgress >= 0);
+    assert(eraLength > 0);
+    assert(eraProgress >= 0);
+
+    if (isEpoch) {
+        assert(epochLength > 0);
+        assert(epochProgress >= 0);
+    } else {
+        assert(sessionLength > 0);
+        assert(sessionProgress >= 0);
+    }
 
     // Unsubscribe and close connection
     app.unsubscribeEraAndSession();
