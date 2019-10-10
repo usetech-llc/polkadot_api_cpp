@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
     auto app = polkadot::api::getInstance()->app();
     app->connect();
 
+    // Get block 1 hash dynamically so that it works on any network (e.g. Kusama)
     cout << endl << endl << "============================ Get Block 1 Hash ============================" << endl;
     unique_ptr<GetBlockHashParams> parBH(new GetBlockHashParams);
     parBH->blockNumber = 1;
