@@ -1292,7 +1292,7 @@ string CPolkaApi::submitExtrinsic(uint8_t *encodedMethodBytes, unsigned int enco
     // Copy signature bytes to transaction
     memcpy(ce.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);
 
-    auto length = DEFAULT_FIXED_EXSTRINSIC_SIZE + encodedMethodBytesSize;
+    auto length = DEFAULT_FIXED_EXSTRINSIC_SIZE + encodedMethodBytesSize + compactNonce.length - 1;
 
     auto compactLength = scale::encodeCompactInteger(length);
 
