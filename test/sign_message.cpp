@@ -2,6 +2,7 @@
 #include "../src/polkadot.h"
 #undef NDEBUG
 #include <cassert>
+#include "../src/libs/sr25519/src/sr25519.h"
 // clang-format on
 
 using namespace std;
@@ -20,7 +21,9 @@ int main(int argc, char *argv[]) {
     char hw[16] = "hello world";
     auto msg = vector<uint8_t>(hw, hw + strlen(hw));
     uint8_t sig[SR25519_SIGNATURE_SIZE + 16] = {0};
-    sr25519_sign(sig, publicKey.data(), secretKey.data(), msg.data(), (size_t)msg.size());
+    //sr25519_sign(sig, publicKey.data(), secretKey.data(), msg.data(), (size_t)msg.size());
+	//void sign011_s(uint8_t* public_key, uint8_t* secret_key, uint8_t* message, unsigned int message_size, uint8_t* result);
+	sign011_s(publicKey.data(), secretKey.data(), msg.data(), strlen(hw), sig);
 
     cout << "================ signature " << endl;
     for (int i = 0; i < SR25519_SIGNATURE_SIZE; ++i) {
