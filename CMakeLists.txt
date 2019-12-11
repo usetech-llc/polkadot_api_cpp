@@ -35,6 +35,7 @@ find_package(Threads REQUIRED)
 #   - WebSocket++
 #   - Boost
 #   - OpenSSL
+#   - C SR25519
 #
 
 set (WEBSOCKETPP_BOOST_LIBS system thread)
@@ -75,11 +76,12 @@ if (NOT OpenSSL_FOUND)
 endif ()
 
 if (WIN32)
-	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust Boost::dynamic_linking Userenv)
+	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust  Boost::dynamic_linking Userenv sr25519)
 else ()
-	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust dl)
+	set (DEPENDENCY_LIBS ${Boost_LIBRARIES} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY} Threads::Threads sr25519crust dl sr25519)
 endif()
 
+add_subdirectory(src/libs/sr25519)
 
 include_directories (${Boost_INCLUDE_DIR})
 include_directories (${OPENSSL_INCLUDE_DIR})
