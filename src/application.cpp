@@ -1394,7 +1394,10 @@ void CPolkaApi::signAndSendTransfer(string sender, string privateKey, string rec
 
     vector<uint8_t> secretKeyVec = fromHex<vector<uint8_t>>(privateKey);
     uint8_t sig[SR25519_SIGNATURE_SIZE] = {0};
-    sr25519_sign(sig, te.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+
+    // Replace SR25519 Rust version with C version 
+    //sr25519_sign(sig, te.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength);
+    sign011_s(te.signature.signerPublicKey, secretKeyVec.data(), signaturePayloadBytes, payloadLength, sig);
 
     // Copy signature bytes to transaction
     memcpy(te.signature.sr25519Signature, sig, SR25519_SIGNATURE_SIZE);

@@ -23,16 +23,32 @@ int main(int argc, char *argv[]) {
     //sr25519_sign(sig, publicKey.data(), secretKey.data(), msg.data(), (size_t)msg.size());
 	//void sign011_s(uint8_t* public_key, uint8_t* secret_key, uint8_t* message, unsigned int message_size, uint8_t* result);
 
+    // Sign using SR25519_C library
 	sign011_s(publicKey.data(), secretKey.data(), msg.data(), strlen(hw), sig);
 
-    cout << "================ signature " << endl;
+    cout << "Message: " << hw << endl;
+    cout << "Signature: ";
     for (int i = 0; i < SR25519_SIGNATURE_SIZE; ++i) {
         printf("%02X", sig[i]);
     }
     cout << endl;
 
-    // validate message with public key
+    // validate using sr25519_crust (Rust) library
     assert(sr25519_verify(sig, msg.data(), msg.size(), publicKey.data()));
+    cout << "Signature verified successfully using Rust library" << endl;
+
+    // validate using sr25519 C library
+    bool verified = verify011_s(sig, publicKey.data(), msg.data(), msg.size());
+    assert(verified);
+    cout << "Signature verified successfully using C SR25519 library" << endl;
+
+    // Negative test: validate with wrong message
+    char hw_wrong[16] = "Goodbye world";
+    auto msg_wrong = vector<uint8_t>(hw_wrong, hw_wrong + strlen(hw_wrong));
+    bool verified_w = verify011_s(sig, publicKey.data(), msg_wrong.data(), msg_wrong.size());
+    assert(!verified_w);
+    cout << "Signature verification failed successfully with wrong message using C SR25519 library" << endl;
+
 
     cout << "success" << endl;
 }
