@@ -1,3 +1,3 @@
 [submodule "src/libs/sr25519"]
 	path = src/libs/sr25519
-	url = https://github.com:usetech-llc/sr25519.git
+	url = https://github.com/usetech-llc/sr25519.git
