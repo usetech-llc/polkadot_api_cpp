@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
     cout << endl;
 
     // validate using sr25519_crust (Rust) library
-    assert(sr25519_verify(sig, msg.data(), msg.size(), publicKey.data()));
-    cout << "Signature verified successfully using Rust library" << endl;
+    // assert(sr25519_verify(sig, msg.data(), msg.size(), publicKey.data()));
+    // cout << "Signature verified successfully using Rust library" << endl;
 
     // validate using sr25519 C library
     bool verified = verify011_s(sig, publicKey.data(), msg.data(), msg.size());
