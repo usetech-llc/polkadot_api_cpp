@@ -29,10 +29,8 @@ int main(int argc, char *argv[]) {
     // Transfer and wait for updates
     bool done = false;
     app.signAndSendTransfer(senderAddr, senderPrivateKeyStr, recipientAddr, 1000000000000, [&](string result) {
-        if (result == "ready")
+        if (result == "ready") {
             cout << endl << endl << "   ---=== Transaction was registered in network ===--- " << endl << endl << endl;
-        if (result == "finalized") {
-            cout << endl << endl << "   ---=== Transaction was mined! ===--- " << endl << endl << endl;
             done = true;
         }
     });
