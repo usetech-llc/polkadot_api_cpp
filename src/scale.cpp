@@ -109,7 +109,7 @@ CompactIntegerLEBytes encodeCompactInteger(uint128 n) {
     } else if (n <= 0x3FFF) {
         b.length = 2;
         b.bytes[0] = (uint8_t)(((n & 0x3F) << 2) | 0x01);
-        b.bytes[1] = (uint8_t)((n & 0xFC0) >> 6);
+        b.bytes[1] = (uint8_t)((n & 0x3FC0) >> 6);
     } else if (n <= 0x3FFFFFFF) {
         b.length = 4;
         b.bytes[0] = (uint8_t)(((n & 0x3F) << 2) | 0x02);
@@ -119,7 +119,6 @@ CompactIntegerLEBytes encodeCompactInteger(uint128 n) {
             n >>= 8;
         }
     } else { // Big integer mode
-        b.length = 1;
         int byteNum = 1;
         while (n) {
             b.bytes[byteNum++] = (uint8_t)(n & 0xFF);
